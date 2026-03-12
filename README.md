@@ -47,6 +47,12 @@ omniscience-research/
 │   ├── computations/        # Python verification scripts
 │   └── handoff.md           # Master research document
 │
+├── omni-toolkit/            # Reusable geometric toolkit (pip-installable)
+│   └── omni_toolkit/        # Python package
+│       ├── core/            # Symmetric spaces, DeWitt metric, Ricci tensor
+│       ├── dynamics/        # RG running, Coleman-Weinberg potential
+│       └── topology/        # Quaternionic structures, index theorems
+│
 ├── simulations/             # Consciousness emergence models
 │   ├── *.py                 # Ising, developmental, scaling
 │   ├── results/             # JSON output data
