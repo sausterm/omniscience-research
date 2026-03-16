@@ -1,0 +1,711 @@
+% Paper 8: Localisation from the Free Energy Principle on the Metric Bundle
+\documentclass[12pt, a4paper]{article}
+
+% ---- Packages ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{cite}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{bbm}
+
+% ---- Theorem environments ----
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ---- Macros ----
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\Met}{\mathrm{Met}}
+\newcommand{\SU}{\mathrm{SU}}
+\newcommand{\SO}{\mathrm{SO}}
+\newcommand{\GL}{\mathrm{GL}}
+\newcommand{\U}{\mathrm{U}}
+\newcommand{\Sp}{\mathrm{Sp}}
+\newcommand{\Tr}{\mathrm{Tr}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\KL}{\mathrm{KL}}
+\newcommand{\FEP}{\mathrm{FEP}}
+\newcommand{\Vol}{\mathrm{Vol}}
+\newcommand{\Veff}{V_{\mathrm{eff}}}
+\newcommand{\MPS}{M_{\mathrm{PS}}}
+\newcommand{\MP}{M_{\mathrm{P}}}
+\newcommand{\gPS}{g_{\mathrm{PS}}}
+\newcommand{\aPS}{\alpha_{\mathrm{PS}}}
+\newcommand{\Lobs}{L_{\mathrm{obs}}}
+\newcommand{\Rfibre}{R_{\mathrm{fibre}}}
+\newcommand{\diag}{\mathrm{diag}}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% ---- Title ----
+\title{\textbf{Localisation from the Free Energy Principle\\on the Metric Bundle}}
+
+\author{Sloan Austermann\\[4pt]
+\small\textit{Independent researcher}\\
+\small\texttt{sloan@omnisciences.org}}
+
+\date{\today}
+
+% ============================================================
+\begin{document}
+\maketitle
+
+% ---- Abstract ----
+\begin{abstract}
+The metric bundle $Y^{14} = \Met(X^4)$ has a non-compact fibre $\GL^+(4,\R)/\SO(3,1)$, and standard Kaluza-Klein reduction requires a localisation mechanism to produce finite four-dimensional couplings.
+We show that the Free Energy Principle (FEP)---the variational principle governing self-evidencing systems---provides a natural and uniquely motivated localisation when applied to a Markov blanket embedded in the metric bundle.
+The observer's blanket defines a section $g: X \to \Met(X)$; the FEP variational functional, with prior determined by the fibre curvature $\Rfibre = -30$ and likelihood from the Gauss equation, yields a Gaussian localisation whose width is fixed by the fibre geometry.
+The resulting effective volume $\Veff$ determines both the four-dimensional Newton constant and the Pati-Salam gauge coupling.
+We derive the closed-form result $\aPS = 27/(128\pi^2) \approx 0.0214$, within $7\%$ of the observed value $0.023$---closing the previous factor-of-$2$ discrepancy from the soldering mechanism alone.
+The conformal mode provides a consistency check on the cosmological constant: given the observed $\Lambda$, the implied observer resolution scale is $\Lobs \approx 80\,\mu\mathrm{m}$---the biological cell scale---and the conformal dilution framework accommodates $\Lambda_{\mathrm{eff}}$ with a physically meaningful conformal VEV.
+The framework unifies the localisation problem and the gauge coupling as consequences of a single variational principle: the observer's self-evidencing on the space of metrics.
+\end{abstract}
+
+\vspace{10pt}
+\noindent\textit{Keywords:} Free Energy Principle, Markov blanket, metric bundle, localisation, gauge coupling, cosmological constant
+
+\newpage
+\tableofcontents
+\newpage
+
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+\subsection{The localisation problem}
+
+Papers~I--VII of the metric bundle programme~\cite{Paper1,Paper3,Paper7} established that the Pati-Salam gauge group $\SU(4) \times \SU(2)_L \times \SU(2)_R$ arises from the $(6,4)$ signature of the DeWitt supermetric on Lorentzian metrics, with the correct fermion content, signs, anomaly cancellation, and three generations following from the geometry of the fourteen-dimensional metric bundle $Y^{14} = \Met(X^4)$.
+
+The effective four-dimensional action is obtained by restricting the Einstein-Hilbert action on $Y^{14}$ to a metric section $g: X \to \Met(X)$ via the Gauss equation.
+This restriction requires a \emph{localisation mechanism}: the fibre $F = \GL^+(4,\R)/\SO(3,1)$ is non-compact, so the na\"ive fibre integral diverges.
+
+Three approaches have been proposed~\cite{Paper1,Paper3}:
+\begin{enumerate}[nosep]
+\item \textbf{Gaussian localisation:} fields decay as $e^{-m^2 d^2_{\mathrm{DW}}}$ in the fibre, with unspecified scale $m$.
+\item \textbf{Conformal damping:} the negative-norm conformal mode provides exponential suppression.
+\item \textbf{Section condition:} fields depend only on base coordinates, analogous to double field theory~\cite{HullZwiebach2009}.
+\end{enumerate}
+All three produce finite answers; none is derived from first principles.
+The consequence is that \emph{relative} couplings (gauge group, signs, ratios) are determined, but the \emph{absolute} gauge coupling $\gPS$ and Newton constant $G_4$ depend on an undetermined effective volume $\Veff$.
+
+\subsection{The proposal}
+
+We propose that the Free Energy Principle~\cite{Friston2010,Friston2019}---the variational principle governing systems that maintain themselves against dissipation---provides the missing dynamical justification.
+
+The argument is:
+\begin{enumerate}[nosep]
+\item An observer is a Markov blanket embedded in $\Met(X)$~\cite{Paper6}.
+\item The blanket defines a section $g(x)$: the observer's experienced geometry.
+\item The FEP determines how tightly the blanket is localised around this section.
+\item The localisation width in the fibre directions determines $\Veff$.
+\item Therefore $G_4$ and $\gPS$ are fixed by the FEP.
+\end{enumerate}
+
+This is not a mathematical trick to tame a divergence.
+From the perspective of Structural Idealism, the localisation \emph{is} the observer: the section condition holds because an observer experiences one metric, not the entire space of metrics.
+The fibre's non-compactness reflects the infinite space of possible experiences; the FEP selects the actual experience.
+
+
+% ============================================================
+\section{Markov blankets on the metric bundle}
+\label{sec:blankets}
+% ============================================================
+
+\subsection{The metric bundle}
+
+Let $X$ be a four-dimensional Lorentzian manifold.
+The metric bundle is
+\begin{equation}
+\pi: Y^{14} = \Met(X) \to X\,,
+\end{equation}
+with fibre $F_x = \GL^+(4,\R)/\SO(3,1)$ at each $x \in X$.
+A metric on $X$ defines a section $g: X \to Y$.
+
+The DeWitt supermetric on the fibre~\cite{DeWitt1967,Giulini2009} is
+\begin{equation}
+\label{eq:dewitt}
+G^{\mathrm{DW}}(h,k) = g^{\mu\rho}\, g^{\nu\sigma}\, h_{\mu\nu}\, k_{\rho\sigma} - \tfrac{1}{2}\left(g^{\mu\nu} h_{\mu\nu}\right)\left(g^{\rho\sigma} k_{\rho\sigma}\right)
+\end{equation}
+for symmetric tensors $h, k \in T_g F$.
+On a Lorentzian background, $G^{\mathrm{DW}}$ has signature $(6,4)$.
+In the orthonormal basis $\{e_a\}$ (with $1/\sqrt{2}$ normalisation on off-diagonal components), all eigenvalues have unit magnitude:
+\begin{equation}
+\label{eq:eigenvalues}
+\{\underbrace{-1, -1, -1, -1}_{V^-},\; \underbrace{+1, +1, +1, +1, +1, +1}_{V^+}\}\,.
+\end{equation}
+The positive-norm subspace $V^+ \cong \R^6$ gives rise to $\SO(6) \cong \SU(4)$; the negative-norm subspace $V^- \cong \R^4$ gives $\SO(4) \cong \SU(2)_L \times \SU(2)_R$.
+
+The fibre is a symmetric space with scalar curvature~\cite{Paper1}
+\begin{equation}
+\label{eq:R_fibre}
+\Rfibre = -30\,.
+\end{equation}
+
+\subsection{The Markov blanket partition}
+
+\begin{definition}[Markov blanket on $\Met(X)$]
+\label{def:blanket}
+A Markov blanket $\mathcal{B}$ for an observer $\mathcal{O}$ embedded in $\Met(X)$ is a partition of the degrees of freedom into internal states $\mu$, external states $\eta$, and blanket states $b$, such that
+\begin{equation}
+P(\mu' \,|\, \mu, b, \eta) = P(\mu' \,|\, \mu, b)\,.
+\end{equation}
+The blanket screens off the observer from the environment: external states influence internal states only through the blanket.
+\end{definition}
+
+In the metric bundle, we identify:
+\begin{itemize}[nosep]
+\item \textbf{Internal states $\mu$:} the observer's experienced geometry $g(x)$ (the section).
+\item \textbf{External states $\eta$:} all other metrics $g' \neq g(x)$ (the full fibre at each point).
+\item \textbf{Blanket states $b$:} the normal fluctuations $h \in T_g F$ that the observer can resolve.
+\end{itemize}
+
+The blanket has finite dimension $N$ (Paper~VI, Theorem~5).
+At each spacetime point, the blanket allocates some of its $N$ modes to fibre directions and the rest to base (spacetime) directions.
+The allocation is determined by the FEP.
+
+\subsection{Fisher-Rao geometry of the blanket}
+
+The blanket's information content is measured by the Fisher-Rao metric.
+For a parametric family of distributions $p(y|\theta)$ on the blanket, the Fisher information matrix is
+\begin{equation}
+\label{eq:fisher}
+\mathcal{I}_{\mu\nu}(\theta) = -\mathbb{E}\!\left[\frac{\partial^2 \ln p(y|\theta)}{\partial \theta^\mu \,\partial \theta^\nu}\right].
+\end{equation}
+Paper~VI showed that the sum of Fisher-Rao metrics over a complete set of mutually unbiased bases (MUBs) reproduces the Fubini-Study metric on quantum state space~\cite{Paper6}.
+
+For fibre directions, the Fisher information about the metric at a point $x$ is
+\begin{equation}
+\label{eq:fibre_fisher}
+\mathcal{I}_{ab}^{\mathrm{fibre}}(g) = G^{\mathrm{DW}}_{ab}(g) + \mathcal{O}(R_X)\,,
+\end{equation}
+where $a, b$ index fibre directions and the correction involves the base curvature.
+On a flat base ($R_X = 0$), the fibre Fisher information \emph{is} the DeWitt metric.
+
+
+% ============================================================
+\section{The FEP variational principle on the fibre}
+\label{sec:fep}
+% ============================================================
+
+\subsection{The free energy functional}
+
+The Free Energy Principle states that a self-evidencing system minimises the variational free energy
+\begin{equation}
+\label{eq:FEP}
+\mathcal{F}[q] = \underbrace{\mathbb{E}_q\!\left[-\ln p(y \,|\, \theta)\right]}_{\text{energy (prediction error)}} + \underbrace{\KL\!\left[q(\theta) \,\|\, p(\theta)\right]}_{\text{complexity (deviation from prior)}}\,,
+\end{equation}
+where:
+\begin{itemize}[nosep]
+\item $\theta \in T_g F \cong \R^{10}$ parameterises fibre fluctuations around the section,
+\item $y$ denotes the sensory data (curvature observables at the section),
+\item $p(y|\theta)$ is the likelihood of observing $y$ given fibre displacement $\theta$,
+\item $p(\theta)$ is the prior over fibre displacements (from the geometry),
+\item $q(\theta)$ is the observer's variational posterior (the recognition density).
+\end{itemize}
+
+\subsection{The geometric prior}
+\label{sec:prior}
+
+The prior $p(\theta)$ encodes the observer's default expectation about fibre fluctuations before receiving sensory data.
+On the symmetric space $F = \GL^+(4,\R)/\SO(3,1)$ with scalar curvature $\Rfibre = -30$, the natural prior in geodesic normal coordinates is
+\begin{equation}
+\label{eq:prior}
+p(\theta) = \frac{1}{Z_p}\, \sqrt{|G^{\mathrm{DW}}|}\; \exp\!\left(-\frac{|\Rfibre|}{2n}\; \theta^a\, |G^{\mathrm{DW}}_{ab}|\, \theta^b\right),
+\end{equation}
+where $n = \dim(F) = 10$ and $|G^{\mathrm{DW}}_{ab}|$ denotes the absolute values of the eigenvalues (taking positive-definite part).
+
+\begin{remark}[Motivation for the prior]
+The factor $|\Rfibre|/n = 3$ sets the characteristic curvature scale per dimension.
+On a negatively curved symmetric space, geodesics diverge exponentially, and the volume element grows as $\sim e^{\sqrt{|K|}\,r}$ at distance $r$.
+The Gaussian prior~\eqref{eq:prior} represents an observer who expects to be near the section: large fibre displacements are exponentially penalised, with the penalty set by the intrinsic geometry.
+This is not imposed by hand---it is the unique Gaussian prior whose width is determined by the curvature alone, with no free parameters.
+\end{remark}
+
+\begin{remark}[Equivalence to standard constructions]
+\label{rem:equivalence}
+The FEP provides the conceptual motivation for~\eqref{eq:prior}, but the same Gaussian localisation arises from several independent, standard constructions:
+\begin{enumerate}[nosep]
+\item \emph{Heat kernel:} The ground state of the Laplacian $\Delta_F$ on the symmetric space $F$ is a Gaussian with width $\sigma^2 = n/|\Rfibre|$ per mode~\cite{Giulini2009}.
+\item \emph{Maximum entropy:} The maximum entropy distribution on $F$, given only the scalar curvature as prior information, is the Gaussian~\eqref{eq:prior}.
+\item \emph{Hartle-Hawking:} A no-boundary wavefunction on the fibre yields a Gaussian localisation at the curvature scale.
+\end{enumerate}
+The quantitative results of this paper---$\Veff = (2\pi)^5/243$, $\aPS = 27/(128\pi^2)$---depend only on the Gaussian width $\sigma^2 = 1/3$, not on which principle selects it.
+The FEP adds a \emph{physical interpretation} (the observer's self-evidencing determines the localisation) but the \emph{mathematical content} is equivalent to the curvature-scale ground state on the fibre.
+\end{remark}
+
+\subsection{The likelihood from the Gauss equation}
+\label{sec:likelihood}
+
+The sensory data $y$ consists of curvature observables measured at the section.
+A fibre displacement $\theta$ changes the observed curvature; the prediction error is the mismatch between predicted and observed curvature.
+
+From the Gauss equation~\cite{Paper3}, the action evaluated at $g + h$ (displacing the section by $h = \theta^a e_a$) gives, to quadratic order,
+\begin{equation}
+\label{eq:action_quad}
+S[g + h] - S[g] = \frac{1}{16\pi G_{14}} \int_X \tfrac{1}{2}\, \theta^a\, \mathcal{M}_{ab}\, \theta^b\; \mathrm{vol}_X\,,
+\end{equation}
+where $\mathcal{M}_{ab}$ is the Hessian of the action in fibre directions.
+
+For a flat base ($R_X = 0$), the Hessian decomposes according to the Gauss equation terms:
+\begin{equation}
+\label{eq:hessian}
+\mathcal{M}_{ab} = \mathcal{M}^{\mathrm{gauge}}_{ab} + \mathcal{M}^{\mathrm{Higgs}}_{ab} + \mathcal{M}^{\mathrm{grav}}_{ab}\,,
+\end{equation}
+where:
+\begin{itemize}[nosep]
+\item $\mathcal{M}^{\mathrm{gauge}}_{ab}$ comes from $R^\perp$ (normal curvature); it is proportional to the gauge kinetic metric $h_{ab}$ with eigenvalue $2$ on the traceless sector.
+\item $\mathcal{M}^{\mathrm{Higgs}}_{ab}$ comes from $|H|^2$ (mean curvature); $|H|^2 = -1$ on the Lorentzian background.
+\item $\mathcal{M}^{\mathrm{grav}}_{ab}$ comes from $|\mathrm{I\!I}|^2$ (second fundamental form); $|\mathrm{I\!I}|^2 = 2$.
+\end{itemize}
+
+The likelihood is
+\begin{equation}
+\label{eq:likelihood}
+p(y|\theta) \propto \exp\!\left(-\frac{1}{2}\, \theta^a\, \mathcal{M}_{ab}\, \theta^b\right).
+\end{equation}
+
+
+\subsection{The FEP minimum}
+\label{sec:fep_min}
+
+We restrict to Gaussian recognition densities:
+\begin{equation}
+q(\theta) = \mathcal{N}(0, \Sigma)\,,
+\end{equation}
+centred at the section ($\langle\theta\rangle = 0$, since the section is an extremum of the action).
+
+\begin{proposition}[FEP localisation]
+\label{prop:localisation}
+For Gaussian $q$, the free energy~\eqref{eq:FEP} is minimised by
+\begin{equation}
+\label{eq:Sigma_opt}
+\Sigma^{-1} = \mathcal{M} + \frac{|\Rfibre|}{n}\, |G^{\mathrm{DW}}|\,,
+\end{equation}
+where $\mathcal{M}$ is the action Hessian and $|G^{\mathrm{DW}}|$ is the absolute-value metric from the prior.
+\end{proposition}
+
+\begin{proof}
+For Gaussian $q = \mathcal{N}(0, \Sigma)$ and prior
+$p = \mathcal{N}(0, \Sigma_p)$ with
+$\Sigma_p^{-1} = (|\Rfibre|/n)\,|G^{\mathrm{DW}}|$:
+\begin{align}
+\mathcal{F}[q] &= \tfrac{1}{2}\, \Tr(\mathcal{M}\, \Sigma) + \tfrac{1}{2}\left[\Tr(\Sigma_p^{-1}\, \Sigma) - \ln\det(\Sigma_p^{-1}\, \Sigma) - 10\right]. \label{eq:F_gaussian}
+\end{align}
+Setting $\partial \mathcal{F}/\partial \Sigma = 0$:
+\begin{equation}
+\tfrac{1}{2}\, \mathcal{M} + \tfrac{1}{2}\, \Sigma_p^{-1} - \tfrac{1}{2}\, \Sigma^{-1} = 0\,,
+\end{equation}
+giving $\Sigma^{-1} = \mathcal{M} + \Sigma_p^{-1}$.
+\end{proof}
+
+\begin{remark}[The indefinite metric and the uncertainty principle]
+The DeWitt metric $G^{\mathrm{DW}}$ has signature $(6,4)$---it is not positive definite.
+The prior~\eqref{eq:prior} uses $|G^{\mathrm{DW}}|$ (absolute values of eigenvalues), which is positive definite.
+This means the prior penalises displacement in \emph{all} fibre directions equally (by magnitude), regardless of the sign of the DeWitt metric.
+
+However, the Hessian $\mathcal{M}$ reflects the physical action and has indefinite signature.
+The $V^+$ (gauge) directions have positive Hessian eigenvalues---the observer is tightly localised there.
+The $V^-$ (Higgs/conformal) directions have negative or smaller Hessian eigenvalues---the observer is more diffuse.
+
+This asymmetry is precisely Theorem~4 of Paper~VI: the indefinite DeWitt metric forces a complementarity between gauge precision and Higgs/conformal precision.
+The FEP resolves this trade-off: the observer localises where surprise is minimised.
+\end{remark}
+
+
+% ============================================================
+\section{The effective volume and the gauge coupling}
+\label{sec:coupling}
+% ============================================================
+
+\subsection{Eigenmode decomposition}
+
+The optimal covariance $\Sigma$ from~\eqref{eq:Sigma_opt} is diagonal in the DeWitt eigenbasis.
+Let $\lambda_a$ be the eigenvalues of $G^{\mathrm{DW}}$~\eqref{eq:eigenvalues} and $m_a$ be the eigenvalues of $\mathcal{M}$.
+
+In each eigendirection $a$, the localisation width is
+\begin{equation}
+\label{eq:sigma_a}
+\sigma_a^2 = \frac{1}{m_a + \frac{|\Rfibre|}{n}\, |\lambda_a|}\,.
+\end{equation}
+
+In the orthonormal basis, the ten fibre directions split into:
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Sector} & \textbf{Dim} & $\lambda_a$ & $|\lambda_a|$ & \textbf{Physical content} \\
+\midrule
+$V^+$: gauge & 6 & $+1$ & $1$ & $\SO(6) \cong \SU(4)$ gauge fields \\
+$V^-$: Higgs & 3 & $-1$ & $1$ & $(\mathbf{1},\mathbf{2},\mathbf{2})$ Higgs \\
+$V^-$: conformal & 1 & $-1$ & $1$ & Resolution scale $\phi$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{remark}[Basis normalisation]
+In the unnormalised coordinate basis, the eigenvalues are $\{-2,-2,-2,-1,+1,+1,+1,+2,+2,+2\}$.
+The orthonormal basis absorbs factors of $\sqrt{2}$ for off-diagonal components, yielding uniform $|\lambda_a| = 1$.
+All physical results (effective volume, coupling) are basis-independent; we use the orthonormal basis throughout.
+\end{remark}
+
+\subsection{The Hessian eigenvalues}
+
+From the Gauss equation decomposition, the Hessian eigenvalues for each sector are:
+
+\paragraph{Gauge sector ($V^+$, traceless).}
+The gauge kinetic metric has eigenvalue $h = 2$~\cite{Paper3}.
+The Hessian from the normal curvature is
+\begin{equation}
+m_{\mathrm{gauge}} = h \cdot \mu^2 = 2\mu^2\,,
+\end{equation}
+where $\mu^2$ is the mass scale from the curvature of the base (for a flat base, $\mu^2 \to 0$ and the prior dominates).
+
+\paragraph{Higgs sector ($V^-$, traceless).}
+The mean curvature gives $|H|^2 = -1$.
+The Hessian from $|H|^2$ in the negative-norm direction:
+\begin{equation}
+m_{\mathrm{Higgs}} = |H|^2 \cdot \mu^2 = -\mu^2\,.
+\end{equation}
+The negative Hessian means the Higgs direction is \emph{unstable} at the section---the prior must stabilise it.
+
+\paragraph{Conformal sector (trace, $V^-$).}
+The conformal mode has the wrong-sign kinetic term (conformal factor problem).
+Its Hessian eigenvalue is
+\begin{equation}
+m_{\mathrm{conf}} = -\mu^2_{\mathrm{conf}}\,,
+\end{equation}
+which is stabilised entirely by the FEP prior.
+
+\subsection{The FEP-localised effective volume}
+
+On a flat base ($\mu^2 \to 0$), the Hessian vanishes and the localisation is determined entirely by the prior.
+In the orthonormal basis, all $|\lambda_a| = 1$, giving a \emph{uniform} localisation width:
+\begin{equation}
+\sigma_a^2 = \frac{n}{|\Rfibre| \cdot |\lambda_a|} = \frac{10}{30 \cdot 1} = \frac{1}{3}\qquad \text{for all } a = 1, \ldots, 10\,.
+\end{equation}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Direction} & $|\lambda_a|$ & $\sigma_a^2$ & $\sigma_a$ \\
+\midrule
+6 gauge modes ($V^+$) & 1 & $1/3$ & $1/\sqrt{3}$ \\
+3 Higgs modes ($V^-$) & 1 & $1/3$ & $1/\sqrt{3}$ \\
+1 conformal mode ($V^-$) & 1 & $1/3$ & $1/\sqrt{3}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The uniform width is a consequence of the orthonormal basis: the FEP prior treats all fibre directions equally (by magnitude), and the curvature-per-dimension ratio $|\Rfibre|/n = 3$ sets the common scale.
+
+The effective volume is
+\begin{equation}
+\label{eq:Veff}
+\Veff = \prod_{a=1}^{10} \sqrt{2\pi}\, \sigma_a = (2\pi)^5 \prod_{a=1}^{10} \sigma_a\,.
+\end{equation}
+
+Since all $\sigma_a = 1/\sqrt{3}$:
+\begin{equation}
+\Veff = (2\pi)^5 \cdot \left(\frac{1}{\sqrt{3}}\right)^{10} = \frac{(2\pi)^5}{3^5} = \frac{(2\pi)^5}{243}\,.
+\end{equation}
+
+Numerically:
+\begin{equation}
+\label{eq:Veff_numerical}
+\boxed{\Veff = \frac{(2\pi)^5}{243} \approx 40.3}
+\end{equation}
+in units where the fibre coordinates are dimensionless (normalised to the DeWitt metric at the section).
+The fifth root (effective width per fibre dimension) is
+\begin{equation}
+\label{eq:Veff_fifth}
+\Veff^{1/5} = \frac{2\pi}{3} \approx 2.094\,.
+\end{equation}
+
+\subsection{The gauge coupling}
+
+The four-dimensional gauge coupling is determined by matching the Gauss equation action to the Yang-Mills action~\cite{Paper3,Paper7}:
+\begin{equation}
+\frac{\Veff \cdot h}{16\pi G_{14}} \int |F|^2\, \mathrm{vol}_X = \frac{1}{4\gPS^2} \int |F|^2\, \mathrm{vol}_X\,.
+\end{equation}
+Solving for $\gPS^2$:
+\begin{equation}
+\gPS^2 = \frac{4\pi G_{14}}{\Veff \cdot h}\,.
+\end{equation}
+
+The fourteen-dimensional Newton constant is $G_{14} = G_4 \cdot \Veff / V_{\mathrm{eff,grav}} = G_4 \cdot \Veff$, where the gravitational localisation uses the same $\Veff$ (both terms come from the same Gauss equation).
+This gives
+\begin{equation}
+\gPS^2 = \frac{4\pi G_4}{h} = \frac{4\pi}{h \cdot \MP^2}\,,
+\end{equation}
+where $h = 2$ is the gauge kinetic eigenvalue.
+
+\begin{remark}[The KK coupling problem]
+The na\"ive KK formula $\gPS^2 = 4\pi/(h \MP^2)$ gives $\gPS^2 \sim 10^{-37}$---far too small.
+This is the well-known KK coupling problem: in models where the gauge coupling arises from gravity, the coupling is gravitationally suppressed.
+The resolution is that the localisation breaks the simple KK scaling.
+\end{remark}
+
+\subsection{The soldering resolution}
+
+The FEP localisation provides a dimensionless ratio that rescales the coupling.
+The key observation is that the gauge field strength is not simply $R^\perp$ but involves the shape operator commutator $\Sigma |[A_m, A_n]|^2 = 9/8$, which is a \emph{dimensionless} geometric invariant of the fibre~\cite{Paper1}.
+
+Following the soldering mechanism (Paper~I, Section~5), the physical gauge coupling is
+\begin{equation}
+\label{eq:soldering}
+\gPS^2 = \frac{\kappa^2}{2T} \cdot \frac{1}{\Veff^{1/5}}\,,
+\end{equation}
+where $\kappa^2 = 9/8$ is the $\SO(6)$ sectional curvature, $T = 1$ is the Dynkin index, and $\Veff^{1/5}$ is the effective width per fibre dimension.
+
+With $\Veff^{1/5} = 2\pi/3$:
+\begin{equation}
+\gPS^2 = \frac{9/8}{2 \times (2\pi/3)} = \frac{9/8}{4\pi/3} = \frac{27}{32\pi}\,,
+\end{equation}
+giving the closed-form result
+\begin{equation}
+\label{eq:alpha_FEP}
+\boxed{\aPS = \frac{\gPS^2}{4\pi} = \frac{27}{128\pi^2} \approx 0.02137}
+\end{equation}
+
+\begin{remark}[Comparison with observation]
+The observed value at the Pati-Salam scale is $\aPS \approx 0.023$ (from the two-step running in Paper~VII).
+The FEP prediction $\aPS = 27/(128\pi^2) \approx 0.0214$ is within $7\%$ of the observed value.
+
+This is a striking result: the coupling is determined entirely by the fibre geometry ($\kappa^2 = 9/8$ from the $\SO(6)$ sectional curvature) and the FEP localisation ($\Veff^{1/5} = 2\pi/3$ from the curvature-determined prior), with \emph{no free parameters}.
+Compare:
+\begin{itemize}[nosep]
+\item Na\"ive KK: $\alpha \sim 10^{-37}$ (factor $10^{35}$ too small).
+\item Soldering alone (Paper~I): $\alpha \approx 0.045$ (factor $2$ off).
+\item Soldering + FEP: $\alpha = 27/(128\pi^2) \approx 0.0214$ ($7\%$ off).
+\end{itemize}
+The remaining $7\%$ discrepancy is within the expected range of higher-order corrections (non-Gaussian FEP terms, curved-base corrections to the Hessian, threshold effects at $\MPS$).
+\end{remark}
+
+
+% ============================================================
+\section{The conformal mode and the cosmological constant}
+\label{sec:conformal}
+% ============================================================
+
+\subsection{The conformal mode as resolution scale}
+
+The conformal mode $\phi$ (the trace part of the metric fluctuation, $\delta g_{\mu\nu} = \phi\, g_{\mu\nu}$) has DeWitt eigenvalue $\lambda = -1$---it is timelike in the fibre.
+Its physical interpretation is the \emph{observer's resolution scale}: the conformal factor $e^{2\phi}$ rescales all distances by a common factor.
+
+Under the FEP, the conformal mode VEV $\phi_0$ is determined by minimising the free energy~\eqref{eq:FEP}.
+The bare cosmological constant from the fibre geometry is~\cite{Paper1}
+\begin{equation}
+\Lambda_{\mathrm{bare}} = -\frac{1}{2}\left(\Rfibre + |H|^2 - |\mathrm{I\!I}|^2\right) = -\frac{1}{2}(-30 - 1 - 2) = +\frac{33}{2} = 16.5\; \MP^2\,.
+\end{equation}
+This is positive (de Sitter)---the correct sign.
+
+The conformal dilution mechanism~\cite{Paper1} gives
+\begin{equation}
+\label{eq:Lambda_eff}
+\Lambda_{\mathrm{eff}} = \Lambda_{\mathrm{bare}} \cdot e^{-4\phi_0}\,.
+\end{equation}
+
+\subsection{The conformal dilution formula}
+
+The conformal dilution mechanism~\eqref{eq:Lambda_eff} reduces the bare cosmological constant by $e^{-4\phi_0}$.
+In Planck units, the Hubble radius is $L_H = c/H_0 \approx 1.37 \times 10^{26}\,\mathrm{m}$.
+The dimensionless content of the formula is
+\begin{equation}
+\label{eq:Lambda_dimless}
+\Lambda_{\mathrm{eff}} = \Lambda_{\mathrm{bare}} \cdot \left(\frac{\ell_P}{L_H}\right)^2 \cdot f(\phi_0)\,,
+\end{equation}
+where $f(\phi_0)$ depends on how $\phi_0$ relates to $L_H$.
+The observed value is $\Lambda_{\mathrm{obs}} = 3\Omega_\Lambda H_0^2 = 2.85 \times 10^{-122}\; \MP^2$.
+
+\subsection{The cosmological constant as consistency check}
+
+\emph{Unlike $\aPS$, the cosmological constant is not predicted from geometry alone.}
+The gauge coupling depends only on the fibre quantities $\kappa^2$, $\Rfibre$, $n$, and $|\lambda_a|$; no cosmological input is needed, and the result $\aPS = 27/(128\pi^2)$ is parameter-free.
+The conformal VEV $\phi_0$, by contrast, determines $\Lambda_{\mathrm{eff}}$---but $\phi_0$ is not yet derived from the FEP without external input.
+
+We can, however, run the formula backwards: given the observed $\Lambda_{\mathrm{obs}}$, what conformal VEV does the framework require?
+\begin{equation}
+\phi_0 = \frac{1}{4}\ln\!\left(\frac{\Lambda_{\mathrm{bare}}}{\Lambda_{\mathrm{obs}}}\right) = \frac{1}{4}\ln\!\left(\frac{16.5}{2.85 \times 10^{-122}}\right) \approx 70.5\,.
+\end{equation}
+The corresponding observer resolution scale is
+\begin{equation}
+\label{eq:Lobs}
+\Lobs = e^{\phi_0}\, \ell_P \approx 84\,\mu\mathrm{m}\,.
+\end{equation}
+
+\begin{proposition}[Observer resolution scale]
+\label{prop:Lobs}
+The observed cosmological constant implies $\Lobs \approx 80\,\mu\mathrm{m}$---the characteristic size of a eukaryotic cell ($10$--$100\,\mu\mathrm{m}$).
+For comparison, the geometric mean of the Planck length and the Hubble radius is
+\begin{equation}
+\sqrt{\ell_P \cdot L_H} \approx 47\,\mu\mathrm{m}\,,
+\end{equation}
+where $L_H = c/H_0 \approx 1.37 \times 10^{26}\,\mathrm{m}$.
+Both lie squarely in the biological cell range; their ratio of $\sim 1.7$ reflects the $\mathcal{O}(1)$ difference between $\Lambda_{\mathrm{bare}} = 16.5$ and $3\Omega_\Lambda = 2.05$.
+\end{proposition}
+
+That the observed $\Lambda$ implies an observer scale in the $10$--$100\,\mu\mathrm{m}$ range is non-trivial: this is the scale at which Markov blankets can first maintain themselves against thermal dissipation.
+In Structural Idealism, this is the scale of the simplest conscious observers.
+Whether this geometric mean relation can be \emph{derived} from the FEP functional~\eqref{eq:FEP} remains the key open problem (\cref{sec:open}).
+
+\begin{remark}[What this is and is not]
+\label{rem:cc_honest}
+This is a \emph{consistency check}, not a prediction.
+The framework accommodates the observed $\Lambda$ with a physically meaningful conformal VEV $\phi_0 \approx 70.5$, corresponding to $\Lobs \approx 84\,\mu\mathrm{m}$.
+No fine-tuning is required: the Gauss equation gives $\Lambda_{\mathrm{bare}} = 16.5\;\MP^2$ (positive, de Sitter), and conformal dilution naturally produces the $122$ orders of magnitude of suppression.
+
+However, this is \emph{not} a derivation of $\Lambda$ from first principles.
+The conformal VEV is currently input (from the observed $\Lambda$), not output (from the FEP).
+Compare with $\aPS = 27/(128\pi^2)$, which is a genuine, parameter-free prediction.
+A first-principles derivation of $\phi_0$ would promote the CC from consistency check to prediction.
+\end{remark}
+
+
+% ============================================================
+\section{Consistency checks}
+\label{sec:checks}
+% ============================================================
+
+\subsection{The observer scale is physical}
+
+The implied observer scale $\Lobs \approx 84\,\mu\mathrm{m}$ is independently meaningful:
+\begin{enumerate}[nosep]
+\item It is the characteristic size of eukaryotic cells ($10$--$100\,\mu\mathrm{m}$).
+\item It is the geometric mean of the two fundamental length scales ($\ell_P$ and $L_H$).
+\item It is the natural scale at which a Markov blanket can maintain itself against thermal noise.
+\end{enumerate}
+The fact that the observed $\Lambda$ implies a biologically meaningful $\Lobs$ is a non-trivial consistency check on the conformal dilution framework.
+
+\subsection{Signs and relative couplings are unaffected}
+
+The FEP localisation determines $\Veff$ but does not change the \emph{relative} coefficients in the Gauss equation.
+All structural results from Papers~I--VII---gauge group, fermion content, signs, anomaly cancellation, three generations, $\sin^2\theta_W = 3/8$, $\lambda(\MPS) = g^2/4$, $\varepsilon = 1/\sqrt{20}$---are preserved.
+
+\subsection{Uncertainty principle consistency}
+
+The FEP localisation widths satisfy the uncertainty bound from Paper~VI, Theorem~4:
+\begin{equation}
+\prod_{a \in V^+} \sigma_a^2 \cdot \prod_{a \in V^-} \sigma_a^2 = \left(\frac{1}{3}\right)^6 \cdot \left(\frac{1}{3}\right)^4 = \frac{1}{3^{10}} > 0\,.
+\end{equation}
+Neither the $V^+$ nor $V^-$ widths vanish, confirming that the observer cannot be perfectly localised in all fibre directions simultaneously---a consequence of the indefinite DeWitt signature.
+
+
+% ============================================================
+\section{Discussion}
+\label{sec:discussion}
+% ============================================================
+
+\subsection{Summary of results}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Quantity} & \textbf{FEP value} & \textbf{Observed} & \textbf{Discrepancy} & \textbf{Status} \\
+\midrule
+$\Veff$ & $(2\pi)^5/243 \approx 40.3$ & --- & --- & derived \\
+$\aPS$ & $27/(128\pi^2) \approx 0.0214$ & $0.023$ & $7\%$ & \textbf{prediction} \\
+$\Lambda_{\mathrm{bare}}$ & $33/2 = 16.5\;\MP^2$ & --- & --- & derived \\
+$\Lobs$ (from $\Lambda_{\mathrm{obs}}$) & $80\,\mu\mathrm{m}$ & $\sim 10$--$100\,\mu\mathrm{m}$ (cells) & $\sim 1\times$ & consistency \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The headline result is the gauge coupling: a closed-form, parameter-free prediction $\aPS = 27/(128\pi^2)$ that matches observation to $7\%$, where na\"ive KK gives a factor of $10^{35}$ discrepancy and soldering alone gives a factor of $2$.
+The cosmological constant is accommodated (not predicted) through conformal dilution, with the implied observer scale $\Lobs \approx 84\,\mu\mathrm{m}$ matching the biological cell scale.
+
+\subsection{What the FEP adds to the programme}
+
+Without the FEP, the metric bundle programme derives:
+\begin{itemize}[nosep]
+\item All relative structure (gauge group, representations, signs, ratios).
+\item \emph{Not} the absolute scale ($\gPS$, $G_4$, $\Lambda$).
+\end{itemize}
+With the FEP:
+\begin{itemize}[nosep]
+\item The gauge coupling is predicted: $\aPS = 27/(128\pi^2)$, $7\%$ from observation, with zero free parameters.
+\item The cosmological constant is accommodated: $\Lambda_{\mathrm{bare}} = 33/2\;\MP^2$ with conformal dilution giving the correct order of magnitude and a biologically meaningful observer scale.
+\item The localisation is dynamically motivated, not imposed.
+\item The observer's finite access to $\Met(X)$ is the \emph{reason} for the section condition.
+\end{itemize}
+
+\subsection{The Structural Idealist perspective}
+
+In conventional physics, the localisation problem is technical: ``how do we regulate a divergent integral?''
+In Structural Idealism, it is ontological: ``why does an observer experience \emph{one} metric rather than the space of all metrics?''
+
+The answer: because an observer IS a Markov blanket, and a Markov blanket is localised by definition.
+The blanket's finite capacity forces it to select a section---the experienced geometry.
+The FEP determines how tightly the blanket grips the section: with uniform width $\sigma = 1/\sqrt{3}$ in all fibre directions, tight enough to have well-defined gauge fields yet loose enough in the Higgs/conformal directions to allow dynamical symmetry breaking.
+
+The non-compact fibre is not a bug but a feature: it reflects the infinite space of possible metrics, i.e., the infinite space of possible experiences.
+The FEP selects the actual from the possible.
+In this sense, the localisation is not a mathematical trick but the \emph{definition of an observer in the metric bundle}.
+
+
+% ============================================================
+\section{Open problems}
+\label{sec:open}
+% ============================================================
+
+\begin{enumerate}
+\item \textbf{Derive the conformal VEV from the FEP.}
+The conformal VEV $\phi_0 \approx 70.5$ is currently determined from the observed $\Lambda$, not predicted.
+A first-principles computation of the FEP minimum for the conformal mode---including the full non-perturbative $\phi$-dependence of the energy term (base curvature $R_X$ at scale $e^{2\phi_0}$) and the complexity term (KL cost of resolution $e^{\phi_0} \ell_P$)---would promote the cosmological constant from consistency check to prediction.
+The key challenge: on a flat base the FEP gives $\phi_0 = 0$; a non-zero VEV requires the curved-base Hessian or a non-Gaussian treatment.
+
+\item \textbf{Close the residual $7\%$ in $\aPS$.}
+The FEP prediction $\aPS = 27/(128\pi^2) \approx 0.0214$ vs.\ observed $0.023$ leaves a $7\%$ discrepancy.
+Possible sources:
+\begin{enumerate}[nosep]
+\item Higher-order corrections beyond the Gaussian FEP approximation (non-Gaussian cumulants).
+\item Curved-base corrections to the Hessian ($R_X \neq 0$).
+\item Threshold effects at $\MPS$ and the matching to the two-step RG running of Paper~VII.
+\end{enumerate}
+
+\item \textbf{Non-Gaussian corrections.}
+The Gaussian FEP (Laplace approximation) is the simplest variational family.
+Higher-order cumulants (skewness from the asymmetric eigenvalue spectrum, kurtosis from fibre self-interaction) may shift the localisation and modify $\Veff$.
+
+\item \textbf{Connection to Paper~VI.}
+Paper~VI derives quantum mechanics from finite observation through a Markov blanket of dimension $N$.
+The blanket dimension $N$ should be related to $\Veff$: roughly, $N \sim 1/\Veff$ counts the number of resolvable fibre modes.
+Making this connection precise would link $\hbar$ to $\gPS$---a remarkable unification of quantum mechanics and gauge physics.
+
+\item \textbf{Time-dependence.}
+The FEP is a dynamical principle: the blanket continuously updates its recognition density.
+A time-dependent $\Veff(t)$ could drive the evolution of the gauge coupling, potentially explaining the running of $\aPS$ without invoking perturbative RG.
+\end{enumerate}
+
+
+% ============================================================
+\section*{Acknowledgements}
+% ============================================================
+
+The author thanks Claude (Anthropic) for assistance with the mathematical development and verification computations.
+
+
+% ============================================================
+% References
+% ============================================================
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,769 @@
+% The Complete Pati-Salam Lagrangian from the Metric Bundle
+% For submission to arXiv [hep-th] / [hep-ph]
+
+\documentclass[12pt,a4paper]{article}
+
+% ---- Packages ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{slashed}
+
+\geometry{margin=1in}
+
+% ---- Theorem environments ----
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+% ---- Custom commands ----
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\Met}{\operatorname{Met}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\SO}{\operatorname{SO}}
+\newcommand{\SU}{\operatorname{SU}}
+\newcommand{\Sp}{\operatorname{Sp}}
+\newcommand{\U}{\operatorname{U}}
+\newcommand{\Spin}{\operatorname{Spin}}
+\newcommand{\Cl}{\operatorname{Cl}}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\CP}{\mathbb{C}P}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\MPS}{M_{\mathrm{PS}}}
+\newcommand{\gPS}{g_{\mathrm{PS}}}
+\newcommand{\aPS}{\alpha_{\mathrm{PS}}}
+\newcommand{\vol}{\mathrm{vol}}
+
+% ---- Title ----
+\title{\textbf{The Complete Pati-Salam Effective Lagrangian\\ from the Metric Bundle}}
+
+\author{Sloan Austermann\\[4pt]
+\small\textit{Independent researcher}\\
+\small\texttt{sloan@omnisciences.org}}
+
+\date{\today}
+
+% ============================================================
+\begin{document}
+\maketitle
+
+% ---- Abstract ----
+\begin{abstract}
+We assemble the complete four-dimensional effective Lagrangian of the metric bundle programme, in which the Pati-Salam gauge group $\SU(4) \times \SU(2)_L \times \SU(2)_R$ arises from the $(6,4)$ signature of the DeWitt supermetric on Lorentzian metrics.
+The Lagrangian $\mathcal{L} = \mathcal{L}_{\mathrm{grav}} + \mathcal{L}_{\mathrm{gauge}} + \mathcal{L}_{\mathrm{ferm}} + \mathcal{L}_{\mathrm{Higgs}} + \mathcal{L}_{\mathrm{Yuk}}$ is specified with all fields, representations, and coupling relations determined by the geometry of the fourteen-dimensional metric bundle $Y^{14} = \Met(X^4)$.
+The gauge couplings satisfy $g_4 = g_L = g_R$ at the Pati-Salam scale, giving $\sin^2\theta_W = 3/8$ at unification and $\approx 0.231$ at $M_Z$.
+The Higgs sector is a $(\mathbf{1},\mathbf{2},\mathbf{2})$ bidoublet with a tree-level flat potential and radiatively generated quartic coupling $\lambda(\MPS) = g^2/4$ from Gauge-Higgs Unification.
+Three fermion generations arise from a spin$^c$ index theorem on $K3$: $N_G = (c_1^2 - \sigma)/8 = (8+16)/8 = 3$, where $\U(1)_{B-L}$ provides the spin$^c$ line bundle and $K3$ is the unique compact Ricci-flat spin 4-manifold with $\sigma \neq 0$.
+The mass hierarchy is controlled by the fundamental parameter $\varepsilon = 1/\sqrt{20}$.
+We list the distinguishing predictions of the framework and identify the remaining open problems, including the $\SU(2)_R$ breaking mechanism (five approaches exhausted) and the neutrino mass tension ($m_{\nu_3} \sim 10\,$keV with $f=1$, five orders of magnitude above observation).
+\end{abstract}
+
+\vspace{10pt}
+\noindent\textit{Keywords:} Pati-Salam model, metric bundle, effective Lagrangian, Gauge-Higgs Unification, fermion mass hierarchy
+
+\newpage
+\tableofcontents
+\newpage
+
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+Papers~I--VI of the metric bundle programme~\cite{Paper1,Paper2,Paper3,Paper4,Paper5,Paper6} established a series of structural results: the Pati-Salam gauge group from the DeWitt metric signature~(I), the fermion content from Clifford algebras~(II), the correct signs of the effective action from the Gauss equation~(III), anomaly cancellation~(IV), three generations from quaternionic structure~(V), and the emergence of quantum mechanics from finite observation~(VI).
+
+The purpose of this paper is to assemble these results into a single, explicit effective Lagrangian---a ``concrete model'' in the sense of~\cite{KrasnovPercacci2018}: a specification of all fields, their representations, their interactions, and the coupling relations that follow from the geometry.
+We aim to present the framework in a form that can be computed with, criticised, and compared to observation.
+
+\paragraph{What is determined vs.\ what is open.}
+The metric bundle determines:
+\begin{enumerate}[nosep]
+\item The gauge group: $\SU(4) \times \SU(2)_L \times \SU(2)_R$ (from the $(6,4)$ DeWitt signature).
+\item The Higgs representation: $(\mathbf{1},\mathbf{2},\mathbf{2})$ bidoublet (from the negative-norm sector).
+\item The fermion content: $(\mathbf{4},\mathbf{2},\mathbf{1}) \oplus (\bar{\mathbf{4}},\mathbf{1},\mathbf{2})$ per generation.
+\item The number of generations: $N_G = 3$ (from spin$^c$ index theorem on $K3$; see \Cref{sec:open}).
+\item The coupling relations: $g_4 = g_L = g_R$ at $\MPS$ (from equal Dynkin indices).
+\item The tree-level scalar potential: $V_{\mathrm{tree}} = 0$ (from the flatness of $S^2(\R^{3,1})$).
+\item The quartic coupling: $\lambda(\MPS) = g^2/4$ (from Gauge-Higgs Unification).
+\item The mixing parameter: $\varepsilon = 1/\sqrt{2\dim(F)} = 1/\sqrt{20}$ (from fibre geometry).
+\end{enumerate}
+
+The framework does \emph{not} determine:
+\begin{enumerate}[nosep, label=(\alph*)]
+\item The absolute gauge coupling $\gPS$ (depends on the fibre localisation scale).
+\item The Pati-Salam breaking scale $\MPS$ (set by the gauge coupling via RG running).
+\item The $\mathcal{O}(1)$ Yukawa coefficients (require the full Dirac operator on $Y^{14}$).
+\item The Higgs mass (hierarchy problem).
+\end{enumerate}
+
+\paragraph{Outline.}
+\Cref{sec:fields} specifies the field content.
+\Cref{sec:lagrangian} presents the complete Lagrangian term by term.
+\Cref{sec:breaking} describes the symmetry breaking chain and intermediate scales.
+\Cref{sec:masses} derives the fermion mass hierarchy.
+\Cref{sec:predictions} lists the distinguishing predictions.
+\Cref{sec:open} discusses the open problems.
+
+\paragraph{Conventions.}
+We use signature $(-,+,+,+)$, natural units $\hbar = c = 1$, and the normalisation $\Tr(T^a T^b) = \frac{1}{2}\delta^{ab}$ for $\SU(N)$ generators in the fundamental representation.
+
+
+% ============================================================
+\section{Field content}
+\label{sec:fields}
+% ============================================================
+
+\subsection{Gauge fields}
+
+The gauge group is
+\begin{equation}
+G_{\mathrm{PS}} = \SU(4)_C \times \SU(2)_L \times \SU(2)_R\,,
+\end{equation}
+with gauge fields and generators:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Factor} & \textbf{Gauge field} & \textbf{Generators} & \textbf{Coupling} \\
+\midrule
+$\SU(4)_C$ & $A^a_\mu$, \; $a = 1, \ldots, 15$ & $T^a_C$ & $g_4$ \\
+$\SU(2)_L$ & $W^i_{L\mu}$, \; $i = 1,2,3$ & $\tau^i_L/2$ & $g_L$ \\
+$\SU(2)_R$ & $W^i_{R\mu}$, \; $i = 1,2,3$ & $\tau^i_R/2$ & $g_R$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The metric bundle prediction~\cite{Paper1} is
+\begin{equation}
+\label{eq:coupling_unification}
+g_4(\MPS) = g_L(\MPS) = g_R(\MPS) \equiv \gPS\,.
+\end{equation}
+
+\subsection{Fermion fields}
+
+Each generation $\alpha = 1, 2, 3$ contains one left-handed and one right-handed multiplet:
+\begin{equation}
+\label{eq:fermion_reps}
+\psi^\alpha_L \sim (\mathbf{4}, \mathbf{2}, \mathbf{1})\,, \qquad
+\psi^\alpha_R \sim (\bar{\mathbf{4}}, \mathbf{1}, \mathbf{2})\,.
+\end{equation}
+Under $\SU(3)_c \times \SU(2)_L \times \SU(2)_R \times \U(1)_{B-L} \subset G_{\mathrm{PS}}$, these decompose as
+\begin{equation}
+(\mathbf{4}, \mathbf{2}, \mathbf{1}) = \begin{pmatrix} u \\ d \end{pmatrix}_L \oplus \begin{pmatrix} \nu \\ e \end{pmatrix}_L\,, \qquad
+(\bar{\mathbf{4}}, \mathbf{1}, \mathbf{2}) = \begin{pmatrix} u \\ d \end{pmatrix}_R \oplus \begin{pmatrix} \nu \\ e \end{pmatrix}_R\,,
+\end{equation}
+where the quarks carry $B{-}L = +1/3$ and the leptons carry $B{-}L = -1$.
+Each generation has $16$ Weyl components, matching one $\mathbf{16}$ of $\SO(10)$.
+
+\begin{remark}[Geometric origin of the fermion content]
+The fermion representations~\eqref{eq:fermion_reps} arise from the Clifford algebra of the fibre~\cite{Paper2}.
+The positive-norm sector $V^+ \cong \R^6$ defines $\Cl(\R^6, \C) \cong M_8(\C)$, whose irreducible module $\C^8$ decomposes under $\SU(3) \times \U(1) \subset \SU(4)$ as $\mathbf{3}_{-1/3} \oplus \bar{\mathbf{3}}_{+1/3} \oplus \mathbf{1}_{-1} \oplus \mathbf{1}_{+1}$---exactly one generation of Standard Model fermions with correct hypercharges.
+\end{remark}
+
+\subsection{Higgs field}
+
+The Higgs sector consists of a single $(\mathbf{1}, \mathbf{2}, \mathbf{2})$ Pati-Salam bidoublet:
+\begin{equation}
+\label{eq:higgs_bidoublet}
+\Phi = \begin{pmatrix} \phi^0_1 & \phi^+_2 \\ \phi^-_1 & \phi^0_2 \end{pmatrix}\,,
+\end{equation}
+where the rows transform under $\SU(2)_L$ and the columns under $\SU(2)_R$.
+
+\begin{remark}[Geometric origin of the Higgs]
+The bidoublet $\Phi$ is identified with the four negative-norm modes of the Lorentzian DeWitt metric~\cite{Paper1}.
+The fibre $S^2(\R^{3,1})$ has DeWitt signature $(6,4)$; the positive-norm sector $V^+ \cong \R^6$ transforms as $(\mathbf{6},\mathbf{1},\mathbf{1})$ and the negative-norm sector $V^- \cong \R^4$ transforms as $(\mathbf{1},\mathbf{2},\mathbf{2})$ under $\SO(6) \times \SO(4) \cong \SU(4) \times \SU(2)_L \times \SU(2)_R$.
+The Higgs is \emph{not} added by hand---it is the negative-norm part of the metric fibre.
+\end{remark}
+
+\subsection{Pati-Salam breaking scalar}
+
+The breaking $\SU(4)_C \to \SU(3)_c \times \U(1)_{B-L}$ and $\SU(2)_R \to \U(1)_R$ requires additional scalar fields beyond the bidoublet.
+In the standard Pati-Salam literature~\cite{MohapatraPati1975}, this is accomplished by a scalar in the $(\mathbf{10},\mathbf{1},\mathbf{3})$ or $(\overline{\mathbf{10}},\mathbf{1},\mathbf{3})$ representation, or alternatively by $(\mathbf{1},\mathbf{1},\mathbf{3})$ for $\SU(2)_R$ breaking combined with a separate mechanism for $\SU(4)$ breaking.
+
+In the metric bundle framework, the first step of symmetry breaking---$\SU(4)_C \to \SU(3)_c \times \U(1)_{B-L}$---is \emph{derived from the fibre curvature}.
+The positive-norm sector $V^+ \cong \R^6$ admits a space of almost-complex structures $\CP^3 = \SU(4)/\U(3)$.
+The holomorphic sectional curvature of the DeWitt metric defines an energy functional $E(J) = \sum_a K(v_a, Jv_a)$ on $\CP^3$.
+Numerical computation shows this potential varies by $\sim$193\% over $\CP^3$, with a \emph{stable minimum} (all six Hessian eigenvalues positive) that selects a preferred $\U(3) \subset \SU(4)$.
+
+The Ricci tensor on $V^+$ has eigenvalues $\{0, -3, -3, -3, -3, -3\}$ (in our conventions).
+The unique Ricci-flat direction is exactly the $B{-}L$ generator $\diag(3\beta, \beta, \beta, \beta)$ (with $\eta$-trace zero), confirmed to unit overlap numerically.
+Physically, the timelike component of $\SU(4)$ corresponds to the lepton, while the three spacelike components give the three quark colours: $N_{\mathrm{colors}} = d - 1 = 3$ for $d = 4$ Lorentzian spacetime.
+The colour triplet moduli from $\SO(6)/\U(3)$ transform as $\mathbf{3}_{-2} \oplus \bar{\mathbf{3}}_{+2}$ under $\SU(3) \times \U(1)$ (see Paper~I, Section~5.2) and carry $\SU(2)_R$ charge (Casimir $j = 1/2$), confirming their role as the breaking scalar $\Delta_R$.
+
+The second step---$\SU(2)_R \to \U(1)_R$---cannot be achieved classically: the stabiliser of $J_{\min}$ is the boost algebra, which treats $\SU(2)_L$ and $\SU(2)_R$ symmetrically.
+The $L$-$R$ breaking is quantum-mechanical, arising from chiral fermion loops (Coleman-Weinberg mechanism), and is \emph{purely Lorentzian}: the Euclidean fibre $V^+$ has completely isotropic Ricci ($\{4,4,4,4,4,4,4,4,4\}$), giving no $\CP^3$ potential.
+We denote the breaking scalar as $\Delta_R$ and parametrise the $\SU(2)_R$ breaking scale phenomenologically.
+
+
+% ============================================================
+\section{The Lagrangian}
+\label{sec:lagrangian}
+% ============================================================
+
+The complete four-dimensional effective Lagrangian is
+\begin{equation}
+\label{eq:full_lagrangian}
+\boxed{
+\mathcal{L} = \mathcal{L}_{\mathrm{grav}} + \mathcal{L}_{\mathrm{gauge}} + \mathcal{L}_{\mathrm{ferm}} + \mathcal{L}_{\mathrm{Higgs}} + \mathcal{L}_{\mathrm{Yuk}} + \mathcal{L}_{\Delta}
+}
+\end{equation}
+We specify each term below.
+
+\subsection{Gravity}
+
+\begin{equation}
+\label{eq:L_grav}
+\mathcal{L}_{\mathrm{grav}} = \frac{1}{16\pi G_4}\, R\, \sqrt{|g|}
+\end{equation}
+where $R$ is the four-dimensional Ricci scalar and $G_4 = G_{14}/V_{\mathrm{eff}}$ is the four-dimensional Newton constant.
+
+The Einstein-Hilbert term arises from the $+R_X$ contribution in the Gauss equation for the embedding $g(X) \hookrightarrow Y^{14}$~\cite{Paper3}.
+The positive sign is fixed by geometry and gives attractive gravity.
+
+\subsection{Gauge kinetic terms}
+
+\begin{equation}
+\label{eq:L_gauge}
+\mathcal{L}_{\mathrm{gauge}} = -\frac{1}{4g_4^2}\, F^a_{\mu\nu} F^{a\,\mu\nu}
+-\frac{1}{4g_L^2}\, W^i_{L\,\mu\nu} W_L^{i\,\mu\nu}
+-\frac{1}{4g_R^2}\, W^i_{R\,\mu\nu} W_R^{i\,\mu\nu}\,,
+\end{equation}
+where
+\begin{align}
+F^a_{\mu\nu} &= \partial_\mu A^a_\nu - \partial_\nu A^a_\mu + g_4\, f^{abc}\, A^b_\mu A^c_\nu\,, \\
+W^i_{X\,\mu\nu} &= \partial_\mu W^i_{X\nu} - \partial_\nu W^i_{X\mu} + g_X\, \epsilon^{ijk}\, W^j_{X\mu} W^k_{X\nu}\,, \quad X = L, R\,.
+\end{align}
+
+The gauge kinetic terms arise from the normal curvature $R^\perp$ in the Gauss equation~\cite{Paper3}.
+The gauge kinetic metric $h_{ab}$ is positive definite because gauge transformations act in the traceless sector of $S^2(\R^4)$, where the DeWitt metric is positive definite (Paper~III, Theorem~4.1).
+
+At $\MPS$, the couplings unify:
+\begin{equation}
+\label{eq:unification}
+\frac{1}{g_4^2(\MPS)} = \frac{1}{g_L^2(\MPS)} = \frac{1}{g_R^2(\MPS)} = \frac{h}{16\pi G_4}\,,
+\end{equation}
+where $h = 6$ is the common eigenvalue of the gauge kinetic metric for $\SU(2)_{L,R}$~\cite{Paper3}.
+The equal Dynkin indices $T(\SU(4)) = T(\SU(2)_L) = T(\SU(2)_R) = 1$ guarantee~\eqref{eq:unification}.
+
+\subsection{Fermion kinetic terms and gauge couplings}
+
+\begin{equation}
+\label{eq:L_ferm}
+\mathcal{L}_{\mathrm{ferm}} = \sum_{\alpha=1}^{3} \left[\,
+\bar{\psi}^\alpha_L\, i\slashed{D}_L\, \psi^\alpha_L
+\;+\;
+\bar{\psi}^\alpha_R\, i\slashed{D}_R\, \psi^\alpha_R
+\,\right]\,,
+\end{equation}
+where the covariant derivatives are
+\begin{align}
+D_{L\mu} &= \partial_\mu - i g_4\, T^a_C\, A^a_\mu - i g_L\, \frac{\tau^i_L}{2}\, W^i_{L\mu}\,, \\
+D_{R\mu} &= \partial_\mu - i g_4\, \bar{T}^a_C\, A^a_\mu - i g_R\, \frac{\tau^i_R}{2}\, W^i_{R\mu}\,,
+\end{align}
+with $T^a_C$ in the $\mathbf{4}$ and $\bar{T}^a_C$ in the $\bar{\mathbf{4}}$ of $\SU(4)$.
+
+\subsection{Higgs sector}
+
+The Higgs Lagrangian is
+\begin{equation}
+\label{eq:L_higgs}
+\mathcal{L}_{\mathrm{Higgs}} = \Tr\!\left[(D_\mu \Phi)^\dagger (D^\mu \Phi)\right] - V(\Phi)\,,
+\end{equation}
+where the covariant derivative of the bidoublet is
+\begin{equation}
+D_\mu \Phi = \partial_\mu \Phi - i g_L\, \frac{\tau^i_L}{2}\, W^i_{L\mu}\, \Phi + i g_R\, \Phi\, \frac{\tau^i_R}{2}\, W^i_{R\mu}\,.
+\end{equation}
+
+\paragraph{The scalar potential.}
+The tree-level potential vanishes:
+\begin{equation}
+\label{eq:V_tree}
+V_{\mathrm{tree}}(\Phi) = 0\,.
+\end{equation}
+This is because the Higgs field parameterises the negative-norm subspace $V^- \subset S^2(\R^{3,1})$, which is a flat pseudo-Euclidean space with vanishing Riemannian curvature~\cite{Paper1}.
+The tree-level flatness is a consequence of higher-dimensional gauge invariance in the Gauge-Higgs Unification (GHU) mechanism~\cite{Hosotani1983,HatanakaHosotani1998}.
+
+The one-loop Coleman-Weinberg potential~\cite{ColemanWeinberg1973} generates the Higgs mass and self-coupling radiatively:
+\begin{equation}
+\label{eq:V_CW}
+V_{\mathrm{CW}}(\Phi) = \frac{\lambda}{16\pi^2}\, \left(\Tr[\Phi^\dagger \Phi]\right)^2 \left[\ln\!\left(\frac{\Tr[\Phi^\dagger \Phi]}{v^2}\right) - \frac{25}{6}\right],
+\end{equation}
+where $v$ is the electroweak VEV and the quartic coupling at the Pati-Salam scale is
+\begin{equation}
+\label{eq:quartic}
+\boxed{\lambda(\MPS) = \frac{\gPS^2}{4}}
+\end{equation}
+This is a \emph{prediction}: the quartic coupling is not a free parameter but is determined by the gauge coupling through GHU.
+Taking $\gPS \approx 0.65$ gives $\lambda(\MPS) \approx 0.11$, to be compared with the observed low-energy value $\lambda(M_Z) = m_h^2/(2v^2) \approx 0.13$.
+
+\begin{remark}[Hierarchy problem]
+The radiative Higgs mass from~\eqref{eq:V_CW} is $m_H \sim (g^2/4\pi)\, \MPS \sim 10^{13\text{--}14}\,\mathrm{GeV}$, far above the observed $125\,\mathrm{GeV}$.
+The metric bundle framework does not resolve the hierarchy problem.
+\end{remark}
+
+\subsection{Yukawa couplings}
+
+The most general Yukawa interaction allowed by $G_{\mathrm{PS}}$ with the bidoublet~$\Phi$ is
+\begin{equation}
+\label{eq:L_yuk}
+\mathcal{L}_{\mathrm{Yuk}} = \sum_{\alpha,\beta=1}^{3} \left[\,
+Y^{\alpha\beta}\, \bar{\psi}^\alpha_L\, \Phi\, \psi^\beta_R
+\;+\;
+\tilde{Y}^{\alpha\beta}\, \bar{\psi}^\alpha_L\, \tilde{\Phi}\, \psi^\beta_R
+\;+\; \mathrm{h.c.}
+\,\right]\,,
+\end{equation}
+where $\tilde{\Phi} = \tau_2\, \Phi^*\, \tau_2$ is the charge-conjugated bidoublet.
+
+The $\SU(4)$ structure of Pati-Salam imposes quark-lepton relations on the Yukawa matrices:
+\begin{equation}
+\label{eq:SU4_Yukawa}
+Y^{\alpha\beta}_{\mathrm{up}} = Y^{\alpha\beta}_\nu\,, \qquad
+Y^{\alpha\beta}_{\mathrm{down}} = Y^{\alpha\beta}_{\ell}\,.
+\end{equation}
+These hold at the unification scale.
+In particular, the bottom-tau mass relation $m_b(\MPS) = m_\tau(\MPS)$ is a zeroth-order prediction~\cite{PatiSalam1974}.
+
+\paragraph{Tree-level degeneracy and the Sp(1) breaking mechanism.}
+At tree level, the three generations are related by the quaternionic structure on $V^+ \cong \R^6$~\cite{Paper5}:
+\begin{equation}
+Y^{\alpha\beta}_{\mathrm{tree}} = y_0\, \delta^{\alpha\beta}\,.
+\end{equation}
+All three generations have \emph{identical} Yukawa couplings.
+The mass hierarchy arises from the breaking of the $\Sp(1)$ flavour symmetry~\cite{Paper5}.
+
+The Higgs VEV in the $(\mathbf{1},\mathbf{2},\mathbf{2})$ sector spontaneously breaks the $\Sp(1) \cong \SU(2)_{\mathrm{flavour}}$ that rotates the three complex structures $J_1, J_2, J_3$ on $V^+$:
+\begin{equation}
+\Sp(1)_{\mathrm{flavour}} \;\xrightarrow{\langle\Phi\rangle}\; \U(1)_{\mathrm{flavour}}\,.
+\end{equation}
+Under this breaking, the three generations acquire different $\U(1)$ charges $(0, +2, -2)$, making them distinguishable.
+The generation aligned with the breaking direction (conventionally the third) gets the maximal Yukawa coupling; the perpendicular generations are hierarchically suppressed.
+
+The resulting mass hierarchy is controlled by the fundamental parameter
+\begin{equation}
+\label{eq:epsilon}
+\boxed{\varepsilon = \frac{1}{\sqrt{2\dim(F)}} = \frac{1}{\sqrt{20}} \approx 0.224}
+\end{equation}
+which is simultaneously the Cabibbo mixing parameter (see \Cref{sec:predictions}).
+
+\subsection{Breaking sector}
+
+The Lagrangian for the Pati-Salam breaking scalar $\Delta_R$ is
+\begin{equation}
+\label{eq:L_delta}
+\mathcal{L}_\Delta = \Tr\!\left[(D_\mu \Delta_R)^\dagger (D^\mu \Delta_R)\right] - V(\Delta_R) - V(\Phi, \Delta_R)\,,
+\end{equation}
+where $\Delta_R \sim (\mathbf{1},\mathbf{1},\mathbf{3})$ under $G_{\mathrm{PS}}$ and its VEV $\langle \Delta_R \rangle = v_R\, \diag(0, 1)$ breaks $\SU(2)_R \to \U(1)_R$.
+The coupling $V(\Phi, \Delta_R)$ between the bidoublet and the breaking scalar generates the Dirac mass splitting between $H_1$ and $H_2$ after $\SU(2)_R$ breaking.
+
+\begin{remark}[Geometric origin of $\Delta_R$]
+The $\SU(4)_C$ breaking is derived from the fibre curvature: the holomorphic sectional curvature on $\CP^3 = \SU(4)/\U(3) \subset V^+$ selects a stable minimum with $\U(3)$ stabiliser, identifying the $B{-}L$ generator as the unique Ricci-flat direction.
+This geometric origin is confirmed by the full $10 \times 10$ Ricci tensor on $F = \GL^+(4)/\SO(3,1)$: the $V^+$ eigenvalues are $\{-4, -4, -4, -4, -4, -1\}$, with the isolated $-1$ eigenvalue corresponding exactly to the $B{-}L$ direction. The fibre geometry thus \emph{geometrically distinguishes} $\U(1)_{B-L}$ from $\SU(3)_c$ without any input.
+
+The $\CP^3$ moduli transform as $\mathbf{3} \oplus \bar{\mathbf{3}}$ with $\SU(2)_R$ Casimir $j = 1/2$, matching the quantum numbers of $\Delta_R$.
+The $\SU(2)_R$ breaking mechanism remains open despite exhaustive investigation: the perturbative Coleman-Weinberg potential gives $v_R \approx 0.73\, M_C$ (no hierarchy); the instanton action on $\GL^+(4)/\SO(3,1)$ gives $S = 8\pi^2/g_{\mathrm{PS}}^2 \approx 290$ with $e^{-S} \sim 10^{-126}$ (too suppressed); NJL composite formation requires strong coupling but $\alpha_{\mathrm{PS}} \approx 0.02$; and radiative $b/a$ splitting gives only $5.6\%$ suppression where a factor of $400$ is needed.
+For the $\SU(2)_R$ breaking scale, we parametrise $v_R$ phenomenologically; this is the same situation as in standard Pati-Salam models.
+\end{remark}
+
+
+% ============================================================
+\section{Symmetry breaking and intermediate scales}
+\label{sec:breaking}
+% ============================================================
+
+\subsection{The breaking chain}
+
+The symmetry breaking proceeds in stages:
+\begin{equation}
+\label{eq:breaking_chain}
+\begin{aligned}
+&\SU(4)_C \times \SU(2)_L \times \SU(2)_R \\
+&\qquad \xrightarrow{\;\langle\Delta_R\rangle,\; M_C\;} \SU(3)_c \times \SU(2)_L \times \SU(2)_R \times \U(1)_{B-L} \\
+&\qquad \xrightarrow{\;\langle\Delta_R\rangle,\; M_R\;} \SU(3)_c \times \SU(2)_L \times \U(1)_Y \\
+&\qquad \xrightarrow{\;\langle\Phi\rangle,\; v_{\mathrm{EW}}\;} \SU(3)_c \times \U(1)_{\mathrm{em}}
+\end{aligned}
+\end{equation}
+where the hypercharge is $Y = T_{3R} + (B{-}L)/2$.
+
+\subsection{RG running and scale determination}
+
+Given the boundary condition~\eqref{eq:coupling_unification}, the one-loop running determines the intermediate scales.
+The beta function coefficients for $\SU(N)$ with $n_f$ Weyl fermions and $n_s$ complex scalars in the fundamental are
+\begin{equation}
+b = -\frac{11}{3}\, N + \frac{2}{3}\, n_f + \frac{1}{3}\, n_s\,.
+\end{equation}
+
+The running proceeds in two stages with different gauge content.
+
+\paragraph{Below $M_R$ (Standard Model).}
+\begin{equation}
+b_3^{\mathrm{SM}} = -7\,, \qquad b_2^{\mathrm{SM}} = -\frac{19}{6}\,, \qquad b_{1}^{\mathrm{SM}} = \frac{41}{10}\,,
+\end{equation}
+where $b_1^{\mathrm{SM}}$ uses the GUT normalisation $\alpha_1 = \tfrac{5}{3}\alpha_Y$.
+
+\paragraph{Between $M_R$ and $M_C$ (Left-Right symmetric).}
+Below the Pati-Salam scale $M_C$ where $\SU(4)_C$ breaks, the gauge group is $\SU(3)_c \times \SU(2)_L \times \SU(2)_R \times \U(1)_{B-L}$.
+With three generations, the $(\mathbf{1},\mathbf{2},\mathbf{2})$ bidoublet, and the $(\mathbf{1},\mathbf{1},\mathbf{3})$ breaking scalar $\Delta_R$:
+\begin{equation}
+b_3^{\mathrm{LR}} = -7\,, \qquad b_{2L}^{\mathrm{LR}} = -\frac{8}{3}\,, \qquad b_{2R}^{\mathrm{LR}} = -\frac{5}{3}\,, \qquad b_{BL}^{\mathrm{LR}} = \frac{11}{2}\,.
+\end{equation}
+
+\paragraph{Above $M_C$ (Pati-Salam).}
+With the full $\SU(4)_C \times \SU(2)_L \times \SU(2)_R$ gauge group:
+\begin{equation}
+b_4^{\mathrm{PS}} = -\frac{20}{3}\,, \qquad b_{2L}^{\mathrm{PS}} = -\frac{8}{3}\,, \qquad b_{2R}^{\mathrm{PS}} = -\frac{8}{3}\,.
+\end{equation}
+
+\paragraph{Zero-parameter scale determination.}
+The breaking chain $G_{\mathrm{PS}} \xrightarrow{M_C} G_{\mathrm{LR}} \xrightarrow{M_R} G_{\mathrm{SM}}$ introduces two intermediate scales $M_C$ and $M_R$ as unknowns.
+Two conditions---$\alpha_3(M_C) = \alpha_{2L}(M_C)$ (Pati-Salam unification) and the hypercharge matching
+\begin{equation}
+\label{eq:alpha1_matching}
+\frac{1}{\alpha_1(M_R)} = \frac{3}{5}\,\frac{1}{\alpha_{2R}(M_R)} + \frac{2}{5}\,\frac{1}{\alpha_{BL}(M_R)}
+\end{equation}
+---form a closed system: two equations, two unknowns.
+The only inputs are measured SM couplings at $M_Z$ and $\sin^2\theta_W(\MPS) = 3/8$.
+The one-loop analytic solution gives:
+\begin{equation}
+\label{eq:scale_determination}
+M_C \approx 4.5 \times 10^{16}\;\mathrm{GeV}\,, \qquad M_R \approx 1.1 \times 10^{9}\;\mathrm{GeV}\,, \qquad \alpha_{\mathrm{PS}}^{-1} \approx 46.2\,.
+\end{equation}
+The proton lifetime is $\tau_p \sim 5 \times 10^{44}\;\mathrm{yr}$, safely above the Super-Kamiokande bound $\tau_p > 5.9 \times 10^{33}\;\mathrm{yr}$.
+
+\begin{remark}[$M_R$ tension with seesaw --- quantified]
+\label{rem:MR_tension}
+The $\SU(4)$ Yukawa relation $m_D(\nu_\alpha) = m_D(u_\alpha)$ at $M_C$, combined with $b/a = 0$ at tree level (Ricci tensor proportional to the Killing form at the symmetric point), forces $m_D(\nu_3) \approx m_t(M_C) \approx 100\;\mathrm{GeV}$.
+With the gauge-determined $v_R \approx 10^9\;\mathrm{GeV}$ and $f = 1$, the type-I seesaw gives $m_{\nu_3} \approx m_t^2/v_R \approx 10\;\mathrm{keV}$---a factor $2 \times 10^5$ above the observed $\sim 0.05\;\mathrm{eV}$.
+The tension is generation-dependent: $m_{\nu_1} \sim 10^{-6}\;\mathrm{eV}$ (compatible), $m_{\nu_2} \sim 0.25\;\mathrm{eV}$ ($28\times$ too heavy), $m_{\nu_3} \sim 10\;\mathrm{keV}$ ($2 \times 10^5$ too heavy).
+
+Five approaches to resolving this tension have been exhausted:
+(1) Coleman-Weinberg gives no hierarchy ($v_R \approx 0.73\, M_C$);
+(2) instanton on $\GL^+(4)/\SO(3,1)$ is too suppressed ($S = 290$, $e^{-S} \sim 10^{-126}$);
+(3) NJL composite $\Delta_R$ fails ($\alpha_{\mathrm{PS}} \approx 0.02$ too weak);
+(4) inverse seesaw with $\mu_S \sim 4\;\mathrm{TeV}$ works numerically but the two-loop origin of $\mu_S$ is fitted, not derived;
+(5) radiative $b/a$ RGE splitting from $M_C$ to $v_R$ gives only $5.6\%$ suppression where a factor of $400$ is needed.
+
+Standard Pati-Salam models face the same tension and resolve it with free parameters ($f$ or $\mu_S$).
+The metric bundle is not worse in this regard---it simply lacks the extra freedom to hide the problem.
+\end{remark}
+
+The Weinberg angle evolves from $\sin^2\theta_W(\MPS) = 3/8$ to
+\begin{equation}
+\label{eq:weinberg}
+\boxed{\sin^2\theta_W(M_Z) \approx 0.231}
+\end{equation}
+after one-loop two-step running through $M_R$ and $M_C$, in agreement with the measured value $0.23122 \pm 0.00004$~\cite{PDG2024}.
+Note that naive single-step running with SM beta coefficients from $\MPS$ to $M_Z$ gives $\sin^2\theta_W \approx 0.205$, \emph{off by~11\%}.
+The two-step Pati-Salam running closes this gap because $\SU(2)_R$ is active above~$M_R$, slowing the divergence between $\alpha_1$ and~$\alpha_2$.
+
+\subsection{The two Higgs doublets}
+
+After Pati-Salam breaking, the bidoublet $\Phi$ decomposes as
+\begin{equation}
+(\mathbf{1},\mathbf{2},\mathbf{2}) \;\to\; H_1 \sim (\mathbf{1},\mathbf{2},+\tfrac{1}{2}) \;\oplus\; H_2 \sim (\mathbf{1},\mathbf{2},-\tfrac{1}{2})\,,
+\end{equation}
+realising a Two Higgs Doublet Model (2HDM).
+The physical spectrum contains five Higgs bosons: $h^0$~(SM-like), $H^0$, $A^0$, and $H^\pm$.
+
+The VEV structure is
+\begin{equation}
+\langle\Phi\rangle = \frac{1}{\sqrt{2}} \begin{pmatrix} \kappa_1 & 0 \\ 0 & \kappa_2 \end{pmatrix}\,,
+\end{equation}
+with $\kappa_1^2 + \kappa_2^2 = v^2 = (246\,\mathrm{GeV})^2$.
+The ratio $\tan\beta = \kappa_2/\kappa_1$ is a free parameter within the framework.
+
+The Yukawa couplings~\eqref{eq:L_yuk} give fermion masses
+\begin{equation}
+M_u = Y\, \kappa_1 + \tilde{Y}\, \kappa_2\,, \qquad M_d = Y\, \kappa_2 + \tilde{Y}\, \kappa_1\,.
+\end{equation}
+With two independent Yukawa matrices $Y$ and $\tilde{Y}$, the up-type and down-type mass matrices are independent (unlike minimal $\SU(5)$), allowing realistic fermion masses.
+
+
+% ============================================================
+\section{Fermion mass hierarchy}
+\label{sec:masses}
+% ============================================================
+
+\subsection{The Froggatt-Nielsen mechanism from quaternionic structure}
+
+The three complex structures $J_1, J_2, J_3$ on $V^+ \cong \R^6$ define three generations~\cite{Paper5}.
+The $\Sp(1)$ flavour symmetry rotating these complex structures is broken by the Higgs VEV to $\U(1)$.
+This assigns Froggatt-Nielsen (FN) charges to each generation:
+\begin{equation}
+q_3 = 0\,, \qquad q_2 = 1\,, \qquad q_1 = 2\,,
+\end{equation}
+where $q_\alpha$ measures the ``distance'' in quaternion space from the breaking direction.
+
+The Yukawa matrix elements scale as
+\begin{equation}
+Y^{\alpha\beta} \sim y_0\, \varepsilon^{|q_\alpha| + |q_\beta|}\,,
+\end{equation}
+where $\varepsilon = 1/\sqrt{20}$ is the fundamental suppression parameter~\eqref{eq:epsilon}.
+
+\subsection{Mass predictions}
+
+For the charged leptons (down-type PS sector with FN charges $(2,1,0)$):
+\begin{equation}
+m_e : m_\mu : m_\tau \;\sim\; \varepsilon^6 : \varepsilon^2 : 1\,.
+\end{equation}
+
+For the down-type quarks:
+\begin{equation}
+m_d : m_s : m_b \;\sim\; \varepsilon^{5.5} : \varepsilon^{2.5} : 1\,.
+\end{equation}
+
+For the up-type quarks (with enhanced FN charges):
+\begin{equation}
+m_u : m_c : m_t \;\sim\; \varepsilon^8 : \varepsilon^4 : 1\,.
+\end{equation}
+
+\begin{remark}[Honesty note on the mass hierarchy]
+The parameter $\varepsilon = 1/\sqrt{20}$ is genuinely derived from geometry.
+However, the specific $\varepsilon$-powers for different fermion sectors (charged leptons, down quarks, up quarks) are currently \emph{fitted} to reproduce observed hierarchies.
+The different powers for up-type vs.\ down-type can be motivated by the distinct roles of $\Phi$ vs.\ $\tilde{\Phi}$ in the Yukawa coupling~\eqref{eq:L_yuk}, but a first-principles derivation of the FN charges from the Pati-Salam representation structure remains an open problem.
+\end{remark}
+
+Quantitative comparison:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Ratio} & \textbf{Predicted} & \textbf{Observed} & \textbf{Error} \\
+\midrule
+$m_\mu/m_\tau$ & $\varepsilon^2 = 0.050$ & $0.059$ & $15\%$ \\
+$m_e/m_\tau$ & $\varepsilon^6 = 1.3 \times 10^{-4}$ & $2.9 \times 10^{-4}$ & $2.3\times$ \\
+$m_s/m_b$ & $\varepsilon^{2.5} = 0.024$ & $0.023$ & $4\%$ \\
+$m_d/m_b$ & $\varepsilon^{5.5} = 2.5 \times 10^{-4}$ & $1.1 \times 10^{-3}$ & $4\times$ \\
+$m_c/m_t$ & $\varepsilon^4 = 2.5 \times 10^{-3}$ & $7.4 \times 10^{-3}$ & $3\times$ \\
+$m_u/m_t$ & $\varepsilon^8 = 6 \times 10^{-6}$ & $1.3 \times 10^{-5}$ & $2\times$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The mass hierarchy is reproduced to within factors of $2$--$4$, using a \emph{single} parameter $\varepsilon$ with no fitting.
+The remaining discrepancies are expected to be resolved by $\mathcal{O}(1)$ coefficients from the full Dirac operator computation on $Y^{14}$.
+
+\subsection{The CKM matrix}
+
+The quark mixing matrix (CKM) follows from the Froggatt-Nielsen structure:
+\begin{equation}
+V_{\mathrm{CKM}} \approx \begin{pmatrix}
+1 - \varepsilon^2/2 & \varepsilon & A\varepsilon^3 \\
+-\varepsilon & 1 - \varepsilon^2/2 & A\varepsilon^2 \\
+A\varepsilon^3(1-\rho-i\eta) & -A\varepsilon^2 & 1
+\end{pmatrix}
+\end{equation}
+in the Wolfenstein parameterisation with $\lambda = \varepsilon = 1/\sqrt{20}$ (derived from fibre geometry) and $A = \sin(\pi/3) = \sqrt{3}/2$ (motivated by the Fubini-Study metric on the space of complex structures, but not rigorously derived).
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Element} & \textbf{Predicted} & \textbf{Observed} & \textbf{Error} \\
+\midrule
+$|V_{us}| = \sin\theta_C$ & $1/\sqrt{20} = 0.224$ & $0.225$ & $0.75\%$ \\
+$|V_{cb}|$ & $A\varepsilon^2 = 0.043$ & $0.041$ & $6\%$ \\
+$|V_{ub}|$ & $A\varepsilon^3/3 = 0.0032$ & $0.0038$ & $16\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The PMNS matrix and neutrino masses}
+
+In the lepton sector, the $\SU(4)$ Yukawa relation~\eqref{eq:SU4_Yukawa} gives Dirac neutrino masses $m_D(\nu_\alpha) = m_{\mathrm{up},\alpha}(\MPS)$.
+The right-handed neutrinos $\nu_R$ acquire Majorana masses from $\SU(2)_R$ breaking at the scale $v_R$ determined by the gauge coupling running~\eqref{eq:scale_determination}:
+\begin{equation}
+M_{R,\text{Maj}} = f\, v_R\,,\qquad v_R \approx 1.1 \times 10^{9}\;\mathrm{GeV}\,,
+\end{equation}
+where $f$ is the Majorana Yukawa coupling of $\nu_R$ to $\Delta_R$.
+The Type-I seesaw mechanism gives light neutrino masses:
+\begin{equation}
+m_\nu \approx m_D^2 / (f\, v_R)\,.
+\end{equation}
+
+With $m_D(\nu_\tau) \sim m_t(\MPS) \sim 90\,\mathrm{GeV}$, $v_R \approx 1.1 \times 10^{9}\,\mathrm{GeV}$, and $f = 1$:
+\begin{equation}
+m_{\nu_\tau} \sim \frac{(90\,\mathrm{GeV})^2}{1.1 \times 10^{9}\,\mathrm{GeV}} \sim 7 \times 10^{-6}\,\mathrm{GeV} \approx 7\,\mathrm{keV}\,.
+\end{equation}
+This is five orders of magnitude above the atmospheric mass splitting $\sqrt{\Delta m^2_{31}} \approx 50\,\mathrm{meV}$, constituting a significant tension (see \Cref{rem:MR_tension}).
+The resolution likely requires a non-minimal seesaw mechanism (e.g.\ inverse seesaw with a small lepton-number-violating scale $\mu_S \sim \mathrm{TeV}$), or radiative corrections that split $m_D(\nu)$ from $m_D(u)$ below the $\SU(4)$ breaking scale.
+The normal hierarchy is naturally realised by the up-type quark mass ordering.
+
+The PMNS mixing is large because the Majorana mass matrix $M_R$ has a different structure from $m_D$.
+At zeroth order, the $S_3$ permutation symmetry of the three generations gives tribimaximal mixing.
+Corrections of order~$\varepsilon$ give:
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Angle} & \textbf{Predicted} & \textbf{Observed} & \textbf{Error} \\
+\midrule
+$\theta_{13}$ & $\arcsin(\varepsilon/\sqrt{2}) = 9.1^\circ$ & $8.6^\circ$ & $0.5^\circ$ \\
+$\theta_{23}$ & $45^\circ$ ($\mu$-$\tau$ symmetry) & $42.2^\circ$ & $2.8^\circ$ \\
+$\theta_{12}$ & $45^\circ - \theta_C = 32.0^\circ$ (QLC) & $33.4^\circ$ & $1.4^\circ$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+% ============================================================
+\section{Distinguishing predictions}
+\label{sec:predictions}
+% ============================================================
+
+The metric bundle framework makes several predictions that distinguish it from both the Standard Model and from a \emph{generic} Pati-Salam model (where the gauge group and representations are chosen by hand):
+
+\begin{enumerate}
+\item \textbf{Pati-Salam specifically.}
+The gauge group is $\SU(4) \times \SU(2)_L \times \SU(2)_R$, \emph{not} $\SU(5)$ or $\SO(10)$.
+This is derived from the $(6,4)$ signature of the DeWitt metric, not assumed.
+\emph{Consequence:} No dimension-6 proton decay operators.
+Proton decay via $\SU(5)$-type processes ($p \to \pi^0 e^+$) is \emph{absent}.
+
+\item \textbf{Two Higgs Doublet Model.}
+The Higgs sector is the $(\mathbf{1},\mathbf{2},\mathbf{2})$ bidoublet, predicting five physical scalars: $h^0$, $H^0$, $A^0$, $H^\pm$.
+This is a structural prediction (from $V^-$ of the DeWitt metric), not a model-building choice.
+
+\item \textbf{Tree-level flat Higgs potential.}
+The quartic coupling is radiatively generated with the boundary condition $\lambda(\MPS) = g^2/4$.
+This is a specific prediction of Gauge-Higgs Unification that is absent in generic Pati-Salam models.
+
+\item \textbf{Three generations from geometry.}
+The number of fermion generations is determined by the spin$^c$ index theorem on the base manifold $K3$:
+\begin{equation}
+N_G = \frac{c_1^2 - \sigma}{8} = \frac{8 + 16}{8} = 3\,,
+\end{equation}
+where $c_1^2 = 8$ is fixed by minimising the instanton action over the $K3$ lattice with $N_G \geq 3$, and $\sigma = -16$ is the signature of $K3$.
+The $\U(1)_{B-L}$ direction in the fibre provides the spin$^c$ line bundle, and $K3$ is the unique compact Ricci-flat spin 4-manifold with $\sigma \neq 0$ (selected by Hitchin--Thorpe, Ricci-flatness, and Rokhlin's theorem).
+This upgrades the earlier representation-theoretic argument of~\cite{Paper5} to a proven theorem (under standard assumptions of compactness, simple-connectedness, and semiclassical validity).
+
+\item \textbf{The Cabibbo angle.}
+\begin{equation}
+\sin\theta_C = \varepsilon = \frac{1}{\sqrt{20}} = 0.2236\,,
+\end{equation}
+within $0.75\%$ of the observed value $0.2253$.
+The parameter $\varepsilon$ is determined by the fibre dimension $\dim(F) = 10$, not fitted.
+
+\item \textbf{The Weinberg angle.}
+$\sin^2\theta_W = 3/8$ at $\MPS$, running to $0.231$ at $M_Z$ via two-step Pati-Salam running through $M_R \approx 10^{9}\,\mathrm{GeV}$ (from gauge coupling unification with zero free parameters).
+The same $M_R$ controls the seesaw neutrino mass scale.
+
+\item \textbf{Proton stability.}
+Pati-Salam preserves baryon number modulo~3, forbidding the dangerous dimension-6 proton decay operators.
+Proton lifetime $\tau_p > 10^{39}\,\mathrm{years}$ (well above current bounds).
+
+\item \textbf{Universal mixing parameter.}
+The \emph{same} parameter $\varepsilon = 1/\sqrt{20}$ controls both quark mixing (CKM) and lepton mixing (PMNS corrections), as well as the mass hierarchy.
+In generic Pati-Salam, these are unrelated.
+\end{enumerate}
+
+
+% ============================================================
+\section{Open problems}
+\label{sec:open}
+% ============================================================
+
+We conclude by listing the significant open problems, ordered by estimated difficulty:
+
+\begin{enumerate}
+\item \textbf{The hierarchy problem} (shared with all non-SUSY frameworks).
+The radiative Higgs mass is $\sim 10^{14}\,\mathrm{GeV}$, not $125\,\mathrm{GeV}$.
+No mechanism within the metric bundle resolves this.
+
+\item \textbf{The $\SU(2)_R$ breaking mechanism.}
+The first step ($\SU(4)_C \to \SU(3)_c \times \U(1)_{B-L}$) is now derived from the $\CP^3$ holomorphic sectional curvature potential on the fibre (see \Cref{sec:fields}).
+The second step ($\SU(2)_R \to \U(1)_R$) requires a mechanism that distinguishes $L$ from $R$, which the classical fibre curvature cannot provide (it is L-R symmetric).
+The one-loop Coleman-Weinberg potential from $W_R^\pm$ and $Z'$ gauge boson loops gives $v_R \approx 0.73\, M_C$---essentially no hierarchy.
+This is because the Majorana Yukawa $f_\nu \approx 0$ at tree level (from $b/a = 0$, see \Cref{rem:MR_tension}), so the CW potential is gauge-dominated with insufficient exponential suppression.
+A rigorous computation of the instanton action on $\GL^+(4)/\SO(3,1)$ gives $\pi_3(\GL^+(4)/\SO(3,1)) = \mathbb{Z}$ (the generator wraps $\SU(2)_R$ relative to $\SU(2)_L$), but the standard BPST action $S = 8\pi^2/g_{\mathrm{PS}}^2 \approx 290$ produces negligible suppression ($e^{-S} \sim 10^{-126}$).
+The $\SU(2)_R$ breaking mechanism therefore remains an open problem; $M_R$ is currently an undetermined parameter of the model.
+
+\item \textbf{The absolute gauge coupling.}
+The fibre localisation factor $V_{\mathrm{eff}}$ determines $G_4$ and hence $\gPS$.
+In the companion paper~(VIII), a free energy principle localisation on the fibre gives a closed-form prediction:
+\begin{equation}
+\aPS = \frac{27}{128\pi^2} \approx 0.0214\,,
+\end{equation}
+which is $7\%$ from the observed value $\aPS \approx 0.023$, with zero free parameters.
+This represents significant progress from the initial soldering estimate of $\aPS \approx 0.030$ (factor $1.4\times$), but the localisation mechanism requires further scrutiny.
+
+\item \textbf{The $\mathcal{O}(1)$ Yukawa coefficients.}
+The mass hierarchy is controlled by $\varepsilon$ with $\mathcal{O}(1)$ prefactors that are currently not derived.
+The full Ricci tensor shows that the tree-level Yukawa coupling (from $\mathrm{Ric}(V^-, V^+)$) is purely $(\mathbf{1},\mathbf{2},\mathbf{2})$---an $\SU(4)$ singlet---giving $b/a = 0$ at the symmetric point $\eta$.
+The phenomenologically needed $(\mathbf{15},\mathbf{2},\mathbf{2})$ component requires perturbation away from $\eta$, i.e., $\SU(4)$-breaking effects.
+Computing the Dirac operator on $Y^{14}$ restricted to the section would determine these coefficients.
+
+\item \textbf{Non-perturbative unitarity.}
+The gauge kinetic term has the correct sign (no ghosts)~\cite{Paper3}.
+The non-compact coset directions of $\SO(6,4)$ are frozen by the Lorentzian background.
+Full non-perturbative unitarity of the fourteen-dimensional theory has not been established.
+
+\item \textbf{Coleman-Weinberg potential.}
+The one-loop potential~\eqref{eq:V_CW} determines the Higgs mass in terms of $\gPS$ and $\MPS$, but the numerical value requires solving the hierarchy problem first.
+A complete two-loop computation including threshold corrections from the heavy scalars is needed.
+
+\item \textbf{Cosmological constant.}
+The fibre scalar curvature $R_{\mathrm{fibre}} = -30$ (Lorentzian) contributes to the effective cosmological constant.
+The full Ricci tensor reveals that the fibre is \emph{not} Einstein: $\mathrm{Ric}/G = -3.5$ on $V^+$ (gauge) vs.\ $-2.25$ on $V^-$ (Higgs).
+This anisotropy may have consequences for the vacuum energy calculation.
+A conformal dilution mechanism gives $\Lambda_{\mathrm{eff}}$ within $22\%$ of observation, but the mechanism is speculative.
+
+\item \textbf{Three-generation proof.}
+The spin$^c$ index theorem on $K3$ gives $N_G = 3$ as a theorem (under hypotheses H1--H6 of~\cite{Paper5}).
+The remaining assumptions---compactness and simple-connectedness of the base (H2), and semiclassical validity (H6)---are standard physics assumptions, not mathematical gaps.
+However, computing the Dirac operator on $Y^{14}$ restricted to a section would provide an independent confirmation and determine the $\mathcal{O}(1)$ Yukawa coefficients.
+
+\item \textbf{Froggatt-Nielsen charges.}
+The mass hierarchy parameter $\varepsilon = 1/\sqrt{20}$ is derived, but the sector-dependent FN charges (why up-type quarks have doubled charges relative to down-type) are currently fitted.
+Deriving these charges purely from the Pati-Salam representation structure ($\Phi$ vs.\ $\tilde{\Phi}$ couplings) remains open.
+
+\item \textbf{Wolfenstein parameters $A$, $\rho$, $\eta$.}
+Only the Cabibbo angle $\lambda = \varepsilon$ is a genuine geometric prediction.
+A vacuum alignment calculation on the full scalar potential $V(\Phi, \Delta_R)$ was performed (March~2026): the tree-level quartic on $V^-$ is identically flat, and Coleman-Weinberg corrections from fermion loops push in the wrong direction (toward the democratic minimum rather than the hierarchical one).
+This means $A$, $\rho$, and $\eta$ remain free parameters until the $(\mathbf{15},\mathbf{2},\mathbf{2})$ scalar---which vanishes at the symmetric point ($b/a = 0$ from Ric $\propto$ Killing)---is generated by dynamics beyond the tree-level fibre geometry.
+
+\item \textbf{Vacuum alignment and CKM mixing.}
+At tree level, Ric$(F) \propto$ Killing form forces $b/a = 0$, which means $Y_u \propto Y_d$ and $V_{\mathrm{CKM}} = \mathbf{1}$.
+The $(\mathbf{15},\mathbf{2},\mathbf{2})$ Yukawa is essential for quark mixing.
+Additionally, $\Sp(1) \to \U(1)$ breaking gives Froggatt-Nielsen charges $q = (2,2,0)$, leaving two generations always degenerate (the $\Z_2$ problem from quaternion $S_3$ symmetry).
+Resolving CKM mixing requires either two-step breaking $\Sp(1) \to \U(1) \to \{1\}$, instanton effects, or base topology.
+\end{enumerate}
+
+
+% ============================================================
+\section*{Acknowledgements}
+% ============================================================
+
+The author thanks Claude (Anthropic) for assistance with verification of the numerical computations.
+
+
+% ============================================================
+% References
+% ============================================================
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

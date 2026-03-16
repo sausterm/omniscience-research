@@ -1,0 +1,61 @@
+{
+  "framework": "Jordan Algebra Agent Dynamics",
+  "date": "2026-03-08",
+  "key_findings": {
+    "j3o_viable": true,
+    "j3o_has_zero_divisors": false,
+    "j3o_norm_multiplicative": false,
+    "j3o_is_commutative": true,
+    "j3o_is_associative": false,
+    "j3o_dimension": 27,
+    "j3o_symmetry_group": "F4",
+    "j3o_symmetry_dimension": 52,
+    "hurwitz_types": 4,
+    "exceptional_types": 1,
+    "total_agent_types": 5
+  },
+  "classification": [
+    {
+      "algebra": "R",
+      "dim": 1,
+      "symmetry": "trivial",
+      "agent_type": "pre-conscious"
+    },
+    {
+      "algebra": "C",
+      "dim": 2,
+      "symmetry": "U(1)",
+      "agent_type": "quantum-like"
+    },
+    {
+      "algebra": "H",
+      "dim": 4,
+      "symmetry": "SU(2)",
+      "agent_type": "dualistic"
+    },
+    {
+      "algebra": "O",
+      "dim": 8,
+      "symmetry": "G2",
+      "agent_type": "non-dual"
+    },
+    {
+      "algebra": "J3(O)",
+      "dim": 27,
+      "symmetry": "F4",
+      "agent_type": "triple non-dual (exceptional)"
+    }
+  ],
+  "impossible": [
+    {
+      "algebra": "Sedenions",
+      "dim": 16,
+      "reason": "zero divisors"
+    },
+    {
+      "algebra": "Higher Cayley-Dickson",
+      "dim": "32+",
+      "reason": "zero divisors"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omni-toolkit"
+version = "0.1.0"
+description = "Non-perturbative geometric toolkit for symmetric space physics"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Sloan Austermann" }
+]
+keywords = ["symmetric-spaces", "gauge-theory", "DeWitt-metric", "Ricci-tensor", "Pati-Salam"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "ruff>=0.1.0",
+    "build>=1.0",
+]
+viz = [
+    "matplotlib>=3.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/sausterm/omniscience-research"
+Repository = "https://github.com/sausterm/omniscience-research"
+
+# Layout: pyproject.toml lives inside the omni_toolkit/ directory, which IS the package.
+# The parent directory (OmniSciences/) contains omni_toolkit/ as a subdirectory.
+# We tell setuptools to look in the parent directory for packages.
+[tool.setuptools.packages.find]
+where = [".."]
+include = ["omni_toolkit", "omni_toolkit.*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100

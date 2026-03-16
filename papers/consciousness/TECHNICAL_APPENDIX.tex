@@ -1,0 +1,2033 @@
+\documentclass[11pt,a4paper]{article}
+
+% ============================================
+% PACKAGES
+% ============================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{thmtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz-cd}
+\usepackage{bbm}
+
+% ============================================
+% THEOREM ENVIRONMENTS
+% ============================================
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}[definition]{Example}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{conjecture}[definition]{Conjecture}
+
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+
+% ============================================
+% CUSTOM COMMANDS
+% ============================================
+\newcommand{\Con}{\mathbf{Con}}
+\newcommand{\MB}{\mathbf{MB}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand{\Exp}{\mathbb{E}}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\im}{im}
+
+% Probability measure space
+\newcommand{\ProbSpace}[1]{\Delta(#1)}
+
+% ============================================
+% DOCUMENT INFO
+% ============================================
+\title{\textbf{Technical Appendix}\\[0.5em]
+\large Formal Foundations for the Mapping $\Theta: \Con \to \MB$}
+\author{[Author]}
+\date{}
+
+% ============================================
+% DOCUMENT
+% ============================================
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This appendix provides the formal mathematical foundations for the correspondence between Hoffman's Conscious Agents and Friston's Markov Blanket systems. We define the mapping $\Theta: \Con \to \MB$, prove that it preserves conditional independence structure (Theorem~\ref{thm:main}), and demonstrate the non-genericity of this property across several classes of dynamical systems. We prove compositional correspondence for non-interacting agents (Theorem~\ref{thm:composition-noninteracting}) and characterize conditions under which it holds for interacting agents. We connect the framework to Tononi's Integrated Information Theory and formalize association/dissociation as categorical operations. We also characterize conditions for the inverse mapping $\MB \to \Con$.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+% ============================================
+% READER'S GUIDE
+% ============================================
+\section*{Reader's Guide}
+\addcontentsline{toc}{section}{Reader's Guide}
+
+This appendix is designed to serve readers with different backgrounds and goals. We provide guidance for navigating the material.
+
+\subsection*{For Philosophers Without Mathematical Training}
+
+The core philosophical content can be extracted from:
+\begin{itemize}
+    \item \textbf{Section 2, Definitions 2.1 and 2.5}: What a conscious agent \emph{is}---a system with experience, action, and world spaces connected by perception, decision, and action processes.
+    \item \textbf{Section 3, Definition 3.1}: What a Markov blanket system \emph{is}---a system with internal, sensory, active, and external states where the blanket ``screens off'' internal from external.
+    \item \textbf{Section 5, Theorem 5.1}: The main result---conscious agent structure \emph{implies} Markov blanket structure. Skip the proof; the statement is what matters philosophically.
+    \item \textbf{Section 5.5, Remark after Theorem 5.1}: What the correspondence means and does not mean.
+    \item \textbf{Section 7, Theorem 7.2}: Connection to Integrated Information Theory.
+\end{itemize}
+
+\subsection*{For Mathematicians Evaluating Rigor}
+
+The mathematical substance is in:
+\begin{itemize}
+    \item \textbf{Section 1.1}: Measure-theoretic foundations (standard Borel spaces, Assumption~\ref{ass:measurability}).
+    \item \textbf{Section 2.4, Proposition 2.9}: Monoidal coherence for Con (pentagon and triangle axioms).
+    \item \textbf{Section 5.1, Theorem 5.1}: Full proof of conditional independence correspondence.
+    \item \textbf{Section 5.3, Lemma 5.4}: Tensor products of kernel compositions (Fubini application).
+    \item \textbf{Section 10}: Information-geometric foundations (Fisher-Rao metric on kernel spaces).
+    \item \textbf{Section 11}: Hypergraph discretization and separator equivalence.
+    \item \textbf{Section 12}: Infinite-dimensional extension (Fr\'echet manifolds)---\emph{marked as conjectural}.
+\end{itemize}
+
+\subsection*{For Researchers Extending the Framework}
+
+Key definitions and open problems:
+\begin{itemize}
+    \item \textbf{Definition 4.3}: Sensory equivalence---how perception induces information-theoretic boundaries.
+    \item \textbf{Definition 5.8}: Blanket-Mediated Interaction Condition (BMIC)---when interacting agents compose correctly.
+    \item \textbf{Theorem 9.1}: Representability conditions---when can a Markov blanket system be ``reverse-engineered'' into a conscious agent?
+    \item \textbf{Conjecture 10.6}: $\Phi$-geometry correspondence---integration as geodesic distance.
+    \item \textbf{Section 12}: Consciousness field---speculative but suggests future directions.
+\end{itemize}
+
+\subsection*{Dependency Structure}
+
+The sections have the following logical dependencies:
+\begin{center}
+\begin{tikzcd}[row sep=small, column sep=small]
+\text{Section 1} \arrow[r] \arrow[d] & \text{Section 2} \arrow[r] & \text{Section 4} \arrow[r] & \text{Section 5} \\
+& \text{Section 3} \arrow[ur] & & \text{Section 7} \arrow[u] \\
+\text{Section 10} \arrow[from=1-4] & & \text{Section 11} \arrow[from=1-4] & \text{Section 12} \arrow[from=1-1, bend right=20]
+\end{tikzcd}
+\end{center}
+
+Sections 6 (non-genericity), 8 (association/dissociation), and 9 (inverse mapping) can be read after Section 5.
+
+\subsection*{What Is Proven vs.\ Conjectured}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Result} & \textbf{Status} & \textbf{Location} \\
+\midrule
+Con is a symmetric monoidal category & Proven & Proposition 2.9 \\
+$\Theta$ preserves conditional independence & Proven & Theorem 5.1 \\
+Compositional correspondence (non-interacting) & Proven & Theorem 5.7 \\
+Compositional correspondence (BMIC) & Proven & Theorem 5.9 \\
+$\Phi$-dissociability equivalence & Proven & Theorem 7.2 \\
+Hypergraph-kernel bijection & Proven & Theorem 11.3 \\
+Blanket-separator equivalence & Proven & Theorem 11.5 \\
+\midrule
+$\Phi$-geometry correspondence & Conjectured & Conjecture 10.6 \\
+Path approximation (discretization limits) & Conjectured & Conjecture 12.6 \\
+Consciousness field structure & Proposed framework & Section 12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\newpage
+
+% ============================================
+% SECTION A.1: PRELIMINARIES
+% ============================================
+\section{Preliminaries}
+
+\subsection{Measure-Theoretic Foundations}
+
+Throughout this appendix, we work in the framework of standard Borel spaces to ensure well-behaved conditional probabilities and measurable selections.
+
+\begin{definition}[Standard Borel Space]
+A measurable space $(S, \Sigma)$ is \emph{standard Borel} if it is measurably isomorphic to a Borel subset of a Polish (complete separable metric) space with its Borel $\sigma$-algebra. Equivalently, $S$ is either countable (with discrete $\sigma$-algebra) or measurably isomorphic to $(\Real, \mathcal{B}(\Real))$.
+\end{definition}
+
+\begin{assumption}[Standing Measurability Assumption]\label{ass:measurability}
+Unless otherwise stated, all state spaces $(X, \Sigma_X)$, $(G, \Sigma_G)$, $(W, \Sigma_W)$ are assumed to be standard Borel spaces. This assumption ensures:
+\begin{enumerate}[label=(\roman*)]
+    \item Regular conditional probabilities exist and are unique a.e.
+    \item Disintegration theorems apply
+    \item Measurable selection theorems (Kuratowski-Ryll-Nardzewski) are available
+    \item Products and quotients inherit good measurable structure
+\end{enumerate}
+\end{assumption}
+
+\begin{remark}
+The finite case (finite sets with discrete $\sigma$-algebra) is a special case of standard Borel. All results in this appendix apply to the finite case; additional care with null sets is needed only for continuous spaces.
+\end{remark}
+
+\subsection{Continuous Tensor Abstraction}
+
+Following Won et al.\ (2024), we employ the Continuous Tensor Abstraction (CTA) as a common representational framework for both Hoffman's Conscious Agents and Friston's Markov Blanket systems.
+
+\begin{definition}[Piecewise-Constant Tensor]
+A tensor $A$ is \emph{piecewise-constant} if:
+\[
+f_A(x) = \sum_n V_n \cdot \mathbbm{1}[x \in I_n]
+\]
+where $\{I_n\}$ are pairwise disjoint regions covering the domain and $V_n$ are constant values.
+\end{definition}
+
+\begin{definition}[Markov Kernel]\label{def:markov-kernel}
+A \emph{Markov kernel} (or \emph{transition kernel}, \emph{stochastic kernel}) from $(S_1, \Sigma_1)$ to $(S_2, \Sigma_2)$ is a function $K: S_1 \times \Sigma_2 \to [0,1]$ such that:
+\begin{enumerate}[label=(\roman*)]
+    \item For each $s_1 \in S_1$, $K(s_1, \cdot)$ is a probability measure on $(S_2, \Sigma_2)$
+    \item For each $A \in \Sigma_2$, $K(\cdot, A): S_1 \to [0,1]$ is $\Sigma_1$-measurable
+\end{enumerate}
+We write $\mathcal{K}(S_1, S_2)$ for the set of all Markov kernels from $S_1$ to $S_2$.
+
+\textbf{Density notation:} When $S_2$ admits a reference measure $\lambda$ and $K(s_1, \cdot) \ll \lambda$ for all $s_1$, we write $K[s_1, s_2]$ for the Radon-Nikodym derivative (density):
+\[
+K(s_1, A) = \int_A K[s_1, s_2] \, d\lambda(s_2)
+\]
+The normalization condition becomes $\int_{S_2} K[s_1, s_2] \, d\lambda(s_2) = 1$ for all $s_1$.
+\end{definition}
+
+\begin{definition}[Kernel Composition]
+For Markov kernels $K_1 \in \mathcal{K}(S_1, S_2)$ and $K_2 \in \mathcal{K}(S_2, S_3)$, their \emph{composition} $K_2 \circ K_1 \in \mathcal{K}(S_1, S_3)$ is defined by:
+\[
+(K_2 \circ K_1)(s_1, A) = \int_{S_2} K_2(s_2, A) \, K_1(s_1, ds_2)
+\]
+This is the Chapman-Kolmogorov equation and defines the Kleisli composition for the probability monad.
+\end{definition}
+
+\begin{definition}[Kernel Tensor Product]\label{def:kernel-tensor}
+For Markov kernels $K_1 \in \mathcal{K}(S_1, T_1)$ and $K_2 \in \mathcal{K}(S_2, T_2)$, their \emph{tensor product} $K_1 \otimes K_2 \in \mathcal{K}(S_1 \times S_2, T_1 \times T_2)$ is defined by:
+\[
+(K_1 \otimes K_2)((s_1, s_2), A_1 \times A_2) = K_1(s_1, A_1) \cdot K_2(s_2, A_2)
+\]
+extended to all measurable sets by the product measure construction. In density notation:
+\[
+(K_1 \otimes K_2)[(s_1, s_2), (t_1, t_2)] = K_1[s_1, t_1] \cdot K_2[s_2, t_2]
+\]
+\end{definition}
+
+\subsection{Notation Conventions}
+
+\begin{center}
+\begin{tabular}{cl}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} \\
+\midrule
+$X, G, W$ & Experience, Action, World spaces \\
+$P, D, A$ & Perception, Decision, Action kernels \\
+$\Omega$ & Total state space (MB) \\
+$\mu, s, a, \eta$ & Internal, Sensory, Active, External states \\
+$B$ & Blanket $= s \cup a$ \\
+$K$ & Dynamics kernel \\
+$\Theta$ & Mapping $\Con \to \MB$ \\
+$\otimes$ & Tensor/monoidal product \\
+$\ProbSpace{S}$ & Probability measures on $S$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================
+% SECTION A.2: CONSCIOUS AGENTS
+% ============================================
+\section{Formal Definition: Conscious Agents (Hoffman)}
+
+\subsection{Definition}
+
+\begin{definition}[Conscious Agent]\label{def:conscious-agent}
+A \emph{conscious agent} is a tuple $\alpha = (X, G, W, P, D, A)$ where:
+
+\textbf{State Spaces} (all standard Borel by Assumption~\ref{ass:measurability}):
+\begin{itemize}
+    \item $X$: Experience space (internal states/qualia)
+    \item $G$: Action space (behavioral outputs)
+    \item $W$: World state space (external environment)
+\end{itemize}
+
+\textbf{Markov Kernels:}
+\begin{itemize}
+    \item $P \in \mathcal{K}(W \times X, X)$: \emph{Perception kernel}
+    \begin{itemize}
+        \item $P((w, x), A)$ = probability that next experience lies in $A \subseteq X$
+        \item Density notation: $P[w, x, x']$ with $\int_X P[w, x, x'] \, d\lambda_X(x') = 1$
+    \end{itemize}
+
+    \item $D \in \mathcal{K}(X, G)$: \emph{Decision kernel}
+    \begin{itemize}
+        \item $D(x, B)$ = probability of selecting action in $B \subseteq G$
+        \item Density notation: $D[x, g]$ with $\int_G D[x, g] \, d\lambda_G(g) = 1$
+    \end{itemize}
+
+    \item $A \in \mathcal{K}(G \times W, W)$: \emph{Action kernel}
+    \begin{itemize}
+        \item $A((g, w), C)$ = probability that world transitions to state in $C \subseteq W$
+        \item Density notation: $A[g, w, w']$ with $\int_W A[g, w, w'] \, d\lambda_W(w') = 1$
+    \end{itemize}
+\end{itemize}
+where $\lambda_X, \lambda_G, \lambda_W$ are fixed reference measures on the respective spaces.
+\end{definition}
+
+\begin{remark}[Causal Structure]
+The kernel structure encodes a specific causal ordering: $W \xrightarrow{P} X \xrightarrow{D} G \xrightarrow{A} W$. This ``perception-decision-action'' cycle is the defining characteristic of an agent-like system, distinguishing conscious agents from arbitrary dynamical systems.
+\end{remark}
+
+\subsection{Agent Dynamics}
+
+The agent's dynamics form a cycle $W \to X \to G \to W$:
+\begin{enumerate}
+    \item \textbf{Perception:} World $w$ and experience $x$ determine next experience $x'$ via $P$
+    \item \textbf{Decision:} Experience $x'$ determines action $g$ via $D$
+    \item \textbf{Action:} Action $g$ and world $w$ determine next world $w'$ via $A$
+\end{enumerate}
+
+\textbf{Combined Kernel:}
+\begin{equation}\label{eq:combined-kernel}
+K_\alpha[(x, g, w) \to (x', g', w')] = P[w, x, x'] \cdot D[x', g'] \cdot A[g', w, w']
+\end{equation}
+
+\subsection{Morphisms and Category Structure}
+
+\begin{definition}[Conscious Agent Morphism]\label{def:con-morphism}
+A \emph{morphism} $\phi: \alpha \to \beta$ is a triple $(\phi_X, \phi_G, \phi_W)$ of measurable maps:
+\begin{align*}
+\phi_X&: X_\alpha \to X_\beta \\
+\phi_G&: G_\alpha \to G_\beta \\
+\phi_W&: W_\alpha \to W_\beta
+\end{align*}
+satisfying the following \emph{kernel intertwining conditions}:
+
+\textbf{(i) Perception intertwining:} For all $w \in W_\alpha$, $x \in X_\alpha$, and measurable $A \subseteq X_\beta$:
+\[
+P_\beta[\phi_W(w), \phi_X(x), A] = P_\alpha[w, x, \phi_X^{-1}(A)]
+\]
+
+\textbf{(ii) Decision intertwining:} For all $x \in X_\alpha$ and measurable $B \subseteq G_\beta$:
+\[
+D_\beta[\phi_X(x), B] = D_\alpha[x, \phi_G^{-1}(B)]
+\]
+
+\textbf{(iii) Action intertwining:} For all $g \in G_\alpha$, $w \in W_\alpha$, and measurable $C \subseteq W_\beta$:
+\[
+A_\beta[\phi_G(g), \phi_W(w), C] = A_\alpha[g, w, \phi_W^{-1}(C)]
+\]
+\end{definition}
+
+\begin{remark}
+These conditions ensure that the dynamics commute with the mapping: applying $\phi$ before or after state transitions yields the same result. When the maps $\phi_X, \phi_G, \phi_W$ are injective, these reduce to pushforward conditions on the kernels.
+\end{remark}
+
+\begin{definition}[Category $\Con$]
+The category $\Con$ has:
+\begin{itemize}
+    \item \textbf{Objects:} Conscious agents $\alpha = (X, G, W, P, D, A)$
+    \item \textbf{Morphisms:} Agent morphisms $\phi: \alpha \to \beta$
+    \item \textbf{Composition:} Component-wise: $(\psi \circ \phi)_X = \psi_X \circ \phi_X$, etc.
+    \item \textbf{Identity:} $\id_\alpha = (\id_X, \id_G, \id_W)$
+\end{itemize}
+\end{definition}
+
+\begin{proposition}[Category Axioms for $\Con$]\label{prop:con-category}
+$\Con$ is indeed a category:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Composition closure:} If $\phi: \alpha \to \beta$ and $\psi: \beta \to \gamma$ are morphisms, then $\psi \circ \phi: \alpha \to \gamma$ is a morphism.
+    \item \textbf{Associativity:} $(\chi \circ \psi) \circ \phi = \chi \circ (\psi \circ \phi)$.
+    \item \textbf{Identity:} $\phi \circ \id_\alpha = \phi = \id_\beta \circ \phi$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) \textit{Composition closure:} Let $\phi: \alpha \to \beta$ and $\psi: \beta \to \gamma$ satisfy the intertwining conditions. We verify that $\psi \circ \phi$ satisfies perception intertwining; the other conditions follow similarly.
+
+For $w \in W_\alpha$, $x \in X_\alpha$, and measurable $A \subseteq X_\gamma$:
+\begin{align*}
+P_\gamma[(\psi_W \circ \phi_W)(w), (\psi_X \circ \phi_X)(x), A]
+&= P_\gamma[\psi_W(\phi_W(w)), \psi_X(\phi_X(x)), A] \\
+&= P_\beta[\phi_W(w), \phi_X(x), \psi_X^{-1}(A)] & \text{($\psi$ intertwines)} \\
+&= P_\alpha[w, x, \phi_X^{-1}(\psi_X^{-1}(A))] & \text{($\phi$ intertwines)} \\
+&= P_\alpha[w, x, (\psi_X \circ \phi_X)^{-1}(A)]
+\end{align*}
+
+(ii) \textit{Associativity:} Follows from associativity of function composition on each component.
+
+(iii) \textit{Identity:} The identity morphism trivially satisfies intertwining since $P_\alpha[\id_W(w), \id_X(x), \id_X^{-1}(A)] = P_\alpha[w, x, A]$.
+\end{proof}
+
+\subsection{Monoidal Structure}
+
+\begin{definition}[Agent Tensor Product]\label{def:tensor-product}
+For agents $\alpha = (X_\alpha, G_\alpha, W_\alpha, P_\alpha, D_\alpha, A_\alpha)$ and $\beta = (X_\beta, G_\beta, W_\beta, P_\beta, D_\beta, A_\beta)$, define $\alpha \otimes \beta$ by:
+
+\textbf{State Spaces:}
+\begin{align*}
+X_{\alpha \otimes \beta} &= X_\alpha \times X_\beta \\
+G_{\alpha \otimes \beta} &= G_\alpha \times G_\beta \\
+W_{\alpha \otimes \beta} &= W_\alpha \times W_\beta
+\end{align*}
+
+\textbf{Kernels} (using Definition~\ref{def:kernel-tensor}):
+\begin{align*}
+P_{\alpha \otimes \beta} &= P_\alpha \otimes P_\beta \in \mathcal{K}((W_\alpha \times W_\beta) \times (X_\alpha \times X_\beta), X_\alpha \times X_\beta) \\
+D_{\alpha \otimes \beta} &= D_\alpha \otimes D_\beta \in \mathcal{K}(X_\alpha \times X_\beta, G_\alpha \times G_\beta) \\
+A_{\alpha \otimes \beta} &= A_\alpha \otimes A_\beta \in \mathcal{K}((G_\alpha \times G_\beta) \times (W_\alpha \times W_\beta), W_\alpha \times W_\beta)
+\end{align*}
+
+Explicitly, in density notation:
+\[
+P_{\alpha \otimes \beta}[(w_1, w_2), (x_1, x_2), (x'_1, x'_2)] = P_\alpha[w_1, x_1, x'_1] \cdot P_\beta[w_2, x_2, x'_2]
+\]
+and similarly for $D_{\alpha \otimes \beta}$ and $A_{\alpha \otimes \beta}$.
+\end{definition}
+
+\begin{definition}[Unit Agent]\label{def:unit-agent}
+The \emph{unit agent} $\mathbf{1} = (\{*\}, \{*\}, \{*\}, P_*, D_*, A_*)$ has singleton state spaces and unique (trivial) kernels. For any agent $\alpha$:
+\[
+\alpha \otimes \mathbf{1} \cong \alpha \cong \mathbf{1} \otimes \alpha
+\]
+via the canonical isomorphisms $(x, *) \mapsto x$, etc.
+\end{definition}
+
+\begin{proposition}[Monoidal Coherence]\label{prop:monoidal-coherence}
+The tensor product $\otimes$ on $\Con$ satisfies:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Associativity:} $(\alpha \otimes \beta) \otimes \gamma \cong \alpha \otimes (\beta \otimes \gamma)$ via the canonical associator
+    \item \textbf{Unit laws:} $\alpha \otimes \mathbf{1} \cong \alpha \cong \mathbf{1} \otimes \alpha$ via the canonical unitors
+    \item \textbf{Symmetry:} $\alpha \otimes \beta \cong \beta \otimes \alpha$ via the swap isomorphism
+\end{enumerate}
+These isomorphisms satisfy the pentagon and triangle coherence axioms, making $(\Con, \otimes, \mathbf{1})$ a symmetric monoidal category.
+\end{proposition}
+
+\begin{proof}
+We verify each condition explicitly.
+
+\textbf{(i) Associativity isomorphism:} Define $\alpha_{assoc}: (\alpha \otimes \beta) \otimes \gamma \to \alpha \otimes (\beta \otimes \gamma)$ by the canonical bijections on state spaces:
+\begin{align*}
+(\alpha_{assoc})_X&: ((x_1, x_2), x_3) \mapsto (x_1, (x_2, x_3)) \\
+(\alpha_{assoc})_G&: ((g_1, g_2), g_3) \mapsto (g_1, (g_2, g_3)) \\
+(\alpha_{assoc})_W&: ((w_1, w_2), w_3) \mapsto (w_1, (w_2, w_3))
+\end{align*}
+The intertwining conditions are satisfied because the tensor product of kernels (Definition~\ref{def:kernel-tensor}) satisfies $(K_1 \otimes K_2) \otimes K_3 = K_1 \otimes (K_2 \otimes K_3)$ under the canonical identification of product spaces.
+
+\textbf{(ii) Unit isomorphisms:} The left unitor $\lambda_\alpha: \mathbf{1} \otimes \alpha \to \alpha$ is given by $(*, x) \mapsto x$, $(*, g) \mapsto g$, $(*, w) \mapsto w$. Since $P_{\mathbf{1}}[*, *, *] = 1$ and $P_{\mathbf{1} \otimes \alpha}[(*, w), (*, x), (*, x')] = P_\alpha[w, x, x']$, the intertwining conditions hold. Similarly for the right unitor $\rho_\alpha$.
+
+\textbf{(iii) Symmetry:} The braiding $\sigma_{\alpha,\beta}: \alpha \otimes \beta \to \beta \otimes \alpha$ swaps components: $(x_1, x_2) \mapsto (x_2, x_1)$, etc. Intertwining follows from commutativity of multiplication in $[0,1]$:
+\[
+P_{\alpha \otimes \beta}[(w_1, w_2), (x_1, x_2), (x'_1, x'_2)] = P_\alpha[w_1, x_1, x'_1] \cdot P_\beta[w_2, x_2, x'_2]
+\]
+equals $P_\beta[w_2, x_2, x'_2] \cdot P_\alpha[w_1, x_1, x'_1] = P_{\beta \otimes \alpha}[(w_2, w_1), (x_2, x_1), (x'_2, x'_1)]$.
+
+\textbf{Pentagon axiom:} For agents $\alpha, \beta, \gamma, \delta$, the following diagram commutes:
+\[
+\begin{tikzcd}[column sep=small]
+((\alpha \otimes \beta) \otimes \gamma) \otimes \delta \arrow[r] \arrow[d] & (\alpha \otimes \beta) \otimes (\gamma \otimes \delta) \arrow[r] & \alpha \otimes (\beta \otimes (\gamma \otimes \delta)) \\
+(\alpha \otimes (\beta \otimes \gamma)) \otimes \delta \arrow[rr] & & \alpha \otimes ((\beta \otimes \gamma) \otimes \delta) \arrow[u]
+\end{tikzcd}
+\]
+This holds because both paths yield the same reassociation of the four-fold product space.
+
+\textbf{Triangle axiom:} For agents $\alpha, \beta$, the diagram involving $\alpha \otimes (\mathbf{1} \otimes \beta) \to \alpha \otimes \beta$ commutes because both paths reduce to the identity after eliminating the trivial factor.
+\end{proof}
+
+\begin{remark}[Closure Property]
+Hoffman \& Prakash (2014) claim $\Con$ is symmetric monoidal \emph{closed}, meaning there exist internal hom-objects $[\alpha, \beta]$ representing agent morphisms. We do not verify this stronger property here; our results require only the monoidal structure established above.
+\end{remark}
+
+% ============================================
+% SECTION A.3: MARKOV BLANKET SYSTEMS
+% ============================================
+\section{Formal Definition: Markov Blanket Systems (Friston)}
+
+\subsection{Definition}
+
+\begin{definition}[Markov Blanket System]\label{def:mb-system}
+A \emph{Markov blanket system} is a tuple $M = (\Omega, \mu, s, a, \eta, K)$ where:
+
+\textbf{State Space:}
+\begin{itemize}
+    \item $\Omega = S_\mu \times S_s \times S_a \times S_\eta$: Total state space, a product of standard Borel spaces
+\end{itemize}
+
+\textbf{Partition Components:}
+\begin{itemize}
+    \item $S_\mu$: Internal state space (values denoted $\mu \in S_\mu$)
+    \item $S_s$: Sensory state space (values denoted $s \in S_s$)
+    \item $S_a$: Active state space (values denoted $a \in S_a$)
+    \item $S_\eta$: External state space (values denoted $\eta \in S_\eta$)
+\end{itemize}
+
+\textbf{Blanket:}
+\begin{itemize}
+    \item $B = (s, a) \in S_s \times S_a$: The blanket state (interface between internal and external)
+    \item $S_B = S_s \times S_a$: The blanket state space
+\end{itemize}
+
+\textbf{Dynamics:}
+\begin{itemize}
+    \item $K \in \mathcal{K}(\Omega, \Omega)$: Transition kernel
+    \item For state $\omega = (\mu, s, a, \eta)$, $K(\omega, \cdot)$ gives the distribution over next states $\omega' = (\mu', s', a', \eta')$
+\end{itemize}
+\end{definition}
+
+\subsection{The Markov Blanket Property}
+
+\begin{definition}[Markov Blanket Property]\label{def:mb-property}
+System $M$ satisfies the \emph{Markov blanket property} if, under the kernel $K$:
+\begin{equation}\label{eq:mb-property}
+P(\mu' \mid \mu, B, \eta) = P(\mu' \mid \mu, B)
+\end{equation}
+That is, the next internal state $\mu'$ is conditionally independent of the external state $\eta$ given the current internal state $\mu$ and blanket state $B = (s, a)$:
+\[
+\mu' \perp\!\!\!\perp \eta \mid (\mu, B)
+\]
+\end{definition}
+
+\begin{remark}[Interpretation]
+The blanket ``screens off'' internal from external. Conditional on knowing the current internal state $\mu$ and the blanket state $B$, additional knowledge of the external state $\eta$ provides no further information about the next internal state $\mu'$. This formalizes the notion that the blanket mediates all interactions between interior and exterior.
+\end{remark}
+
+\begin{remark}[Relation to Pearl's d-Separation]
+When the dynamics can be represented as a Bayesian network, the Markov blanket property corresponds to d-separation: $B$ d-separates $\mu'$ from $\eta$ given $\mu$. Our definition generalizes this to arbitrary Markov kernels.
+\end{remark}
+
+\subsection{Morphisms and Category Structure}
+
+\begin{definition}[Markov Blanket Morphism]\label{def:mb-morphism}
+A \emph{morphism} $\psi: M_1 \to M_2$ is a tuple $\psi = (\psi_\mu, \psi_s, \psi_a, \psi_\eta)$ of measurable maps such that:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Partition preservation:} $\psi_\mu: S_{\mu,1} \to S_{\mu,2}$, $\psi_s: S_{s,1} \to S_{s,2}$, $\psi_a: S_{a,1} \to S_{a,2}$, $\psi_\eta: S_{\eta,1} \to S_{\eta,2}$
+    \item \textbf{Kernel intertwining:} For all $\omega = (\mu, s, a, \eta) \in \Omega_1$ and measurable $A \subseteq \Omega_2$:
+    \[
+    K_2(\psi(\omega), A) = K_1(\omega, \psi^{-1}(A))
+    \]
+    where $\psi: \Omega_1 \to \Omega_2$ is the product map $\psi(\mu, s, a, \eta) = (\psi_\mu(\mu), \psi_s(s), \psi_a(a), \psi_\eta(\eta))$.
+    \item \textbf{Markov property preservation:} If $M_1$ satisfies the Markov blanket property (Definition~\ref{def:mb-property}), then so does the image system under $\psi$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[Markov Preservation is Automatic]
+Given the kernel intertwining condition (ii), Markov property preservation (iii) follows automatically when $\psi_\mu, \psi_s, \psi_a, \psi_\eta$ are injective: the conditional independence structure is preserved under pushforward by injective maps. For non-injective maps, condition (iii) is an additional requirement.
+\end{remark}
+
+\begin{definition}[Category $\MB$]
+The category $\MB$ has:
+\begin{itemize}
+    \item \textbf{Objects:} Markov blanket systems $M = (\Omega, \mu, s, a, \eta, K)$
+    \item \textbf{Morphisms:} Blanket morphisms $\psi: M_1 \to M_2$
+    \item \textbf{Composition:} Function composition
+    \item \textbf{Identity:} Identity map on $\Omega$
+\end{itemize}
+\end{definition}
+
+% ============================================
+% SECTION A.4: THE CORRESPONDENCE
+% ============================================
+\section{The Correspondence $\Theta: \Con \to \MB$}
+
+\subsection{Sensory Equivalence}
+
+\begin{definition}[Sensory Equivalence]\label{def:sensory-equiv}
+Given conscious agent $\alpha$ and experience $x \in X$, world states $w_1, w_2 \in W$ are \emph{sensorily equivalent given $x$}, written $w_1 \sim_x w_2$, if they induce identical perception distributions:
+\[
+P((w_1, x), \cdot) = P((w_2, x), \cdot) \quad \text{as measures on } X
+\]
+In density notation: $P[w_1, x, x'] = P[w_2, x, x']$ for $\lambda_X$-almost all $x' \in X$.
+\end{definition}
+
+\begin{remark}[Interpretation]
+Two world states are sensorily equivalent if they produce identical perception distributions. The agent cannot distinguish them based on perception alone---they are ``phenomenologically indistinguishable'' from the agent's perspective.
+\end{remark}
+
+\begin{definition}[Sensory State Function]\label{def:sensory-state}
+For each $x \in X$, the relation $\sim_x$ is an equivalence relation on $W$. The \emph{sensory state function} $\sigma: W \times X \to S$ maps each $(w, x)$ to its equivalence class:
+\[
+\sigma(w, x) = [w]_{\sim_x}
+\]
+where $S = \bigsqcup_{x \in X} (W / {\sim_x})$ is the disjoint union of quotient spaces.
+\end{definition}
+
+\begin{proposition}[Measurability of Sensory States]\label{prop:sensory-measurable}
+Under Assumption~\ref{ass:measurability}, if the perception kernel $P$ satisfies either:
+\begin{enumerate}[label=(\roman*)]
+    \item $P$ is piecewise-constant (finite equivalence classes), or
+    \item The map $w \mapsto P((w, x), \cdot)$ is continuous from $W$ into $\ProbSpace{X}$ equipped with the weak topology
+\end{enumerate}
+then $\sigma$ is measurable and $S$ inherits a standard Borel structure.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+(i) For piecewise-constant $P$, equivalence classes are finite unions of measurable regions, hence measurable. (ii) For continuous $P$, the quotient map is measurable by the universal property of quotients. In either case, the quotient of a standard Borel space by a measurable equivalence relation is standard Borel (see Kechris, \textit{Classical Descriptive Set Theory}, Theorem 15.1).
+\end{proof}
+
+\begin{remark}[Sensory States vs.\ Partition Elements]
+\textbf{Important distinction:} The sensory state $\sigma(w, x)$ is a \emph{function} of both the world state $w$ and current experience $x$, not an independent component of the state space. This differs from the standard Markov blanket formulation where $(S_\mu, S_s, S_a, S_\eta)$ are independent factors. The mapping $\Theta$ (Definition~\ref{def:theta}) reconciles this by showing that the functional dependence $\sigma(w, x)$ captures exactly the information that the blanket needs to screen off the external state.
+\end{remark}
+
+\subsection{Definition of $\Theta$ on Objects}
+
+\begin{definition}[The Mapping $\Theta$]\label{def:theta}
+Given conscious agent $\alpha = (X, G, W, P, D, A)$, define the Markov blanket system:
+\[
+\Theta(\alpha) = (\Omega_\alpha, S_{\mu}, S_s, S_a, S_{\eta}, K_\alpha)
+\]
+as follows.
+
+\textbf{State Space:}
+\[
+\Omega_\alpha = X \times G \times W
+\]
+
+\textbf{Partition Components:}
+\begin{itemize}
+    \item $S_\mu = X$: Internal state space (experience)
+    \item $S_a = G$: Active state space (action)
+    \item $S_\eta = W$: External state space (world)
+    \item $S_s = S$: Sensory state space (from Definition~\ref{def:sensory-state})
+\end{itemize}
+
+A state $\omega = (x, g, w) \in \Omega_\alpha$ has components:
+\begin{itemize}
+    \item Internal state: $\mu = x \in X$
+    \item Active state: $a = g \in G$
+    \item External state: $\eta = w \in W$
+    \item Sensory state: $s = \sigma(w, x) \in S$ (derived from $w$ and $x$)
+\end{itemize}
+
+\textbf{Blanket State:}
+\[
+B = (s, a) = (\sigma(w, x), g) \in S \times G
+\]
+
+\textbf{Dynamics Kernel:}
+The transition kernel $K_\alpha \in \mathcal{K}(\Omega_\alpha, \Omega_\alpha)$ is defined by:
+\begin{equation}\label{eq:theta-kernel}
+K_\alpha[(x, g, w), (x', g', w')] = P[w, x, x'] \cdot D[x', g'] \cdot A[g', w, w']
+\end{equation}
+This factorization encodes the perception-decision-action cycle: world and experience determine next experience (via $P$), which determines next action (via $D$), which together with world determines next world state (via $A$).
+\end{definition}
+
+\begin{remark}[Embedding vs.\ Isomorphism]
+The state space $\Omega_\alpha = X \times G \times W$ is a three-fold product, but the Markov blanket formalism expects a four-fold partition $(\mu, s, a, \eta)$. The resolution is that the sensory state $s = \sigma(w, x)$ is \emph{functionally dependent} on the external and internal states, not an independent degree of freedom. This is consistent with Friston's formulation where sensory states mediate information flow but are not causally independent of the external environment.
+\end{remark}
+
+\begin{remark}[On the Nature of $\Theta$]
+The mapping $\Theta$ is a \emph{construction}, not a discovery of a hidden isomorphism between independently defined structures. We are not claiming to have uncovered a deep equivalence that was previously unnoticed. Rather, we are showing that Hoffman's kernel architecture \emph{implies} the conditional independence that Friston's framework \emph{requires}.
+
+The significance of this construction lies in what it reveals:
+\begin{enumerate}
+    \item \textbf{Sufficiency, not necessity:} Conscious agent structure is \emph{sufficient} for Markov blanket structure. We have not shown the converse.
+    \item \textbf{Derived vs.\ definitional:} Hoffman's framework was motivated by perception-action cycles, not by statistical independence properties. That the $P \cdot D \cdot A$ kernel factorization implies conditional independence is a \emph{derived result}.
+    \item \textbf{Compatibility, not equivalence:} We claim these frameworks are \emph{compatible}, not that they are equivalent formalizations of the same phenomenon.
+\end{enumerate}
+\end{remark}
+
+\subsection{Definition of $\Theta$ on Morphisms}
+
+\begin{definition}[$\Theta$ on Morphisms]
+Given agent morphism $\phi = (\phi_X, \phi_G, \phi_W): \alpha \to \beta$, define:
+\[
+\Theta(\phi): \Theta(\alpha) \to \Theta(\beta)
+\]
+by:
+\[
+\Theta(\phi)(x, g, w) = (\phi_X(x), \phi_G(g), \phi_W(w))
+\]
+\end{definition}
+
+\subsection{Functoriality}
+
+\begin{proposition}[Identity Preservation]\label{prop:identity}
+\[
+\Theta(\id_\alpha) = \id_{\Theta(\alpha)}
+\]
+\end{proposition}
+
+\begin{proof}
+$\Theta(\id_\alpha)(x, g, w) = (\id_X(x), \id_G(g), \id_W(w)) = (x, g, w)$.
+\end{proof}
+
+\begin{proposition}[Composition Preservation]\label{prop:composition}
+\[
+\Theta(\psi \circ \phi) = \Theta(\psi) \circ \Theta(\phi)
+\]
+\end{proposition}
+
+\begin{proof}
+Let $\phi: \alpha \to \beta$ and $\psi: \beta \to \gamma$ be morphisms in $\Con$. We verify equality pointwise.
+
+For any $(x, g, w) \in \Omega_\alpha = X_\alpha \times G_\alpha \times W_\alpha$:
+\begin{align*}
+\Theta(\psi \circ \phi)(x, g, w) &= ((\psi_X \circ \phi_X)(x), (\psi_G \circ \phi_G)(g), (\psi_W \circ \phi_W)(w)) \\
+&= (\psi_X(\phi_X(x)), \psi_G(\phi_G(g)), \psi_W(\phi_W(w)))
+\end{align*}
+
+On the other hand:
+\begin{align*}
+(\Theta(\psi) \circ \Theta(\phi))(x, g, w) &= \Theta(\psi)(\Theta(\phi)(x, g, w)) \\
+&= \Theta(\psi)(\phi_X(x), \phi_G(g), \phi_W(w)) \\
+&= (\psi_X(\phi_X(x)), \psi_G(\phi_G(g)), \psi_W(\phi_W(w)))
+\end{align*}
+
+These are equal, establishing the result.
+\end{proof}
+
+\begin{proposition}[Partition Preservation]
+$\Theta(\phi)$ preserves the partition structure:
+\begin{itemize}
+    \item Internal ($X$) maps to internal
+    \item Active ($G$) maps to active
+    \item External ($W$) maps to external
+    \item Sensory equivalence is preserved (under appropriate conditions on $\phi$)
+\end{itemize}
+\end{proposition}
+
+\begin{theorem}[$\Theta$ is a Functor]\label{thm:theta-functor}
+The mapping $\Theta: \Con \to \MB$ is a functor:
+\begin{enumerate}[label=(\roman*)]
+    \item $\Theta$ assigns to each object $\alpha \in \Con$ an object $\Theta(\alpha) \in \MB$
+    \item $\Theta$ assigns to each morphism $\phi: \alpha \to \beta$ a morphism $\Theta(\phi): \Theta(\alpha) \to \Theta(\beta)$
+    \item $\Theta(\id_\alpha) = \id_{\Theta(\alpha)}$ (Proposition~\ref{prop:identity})
+    \item $\Theta(\psi \circ \phi) = \Theta(\psi) \circ \Theta(\phi)$ (Proposition~\ref{prop:composition})
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Conditions (iii) and (iv) are established by Propositions~\ref{prop:identity} and~\ref{prop:composition}. It remains to verify condition (ii): that $\Theta(\phi)$ is a valid morphism in $\MB$.
+
+By Definition~\ref{def:mb-morphism}, we must verify:
+\begin{enumerate}
+    \item \textbf{Partition preservation:} $\Theta(\phi)$ maps $(\mu, s, a, \eta)$-components to corresponding components. This holds by construction: $\Theta(\phi)(x, g, w) = (\phi_X(x), \phi_G(g), \phi_W(w))$.
+
+    \item \textbf{Kernel intertwining:} For $\omega = (x, g, w) \in \Omega_\alpha$ and measurable $A \subseteq \Omega_\beta$:
+    \begin{align*}
+    K_\beta(\Theta(\phi)(\omega), A) &= K_\beta((\phi_X(x), \phi_G(g), \phi_W(w)), A) \\
+    &= K_\alpha(\omega, \Theta(\phi)^{-1}(A))
+    \end{align*}
+    The second equality follows from the kernel intertwining conditions on $\phi$ (Definition~\ref{def:con-morphism}).
+
+    \item \textbf{Markov property preservation:} By Theorem~\ref{thm:main}, $\Theta(\alpha)$ satisfies the MB property. Since $\phi$ preserves the kernel structure, $\Theta(\beta)$ inherits this property through the intertwining.
+\end{enumerate}
+\end{proof}
+
+% ============================================
+% SECTION A.5: PROPERTY PRESERVATION
+% ============================================
+\section{Property Preservation Results}
+
+\subsection{Main Theorem: Conditional Independence Correspondence}
+
+\begin{lemma}[Conditional Probability Well-Definedness]\label{lem:conditional-welldefined}
+Under Assumption~\ref{ass:measurability}, for the dynamics kernel $K_\alpha$ (Equation~\ref{eq:theta-kernel}), regular conditional probabilities $P(x' \mid x, g, w)$ exist and are unique up to a.e.\ equivalence.
+\end{lemma}
+
+\begin{proof}
+Since $\Omega_\alpha = X \times G \times W$ is a product of standard Borel spaces, it is itself standard Borel. The kernel $K_\alpha$ defines a probability measure on $\Omega_\alpha \times \Omega_\alpha$ via $K_\alpha(\omega, \cdot)$. By the disintegration theorem for standard Borel spaces (see Kallenberg, \textit{Foundations of Modern Probability}, Theorem 6.3), regular conditional probabilities exist and are a.e.\ unique.
+\end{proof}
+
+\begin{theorem}[Conditional Independence Correspondence]\label{thm:main}
+Let $\alpha = (X, G, W, P, D, A)$ be a conscious agent satisfying the normalization constraints (Definition~\ref{def:conscious-agent}). Then $\Theta(\alpha)$ satisfies the Markov blanket property:
+\begin{equation}
+P(\mu' \mid \mu, B, \eta) = P(\mu' \mid \mu, B)
+\end{equation}
+where $\mu = x$, $\mu' = x'$, $B = (s(w,x), g)$, and $\eta = w$.
+
+\textbf{Measure-theoretic precision:} For standard Borel spaces, this equality holds for all $(\mu, B, \eta)$ in a set of full measure under any $\sigma$-finite measure on $\Omega_\alpha$. For finite state spaces, it holds pointwise.
+\end{theorem}
+
+\begin{proof}
+We proceed in five steps.
+
+\textbf{Step 1: Derive the Transition Probability for $x'$.}
+
+From the dynamics kernel $K_\alpha$, the joint transition probability is:
+\[
+K_\alpha[(x, g, w) \to (x', g', w')] = P[w, x, x'] \cdot D[x', g'] \cdot A[g', w, w']
+\]
+
+To find $P(x' \mid x, g, w)$, we marginalize over $g'$ and $w'$:
+\begin{align*}
+P(x' \mid x, g, w) &= \int_G \int_W K_\alpha[(x, g, w) \to (x', g', w')] \, dg' \, dw' \\
+&= \int_G \int_W P[w, x, x'] \cdot D[x', g'] \cdot A[g', w, w'] \, dg' \, dw'
+\end{align*}
+
+\textbf{Step 2: Apply Normalization.}
+
+Since the kernels factor and are normalized:
+\[
+P(x' \mid x, g, w) = P[w, x, x'] \cdot \int_G D[x', g'] \left( \int_W A[g', w, w'] \, dw' \right) dg'
+\]
+
+By normalization of $A$: $\int_W A[g', w, w'] \, dw' = 1$ for all $g', w$.
+
+Therefore:
+\[
+P(x' \mid x, g, w) = P[w, x, x'] \cdot \int_G D[x', g'] \cdot 1 \, dg' = P[w, x, x'] \cdot 1 = P[w, x, x']
+\]
+
+\textbf{Step 3: Establish the Key Dependence Structure.}
+
+We have shown:
+\begin{equation}\label{eq:key-dependence}
+P(x' \mid x, g, w) = P[w, x, x']
+\end{equation}
+
+\textbf{Observation 1:} The next experience $x'$ does not depend on the current action $g$.
+
+\textbf{Observation 2:} The next experience $x'$ depends on the world state $w$ only through the perception kernel $P[w, x, x']$.
+
+\textbf{Step 4: Apply Sensory Equivalence.}
+
+By Definition~\ref{def:sensory-equiv}, if $w_1 \sim_x w_2$ (sensorily equivalent given $x$), then:
+\[
+P[w_1, x, x'] = P[w_2, x, x'] \quad \forall x'
+\]
+
+Therefore:
+\[
+P(x' \mid x, g, w_1) = P[w_1, x, x'] = P[w_2, x, x'] = P(x' \mid x, g, w_2)
+\]
+
+This means $P(x' \mid x, g, w)$ depends on $w$ only through its sensory equivalence class $s(w, x)$.
+
+\textbf{Step 5: Express as Conditional Independence.}
+
+Define:
+\begin{itemize}
+    \item $\mu = x$ (current internal state)
+    \item $\mu' = x'$ (next internal state)
+    \item $s = s(w, x)$ (sensory state)
+    \item $a = g$ (active state)
+    \item $\eta = w$ (external state)
+    \item $B = (s, a)$ (blanket)
+\end{itemize}
+
+From Step 4, we can write:
+\[
+P(x' \mid x, g, w) = P(x' \mid x, s(w, x)) = P(x' \mid x, s)
+\]
+
+Since $s = s(w, x)$ is determined by $w$ and $x$, conditioning on $(x, s, w)$ is equivalent to conditioning on $(x, s)$ with respect to $x'$:
+\[
+P(\mu' \mid \mu, s, \eta) = P(\mu' \mid \mu, s)
+\]
+
+Since $x'$ does not depend on $g$ (Observation 1), we also have:
+\[
+P(\mu' \mid \mu, s, a, \eta) = P(\mu' \mid \mu, s, a)
+\]
+
+This is the Markov blanket property:
+\[
+\boxed{P(\mu' \mid \mu, B, \eta) = P(\mu' \mid \mu, B)}
+\]
+
+The blanket $B = (s, a)$ screens off the external state $\eta$ from the next internal state $\mu'$.
+\end{proof}
+
+\subsection{Boundary Correspondence}
+
+\begin{theorem}[Boundary Correspondence]\label{thm:boundary}
+The agent boundary implicit in Hoffman's kernel structure corresponds to the Markov blanket $B$ in Friston's framework.
+\end{theorem}
+
+\begin{proof}[Proof Sketch]
+The boundary is where agent $\leftrightarrow$ world interaction occurs:
+\begin{itemize}
+    \item \textbf{Sensory side:} $P$ provides $w \to x'$ interface (input)
+    \item \textbf{Active side:} $A$ provides $g \to w'$ interface (output)
+\end{itemize}
+Under $\Theta$: $B = (s, a)$ captures exactly this interface.
+\end{proof}
+
+\subsection{Compositional Correspondence: Non-Interacting Agents}
+
+We first establish a key lemma about kernel tensor products.
+
+\begin{lemma}[Tensor Products of Kernel Compositions]\label{lem:tensor-composition}
+Let $P_1, D_1, A_1$ and $P_2, D_2, A_2$ be Markov kernels forming two conscious agent structures. Then:
+\[
+(P_1 \otimes P_2) \cdot (D_1 \otimes D_2) \cdot (A_1 \otimes A_2) = (P_1 \cdot D_1 \cdot A_1) \otimes (P_2 \cdot D_2 \cdot A_2)
+\]
+That is, the tensor product of factored kernels equals the factored tensor product.
+\end{lemma}
+
+\begin{proof}
+We verify this pointwise. For states $\omega_1 = (x_1, g_1, w_1)$, $\omega_2 = (x_2, g_2, w_2)$ and target states $\omega'_1 = (x'_1, g'_1, w'_1)$, $\omega'_2 = (x'_2, g'_2, w'_2)$:
+
+\textbf{Left-hand side:}
+\begin{align*}
+&[(P_1 \otimes P_2) \cdot (D_1 \otimes D_2) \cdot (A_1 \otimes A_2)][(\omega_1, \omega_2), (\omega'_1, \omega'_2)] \\
+&= \int_{X_1 \times X_2} \int_{G_1 \times G_2} (P_1 \otimes P_2)[...] \cdot (D_1 \otimes D_2)[...] \cdot (A_1 \otimes A_2)[...] \\
+&= \int_{X_1 \times X_2} \int_{G_1 \times G_2} P_1[w_1, x_1, x'_1] P_2[w_2, x_2, x'_2] \cdot D_1[x'_1, g'_1] D_2[x'_2, g'_2] \\
+&\qquad\qquad\qquad\qquad \cdot A_1[g'_1, w_1, w'_1] A_2[g'_2, w_2, w'_2]
+\end{align*}
+
+By Fubini's theorem (applicable since all kernels are probability kernels):
+\begin{align*}
+&= \left( \int_{X_1} \int_{G_1} P_1[w_1, x_1, x'_1] D_1[x'_1, g'_1] A_1[g'_1, w_1, w'_1] \right) \\
+&\quad \cdot \left( \int_{X_2} \int_{G_2} P_2[w_2, x_2, x'_2] D_2[x'_2, g'_2] A_2[g'_2, w_2, w'_2] \right) \\
+&= (P_1 \cdot D_1 \cdot A_1)[\omega_1, \omega'_1] \cdot (P_2 \cdot D_2 \cdot A_2)[\omega_2, \omega'_2] \\
+&= [(P_1 \cdot D_1 \cdot A_1) \otimes (P_2 \cdot D_2 \cdot A_2)][(\omega_1, \omega_2), (\omega'_1, \omega'_2)]
+\end{align*}
+which is the right-hand side.
+\end{proof}
+
+\begin{definition}[Non-Interacting Agents]\label{def:non-interacting}
+Agents $\alpha$ and $\beta$ are \emph{non-interacting} if their tensor product $\alpha \otimes \beta$ has:
+\begin{enumerate}[label=(\roman*)]
+    \item Separate world states: $W_{\alpha \otimes \beta} = W_\alpha \times W_\beta$
+    \item Factored perception: $P_{\alpha \otimes \beta}[(w_1,w_2), (x_1,x_2), (x'_1,x'_2)] = P_\alpha[w_1, x_1, x'_1] \cdot P_\beta[w_2, x_2, x'_2]$
+    \item Factored decision: $D_{\alpha \otimes \beta}[(x_1,x_2), (g_1,g_2)] = D_\alpha[x_1, g_1] \cdot D_\beta[x_2, g_2]$
+    \item Factored action: $A_{\alpha \otimes \beta}[(g_1,g_2), (w_1,w_2), (w'_1,w'_2)] = A_\alpha[g_1, w_1, w'_1] \cdot A_\beta[g_2, w_2, w'_2]$
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Compositional Correspondence for Non-Interacting Agents]\label{thm:composition-noninteracting}
+For non-interacting agents $\alpha$ and $\beta$:
+\[
+\Theta(\alpha \otimes \beta) \cong \Theta(\alpha) \otimes_{\MB} \Theta(\beta)
+\]
+where $\cong$ denotes isomorphism of Markov blanket systems.
+\end{theorem}
+
+\begin{proof}
+We establish the isomorphism in four steps.
+
+\textbf{Step 1: State Space Isomorphism.}
+
+By definition:
+\[
+\Omega_{\alpha \otimes \beta} = (X_\alpha \times X_\beta) \times (G_\alpha \times G_\beta) \times (W_\alpha \times W_\beta)
+\]
+This is isomorphic to $\Omega_{\Theta(\alpha)} \times \Omega_{\Theta(\beta)} = (X_\alpha \times G_\alpha \times W_\alpha) \times (X_\beta \times G_\beta \times W_\beta)$ via the canonical reordering:
+\[
+\phi((x_1, x_2), (g_1, g_2), (w_1, w_2)) = ((x_1, g_1, w_1), (x_2, g_2, w_2))
+\]
+This is a measurable bijection with measurable inverse.
+
+\textbf{Step 2: Partition Correspondence.}
+
+Under $\phi$, the partitions align exactly:
+\begin{itemize}
+    \item Internal: $\mu_{\alpha \otimes \beta} = X_\alpha \times X_\beta \leftrightarrow \mu_\alpha \times \mu_\beta$
+    \item Active: $a_{\alpha \otimes \beta} = G_\alpha \times G_\beta \leftrightarrow a_\alpha \times a_\beta$
+    \item External: $\eta_{\alpha \otimes \beta} = W_\alpha \times W_\beta \leftrightarrow \eta_\alpha \times \eta_\beta$
+\end{itemize}
+
+For sensory states, by factorization of $P_{\alpha \otimes \beta}$: two world states $(w_1, w_2)$ and $(w'_1, w'_2)$ are sensorily equivalent given $(x_1, x_2)$ iff both $w_1 \sim_{x_1} w'_1$ and $w_2 \sim_{x_2} w'_2$. Therefore:
+\[
+s_{\alpha \otimes \beta}((w_1, w_2), (x_1, x_2)) = (s_\alpha(w_1, x_1), s_\beta(w_2, x_2))
+\]
+
+\textbf{Step 3: Kernel Correspondence.}
+
+By the definition of non-interacting agents and Lemma~\ref{lem:tensor-composition}:
+\begin{align*}
+K_{\alpha \otimes \beta} &= P_{\alpha \otimes \beta} \cdot D_{\alpha \otimes \beta} \cdot A_{\alpha \otimes \beta} \\
+&= (P_\alpha \otimes P_\beta) \cdot (D_\alpha \otimes D_\beta) \cdot (A_\alpha \otimes A_\beta) & \text{(by Definition~\ref{def:non-interacting})} \\
+&= (P_\alpha \cdot D_\alpha \cdot A_\alpha) \otimes (P_\beta \cdot D_\beta \cdot A_\beta) & \text{(by Lemma~\ref{lem:tensor-composition})} \\
+&= K_\alpha \otimes K_\beta
+\end{align*}
+
+\textbf{Step 4: Markov Property Preservation.}
+
+By Theorem~\ref{thm:main}, each agent individually satisfies the Markov property. For the combined system:
+\begin{align*}
+P((x'_1, x'_2) | (x_1, x_2), (g_1, g_2), (w_1, w_2)) &= P(x'_1 | x_1, g_1, w_1) \cdot P(x'_2 | x_2, g_2, w_2) \\
+&= P(x'_1 | x_1, s_\alpha(w_1, x_1)) \cdot P(x'_2 | x_2, s_\beta(w_2, x_2))
+\end{align*}
+This depends on $(w_1, w_2)$ only through the combined sensory state, establishing the Markov blanket property for $\Theta(\alpha \otimes \beta)$.
+\end{proof}
+
+\begin{remark}[Monoidal Functoriality]
+Theorem~\ref{thm:composition-noninteracting} establishes that $\Theta$ is a \emph{monoidal functor} when restricted to non-interacting agents: it preserves not just objects and morphisms but also the compositional structure.
+\end{remark}
+
+\subsection{Compositional Correspondence: Interacting Agents}
+
+\begin{definition}[Blanket-Mediated Interaction Condition (BMIC)]\label{def:bmic}
+Agents $\alpha$ and $\beta$ satisfy the \emph{Blanket-Mediated Interaction Condition} if all statistical dependencies between their internal states pass through their respective blankets:
+\[
+P(x'_1, x'_2 | x_1, x_2, B_\alpha, B_\beta, \eta) = P(x'_1 | x_1, B_\alpha) \cdot P(x'_2 | x_2, B_\beta)
+\]
+where $B_\alpha = (s_\alpha, g_1)$, $B_\beta = (s_\beta, g_2)$, and $\eta$ represents joint external states.
+\end{definition}
+
+\begin{theorem}[Compositional Correspondence for Interacting Agents]\label{thm:composition-interacting}
+For interacting agents $\alpha$ and $\beta$:
+\begin{enumerate}[label=(\roman*)]
+    \item If BMIC holds: $\Theta(\alpha \bowtie \beta) \cong \Theta(\alpha) \otimes_{\MB} \Theta(\beta)$
+    \item If BMIC fails: the correspondence fails at the component level, but the combined system $\gamma = \alpha \bowtie \beta$ has its own well-defined Markov blanket structure $\Theta(\gamma)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(i)} Under BMIC, each agent's internal state update depends only on its own blanket. The combined blanket $B = (B_\alpha, B_\beta)$ screens off the combined internal state from external states, and the product structure is preserved.
+
+\textbf{(ii)} When BMIC fails (direct internal coupling), some information about $\mu'_\beta$ depends on $\mu_\alpha$ without passing through $B_\beta$. The individual blankets cease to function as independent screens. However, the combined system $\gamma$ can be treated as a single agent with joint experience space $X_\gamma = X_\alpha \times X_\beta$, and $\Theta(\gamma)$ is well-defined with its own unified blanket $B_\gamma$.
+\end{proof}
+
+\begin{example}[Direct Internal Coupling Counterexample]
+Let $\alpha$ and $\beta$ have $X_\alpha = X_\beta = \{0, 1\}$. Define interacting dynamics where $x'_2 = x_1$ (agent $\beta$'s next experience is determined by agent $\alpha$'s current experience). Then:
+\[
+P(x'_2 | x_2, B_\beta, \eta, x_1) = \delta_{x_1}(x'_2) \neq P(x'_2 | x_2, B_\beta)
+\]
+The Markov blanket property fails for individual agents, but holds for the combined agent $\gamma$.
+\end{example}
+
+\begin{remark}[Interpretation]
+BMIC failure indicates \emph{true association}: the agents have integrated into a unified whole whose internal dynamics cannot be decomposed into independent component dynamics. This is precisely when $\Phi > 0$ (see Section~\ref{sec:iit}).
+\end{remark}
+
+\subsection{Scope and Limitations of $\Theta$}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Claim} & \textbf{Status} & \textbf{Notes} \\
+\midrule
+$\Theta$ is well-defined on objects & \textbf{Established} & Definition~\ref{def:theta} \\
+$\Theta$ is well-defined on morphisms & \textbf{Established} & Given intertwining conditions \\
+$\Theta$ preserves identity & \textbf{Proven} & Proposition~\ref{prop:identity} \\
+$\Theta$ preserves composition & \textbf{Proven} & Proposition~\ref{prop:composition} \\
+$\Theta(\phi)$ is an MB morphism & \textbf{Established} & From intertwining conditions \\
+$\Theta$ preserves conditional independence & \textbf{Proven} & Theorem~\ref{thm:main} \\
+$\Theta$ preserves $\otimes$ (non-interacting) & \textbf{Proven} & Theorem~\ref{thm:composition-noninteracting} \\
+$\Theta$ preserves $\otimes$ (interacting, BMIC) & \textbf{Proven} & Theorem~\ref{thm:composition-interacting} \\
+Inverse mapping conditions & \textbf{Characterized} & Section~\ref{sec:inverse} \\
+$\Theta$ establishes equivalence of categories & \textbf{Not claimed} & Would require full inverse functor \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{remark}
+The demonstrated correspondence shows \emph{compatibility}, not \emph{equivalence}. Conscious Agent structure is sufficient for Markov Blanket structure. We have characterized when MB structure is sufficient for Con structure (Section~\ref{sec:inverse}).
+\end{remark}
+
+% ============================================
+% SECTION A.6: NON-GENERICITY
+% ============================================
+\section{Non-Genericity Analysis}
+
+The conditional independence established in Theorem~\ref{thm:main} is \textbf{non-generic}---it is not a property shared by arbitrary complex systems. This section establishes that the correspondence captures a specific structural constraint, not a trivial or universal feature.
+
+\textbf{Two observations support significance:}
+\begin{enumerate}
+    \item \textbf{Derived vs.\ definitional:} Hoffman's framework was not designed to satisfy Markov blanket properties. That it implies conditional independence is a derived result.
+    \item \textbf{Measure-zero constraint:} The class of dynamical systems satisfying conditional independence is measure-zero in the space of all transition kernels.
+\end{enumerate}
+
+\subsection{Cellular Automata}
+
+\begin{proposition}\label{prop:ca}
+Cellular automata do not generically satisfy the Markov blanket property.
+\end{proposition}
+
+\begin{proof}
+Consider a 1D cellular automaton with nearest-neighbor rule. Let cell $c$ be ``internal,'' cells $\{c-1, c+1\}$ be candidates for blanket, and cells $\{c-2, c+2, \ldots\}$ be ``external.''
+
+Attempt $B = \{c-1, c+1\}$. The update for $c-1$:
+\[
+\sigma'(c-1) = f(\sigma(c-2), \sigma(c-1), \sigma(c))
+\]
+
+Cell $c-2 \in \eta$ directly affects $c-1$'s update, but $c-1 \in B$. The blanket itself is affected by external states. Therefore:
+\[
+P(\mu' \mid B, \eta) \neq P(\mu' \mid B)
+\]
+in general, because $B'$ depends on $\eta$.
+
+The fundamental issue: in cellular automata, every finite region's boundary is causally affected by the exterior. There is no finite blanket that screens off the infinite exterior.
+\end{proof}
+
+\subsection{Generic Markov Processes}
+
+\begin{proposition}\label{prop:generic-markov}
+Generic Markov processes do not satisfy the Markov blanket property.
+\end{proposition}
+
+\begin{proof}
+Let $\Omega = \Omega_\mu \times \Omega_B \times \Omega_\eta$ where each factor has $\geq 2$ states. For the Markov blanket property, we need:
+\[
+K((m, b, e) \to (m', \cdot, \cdot)) = K_\mu(m, b, m')
+\]
+
+For a generic (randomly sampled) stochastic matrix $K$, $K((m, b, e_1) \to (m', \cdot, \cdot))$ and $K((m, b, e_2) \to (m', \cdot, \cdot))$ are independent random variables.
+
+The conditional independence constraint imposes a positive-codimension constraint on the space of stochastic matrices. The set of matrices satisfying any fixed Markov blanket structure has measure zero.
+\end{proof}
+
+\subsection{Reaction-Diffusion Systems}
+
+\begin{proposition}\label{prop:reaction-diffusion}
+Reaction-diffusion systems do not generically satisfy the Markov blanket property.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+Consider a 1D system with internal region $[0,1]$. The diffusion operator $\nabla^2 u$ at the boundary depends on values in the external region:
+\[
+\frac{\partial^2 u}{\partial x^2}\bigg|_{x=-\epsilon} \approx \frac{u(-2\epsilon) - 2u(-\epsilon) + u(0)}{\epsilon^2}
+\]
+
+The Laplacian couples every point to its neighbors. Any finite blanket region has its dynamics affected by the exterior through diffusion.
+\end{proof}
+
+\subsection{Network Dynamical Systems}
+
+\begin{proposition}\label{prop:network}
+Network dynamical systems do not generically satisfy the Markov blanket property.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+For a Markov blanket to exist, the graph must have a specific structure: a cut separating internal from external, with cut edges passing through blanket nodes.
+
+In a random graph $G(n, p)$, with high probability there exist edges from $\mu$ to nodes in $\eta$ bypassing any fixed $B$. Even with good topology, generic coupling functions don't satisfy the required conditional independence.
+\end{proof}
+
+\subsection{Summary Table}
+
+\begin{center}
+\begin{tabular}{lcp{6cm}}
+\toprule
+\textbf{System Class} & \textbf{Markov Blanket Property} & \textbf{Reason for Failure} \\
+\midrule
+Hoffman's Conscious Agents & \textbf{Yes} & Kernel factorization $P \cdot D \cdot A$ \\
+Friston's MB Systems & \textbf{Yes} (by definition) & Constructed to have property \\
+Cellular Automata & No & Simultaneous symmetric updates \\
+Generic Markov Processes & No (measure zero) & Arbitrary kernels don't factor \\
+Reaction-Diffusion & No & Continuous diffusive coupling \\
+Network Dynamical Systems & No (generically) & No screening topology \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Precise Measure-Theoretic Characterization}
+
+\begin{proposition}[Codimension of MB-Satisfying Matrices]\label{prop:codimension}
+Let $\Omega = \mu \cup B \cup \eta$ with $|\mu| = m$, $|B| = b$, $|\eta| = e$, and $n = m + b + e$. The set of $n \times n$ stochastic matrices $K$ satisfying the Markov blanket property has codimension at least $m^2 \cdot b \cdot (e-1)$ in the space of stochastic matrices.
+\end{proposition}
+
+\begin{proof}
+The Markov blanket property requires that for all $(\mu, b) \in \mu \times B$ and all $\mu' \in \mu$:
+\[
+\sum_{b', \eta'} K[(\mu, b, \eta_1) \to (\mu', b', \eta')] = \sum_{b', \eta'} K[(\mu, b, \eta_2) \to (\mu', b', \eta')] \quad \forall \eta_1, \eta_2 \in \eta
+\]
+This imposes $(e-1)$ independent linear constraints for each $(\mu, b, \mu')$ triple. The total number of constraints is $m \cdot b \cdot m \cdot (e-1) = m^2 \cdot b \cdot (e-1)$.
+\end{proof}
+
+\begin{proposition}[Graph-Theoretic Characterization]\label{prop:graph-separator}
+A network dynamical system on graph $G = (V, E)$ supports a Markov blanket partition $(\mu, B, \eta)$ if and only if $B$ is a $(\mu, \eta)$-vertex separator in $G$: every path from $\mu$ to $\eta$ passes through $B$.
+\end{proposition}
+
+\begin{proof}
+$(\Rightarrow)$ If $B$ is not a separator, there exists an edge $(v, u)$ with $v \in \mu$ and $u \in \eta$. Then $\eta$ can directly affect $\mu'$ through this edge, violating conditional independence.
+
+$(\Leftarrow)$ If $B$ separates $\mu$ from $\eta$, any influence of $\eta$ on $\mu'$ must pass through $B$. When dynamics respect graph structure (only neighbors interact), the MB property holds.
+\end{proof}
+
+\begin{corollary}[Biological Relevance]
+Neural networks exhibit approximate Markov blanket structure due to hierarchical organization and modular connectivity. This is non-generic: in Erd\H{o}s-R\'enyi random graphs $G(n, p)$ with $p > \log(n)/n$, no non-trivial vertex separator exists with high probability.
+\end{corollary}
+
+\begin{proposition}[Continuous-Time Extension]\label{prop:continuous-time}
+For continuous-time Markov processes with generator matrix $Q$, the Markov blanket property is measure-zero in the space of valid generators, with codimension $\geq m^2 \cdot b \cdot (e-1)$.
+\end{proposition}
+
+% ============================================
+% SECTION A.7: INTEGRATED INFORMATION CONNECTION
+% ============================================
+\section{Connection to Integrated Information Theory}\label{sec:iit}
+
+This section formalizes the relationship between the $\Con/\MB$ correspondence and Tononi's Integrated Information Theory (IIT).
+
+\subsection{Integrated Information in the Agent Framework}
+
+\begin{definition}[Non-Trivial Factorization]\label{def:nontrivial-factorization}
+A \emph{non-trivial factorization} of agent $\alpha$ is a pair $(\alpha_1, \alpha_2)$ of agents such that:
+\begin{enumerate}[label=(\roman*)]
+    \item Neither $\alpha_1$ nor $\alpha_2$ is the unit agent $\mathbf{1}$
+    \item $X_{\alpha_1} \times X_{\alpha_2} \cong X_\alpha$ (and similarly for $G$ and $W$)
+\end{enumerate}
+Write $\mathcal{F}_{nt}(\alpha)$ for the set of all non-trivial factorization candidates.
+\end{definition}
+
+\begin{definition}[Agent Integration]\label{def:agent-integration}
+For conscious agent $\alpha$ with finite state spaces, define the \emph{agent integration}:
+\[
+\Phi_{\Con}(\alpha) = \inf_{(\alpha_1, \alpha_2) \in \mathcal{F}_{nt}(\alpha)} D_{KL}(K_\alpha \| K_{\alpha_1} \otimes K_{\alpha_2})
+\]
+where $D_{KL}(P \| Q) = \sum_\omega P(\omega) \log \frac{P(\omega)}{Q(\omega)}$ is the Kullback-Leibler divergence, with the convention $0 \log 0 = 0$ and $p \log(p/0) = +\infty$ when $p > 0$.
+
+If $\mathcal{F}_{nt}(\alpha) = \emptyset$ (no non-trivial factorization exists), set $\Phi_{\Con}(\alpha) = +\infty$.
+\end{definition}
+
+\begin{proposition}[Infimum Achievement]\label{prop:infimum-achievement}
+For conscious agents with finite state spaces:
+\begin{enumerate}[label=(\roman*)]
+    \item The set $\mathcal{F}_{nt}(\alpha)$ of non-trivial factorizations is finite (up to isomorphism).
+    \item The infimum in Definition~\ref{def:agent-integration} is achieved: there exists $(\alpha_1^*, \alpha_2^*) \in \mathcal{F}_{nt}(\alpha)$ with $\Phi_{\Con}(\alpha) = D_{KL}(K_\alpha \| K_{\alpha_1^*} \otimes K_{\alpha_2^*})$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) For finite $X, G, W$, the factorizations of $X = X_1 \times X_2$ (up to isomorphism) correspond to partitions of $\log_2|X|$ into two positive integers, giving $\lfloor \log_2|X| \rfloor$ choices. Similarly for $G$ and $W$. The total number of factorizations is therefore bounded by $\log_2(|X||G||W|)^3$.
+
+(ii) The infimum over a finite set is achieved.
+\end{proof}
+
+\begin{remark}[Continuous State Spaces]
+For continuous state spaces, $\mathcal{F}_{nt}(\alpha)$ parametrizes measurable factorizations of the spaces. The infimum may not be achieved, and $\Phi_{\Con}$ should be interpreted as the greatest lower bound. In this case, one may consider:
+\begin{enumerate}[label=(\roman*)]
+    \item Restricting to a compact family of factorizations where the infimum is achieved
+    \item Working with $\epsilon$-optimal factorizations for any $\epsilon > 0$
+    \item Using the convention that $\Phi_{\Con} = 0$ iff there exists a sequence of factorizations with divergence $\to 0$
+\end{enumerate}
+\end{remark}
+
+\begin{theorem}[$\Phi$-Dissociability Correspondence]\label{thm:phi-dissociability}
+For conscious agent $\alpha$ with $\mathcal{F}_{nt}(\alpha) \neq \emptyset$:
+\[
+\Phi_{\Con}(\alpha) = 0 \iff \alpha \text{ is dissociable} \iff \alpha \cong \alpha_1 \otimes \alpha_2 \text{ for non-trivial } \alpha_1, \alpha_2
+\]
+\end{theorem}
+
+\begin{proof}
+$(\Rightarrow)$ Suppose $\Phi_{\Con}(\alpha) = 0$. Then there exists a sequence of factorizations $(\alpha_1^{(n)}, \alpha_2^{(n)})$ with $D_{KL}(K_\alpha \| K_{\alpha_1^{(n)}} \otimes K_{\alpha_2^{(n)}}) \to 0$. For finite state spaces, the infimum is achieved at some $(\alpha_1, \alpha_2)$ with $D_{KL} = 0$. Since $D_{KL}(P \| Q) = 0$ iff $P = Q$ almost everywhere, we have $K_\alpha = K_{\alpha_1} \otimes K_{\alpha_2}$ a.e., establishing $\alpha \cong \alpha_1 \otimes \alpha_2$.
+
+$(\Leftarrow)$ If $\alpha \cong \alpha_1 \otimes \alpha_2$ for non-trivial agents, then $K_\alpha = K_{\alpha_1} \otimes K_{\alpha_2}$ (up to the canonical isomorphism), so $D_{KL}(K_\alpha \| K_{\alpha_1} \otimes K_{\alpha_2}) = 0$, hence $\Phi_{\Con}(\alpha) = 0$.
+\end{proof}
+
+\subsection{Blanket Strength}
+
+\begin{definition}[Blanket Strength]\label{def:blanket-strength}
+For Markov blanket system $M = (\Omega, S_\mu, S_s, S_a, S_\eta, K)$, define \emph{blanket strength}:
+\[
+\sigma(M) = \begin{cases}
+1 - \dfrac{I(\mu'; \eta \mid B, \mu)}{H(\mu' \mid B, \mu)} & \text{if } H(\mu' \mid B, \mu) > 0 \\[1em]
+1 & \text{if } H(\mu' \mid B, \mu) = 0
+\end{cases}
+\]
+where $I(\cdot; \cdot \mid \cdot)$ denotes conditional mutual information and $H(\cdot \mid \cdot)$ denotes conditional entropy.
+\end{definition}
+
+\begin{remark}[Interpretation of Edge Case]
+When $H(\mu' \mid B, \mu) = 0$, the next internal state is deterministic given the current internal state and blanket. In this case, there is no uncertainty for external information to reduce, so we define $\sigma(M) = 1$ (perfect screening). This convention ensures $\sigma(M) \in [0, 1]$ for all systems.
+\end{remark}
+
+\begin{proposition}[Perfect Screening for Conscious Agents]
+For any conscious agent $\alpha$: $\sigma(\Theta(\alpha)) = 1$.
+\end{proposition}
+
+\begin{proof}
+By Theorem~\ref{thm:main}, $P(\mu' | \mu, B, \eta) = P(\mu' | \mu, B)$. Therefore $I(\mu'; \eta | B, \mu) = 0$, giving $\sigma = 1$.
+\end{proof}
+
+\subsection{Relationship Between $\Phi$ Measures}
+
+\begin{proposition}[$\Phi$ Under $\Theta$]
+For conscious agent $\alpha$:
+\[
+\Phi_{IIT}(\Theta(\alpha)) \geq \Phi_{\Con}(\alpha)
+\]
+where $\Phi_{IIT}$ is Tononi's integrated information computed on the MB system.
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+$\Phi_{IIT}$ minimizes over all system partitions; $\Phi_{\Con}$ minimizes over agent-structure-respecting factorizations. The latter is a subset of the former, so the infimum over the larger set is at most the infimum over the smaller set.
+\end{proof}
+
+\begin{remark}[Connection to $\Phi$-Assembly Framework]
+The $\Phi$-Assembly framework proposes:
+\begin{itemize}
+    \item \textbf{Association:} Increasing $\Phi$ (unification, integration)
+    \item \textbf{Dissociation:} Decreasing $\Phi$ (factorization, separation)
+\end{itemize}
+Our formalization supports this: $\Phi_{\Con}(\alpha) = 0$ iff $\alpha$ is dissociable (can be factored into independent components). The compositional correspondence $\Theta(\alpha \otimes \beta) \cong \Theta(\alpha) \otimes_{\MB} \Theta(\beta)$ holds precisely when $\Phi_{\Con}(\alpha \otimes \beta) = 0$.
+\end{remark}
+
+% ============================================
+% SECTION A.8: ASSOCIATION AND DISSOCIATION
+% ============================================
+\section{Formal Operations: Association and Dissociation}\label{sec:assoc-dissoc}
+
+This section formalizes association and dissociation as categorical operations on conscious agents.
+
+\subsection{Dissociability}
+
+\begin{definition}[Dissociable Agent]\label{def:dissociable}
+Agent $\alpha$ is \emph{dissociable} if there exist non-trivial agents $\alpha_1, \alpha_2$ such that $\alpha \cong \alpha_1 \otimes \alpha_2$.
+\end{definition}
+
+\begin{definition}[Integration Degree]\label{def:integration-degree}
+The \emph{integration degree} of agent $\alpha$ is:
+\[
+\iota(\alpha) = \inf \{ D_{KL}(K_\alpha \| K_{\alpha_1} \otimes K_{\alpha_2}) : (\alpha_1, \alpha_2) \text{ non-trivial} \}
+\]
+\end{definition}
+
+\begin{theorem}[Integration-Dissociability Equivalence]\label{thm:integration-dissociability}
+\[
+\iota(\alpha) = 0 \iff \alpha \text{ is dissociable} \iff \Phi_{\Con}(\alpha) = 0
+\]
+\end{theorem}
+
+\begin{proof}
+Direct from definitions: $\iota = 0$ means there exists a factorization with zero divergence, which is exactly dissociability, which equals $\Phi_{\Con} = 0$ by Theorem~\ref{thm:phi-dissociability}.
+\end{proof}
+
+\subsection{Formal Operations}
+
+\begin{definition}[Dissociation Operation]\label{def:dissociation-op}
+A \emph{dissociation} of agent $\alpha$ is a triple $(\alpha_1, \alpha_2, \phi)$ where:
+\begin{itemize}
+    \item $\alpha_1, \alpha_2$ are non-trivial agents
+    \item $\phi: \alpha \to \alpha_1 \otimes \alpha_2$ is an isomorphism in $\Con$
+\end{itemize}
+We write $\alpha \xrightarrow{\text{diss}} \alpha_1 \otimes \alpha_2$.
+\end{definition}
+
+\begin{definition}[Association Operation]\label{def:association-op}
+An \emph{association} of agents $\alpha_1$ and $\alpha_2$ producing agent $\gamma$ is a morphism $\chi: \alpha_1 \otimes \alpha_2 \to \gamma$ where $\iota(\gamma) > 0$.
+
+A \emph{strong association} additionally requires $\iota(\gamma) > \max(\iota(\alpha_1), \iota(\alpha_2))$.
+\end{definition}
+
+\subsection{Effects on Structure}
+
+\begin{proposition}[Association Creates Unified Blankets]\label{prop:blanket-merging}
+Under strong association $\alpha_1 \otimes \alpha_2 \xrightarrow{\chi} \gamma$:
+\begin{enumerate}[label=(\roman*)]
+    \item $\mu_\gamma \supseteq \mu_{\alpha_1} \cup \mu_{\alpha_2}$ (combined internal states)
+    \item $B_\gamma \neq B_{\alpha_1} \cup B_{\alpha_2}$ (blanket structure changes)
+    \item Information that was ``blanket'' becomes ``internal''
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+We establish each claim.
+
+\textbf{(i) Combined internal states:} Under the morphism $\chi: \alpha_1 \otimes \alpha_2 \to \gamma$, the internal state space of $\gamma$ receives both $X_{\alpha_1}$ and $X_{\alpha_2}$. Since $\chi$ is not an isomorphism (association creates new structure), we have:
+\[
+X_\gamma \supseteq \chi_X(X_{\alpha_1} \times X_{\alpha_2}) \supseteq X_{\alpha_1} \cup X_{\alpha_2}
+\]
+where the second inclusion uses the projections.
+
+\textbf{(ii) Blanket structure change:} By strong association, $\iota(\gamma) > \max(\iota(\alpha_1), \iota(\alpha_2)) \geq 0$. If $B_\gamma = B_{\alpha_1} \cup B_{\alpha_2}$, the blankets would remain independent, and the combined system would factor as $\Theta(\gamma) \cong \Theta(\alpha_1) \otimes \Theta(\alpha_2)$ by Theorem~\ref{thm:composition-noninteracting}. This would imply $\iota(\gamma) = 0$, contradicting strong association.
+
+\textbf{(iii) Blanket internalization:} Consider states that were blanket states for the tensor product: $B_{\alpha_1 \otimes \alpha_2} = (B_{\alpha_1}, B_{\alpha_2})$. Under association, some statistical dependencies that previously passed through these blanket states now become internal correlations within $\gamma$. Specifically, if $\chi$ creates correlations between $\mu_{\alpha_1}$ and $\mu_{\alpha_2}$ that do not factor through $(B_{\alpha_1}, B_{\alpha_2})$, then the effective blanket of $\gamma$ must differ from the union of component blankets.
+\end{proof}
+
+\subsection{Summary of Operations}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Operation} & $\iota$ & $\Phi$ & \textbf{Blanket} & \textbf{Compositional Corresp.} \\
+\midrule
+Dissociation & $\to 0$ & $\to 0$ & Splits & Preserved \\
+Weak Association & $= 0$ & $= 0$ & Juxtaposed & Preserved \\
+Strong Association & $> 0$ & $> 0$ & Merged & Fails at component level \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================
+% SECTION A.9: INVERSE MAPPING
+% ============================================
+\section{Inverse Mapping: $\MB \to \Con$}\label{sec:inverse}
+
+This section characterizes conditions under which a Markov blanket system can be represented as (arises from) a conscious agent.
+
+\subsection{Necessary and Sufficient Conditions}
+
+\begin{theorem}[Representability Conditions]\label{thm:representability}
+A Markov blanket system $M = (\Omega, \mu, s, a, \eta, K)$ admits representation as $\Theta(\alpha)$ for some conscious agent $\alpha$ \textbf{if and only if}:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{State space structure:} $\Omega \cong X \times G \times W$ for measurable spaces $X, G, W$
+    \item \textbf{Partition alignment:} $\mu \cong X$, $a \cong G$, $\eta \cong W$
+    \item \textbf{Kernel factorization:} $K$ factors as $K = P \cdot D \cdot A$ where:
+    \begin{itemize}
+        \item $P: W \times X \to \ProbSpace{X}$ (perception-like)
+        \item $D: X \to \ProbSpace{G}$ (decision-like)
+        \item $A: G \times W \to \ProbSpace{W}$ (action-like)
+    \end{itemize}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(Necessity)} Suppose $M = \Theta(\alpha)$ for $\alpha = (X, G, W, P, D, A)$. By Definition~\ref{def:theta}: $\Omega_\alpha = X \times G \times W$, the partition aligns as specified, and $K_\alpha = P \cdot D \cdot A$.
+
+\textbf{(Sufficiency)} Given conditions (i)--(iii), define $\alpha = (X, G, W, P, D, A)$ where the kernels are from the factorization. This is a valid conscious agent, and $\Theta(\alpha) = M$ by construction.
+\end{proof}
+
+\subsection{Factorizability Obstruction}
+
+\begin{definition}[Factorizability Obstruction]\label{def:factorizability-obstruction}
+For MB system $M$, the \emph{factorizability obstruction} is:
+\[
+\text{Obs}(M) = \inf_{P, D, A} D_{KL}(K \| P \cdot D \cdot A)
+\]
+where the infimum is over all valid kernel factorizations respecting the partition structure.
+\end{definition}
+
+\begin{proposition}[Obstruction Characterization]
+\begin{enumerate}[label=(\roman*)]
+    \item $\text{Obs}(M) = 0$ iff $M$ is representable as $\Theta(\alpha)$ for some conscious agent $\alpha$
+    \item $\text{Obs}(M) > 0$ measures ``distance'' from conscious agent structure
+\end{enumerate}
+\end{proposition}
+
+\subsection{Uniqueness}
+
+\begin{proposition}[Non-Uniqueness]\label{prop:non-uniqueness}
+If $M$ admits representation as $\Theta(\alpha)$, the representing agent $\alpha$ is generally \textbf{not unique} up to isomorphism.
+\end{proposition}
+
+\begin{proof}
+Let $K$ factor as both $K = P_1 \cdot D \cdot A_1$ and $K = P_2 \cdot D \cdot A_2$ where $P_1 \neq P_2$ but $P_1 \cdot A_1 = P_2 \cdot A_2$. Then $\alpha_1 = (X, G, W, P_1, D, A_1)$ and $\alpha_2 = (X, G, W, P_2, D, A_2)$ satisfy $\Theta(\alpha_1) \cong \Theta(\alpha_2) \cong M$ but $\alpha_1 \not\cong \alpha_2$.
+\end{proof}
+
+\begin{remark}[Causal Structure Interpretation]
+The kernel factorization $P \cdot D \cdot A$ encodes a specific causal structure:
+\begin{enumerate}
+    \item Perception: World $\to$ Experience (environmental input)
+    \item Decision: Experience $\to$ Action (internal processing)
+    \item Action: Action $\times$ World $\to$ World (environmental output)
+\end{enumerate}
+Not all MB systems have this ``agential'' causal structure. Systems with actions directly affecting experiences, or external states directly affecting actions, have $\text{Obs}(M) > 0$.
+\end{remark}
+
+% ============================================
+% SECTION A.10: INFORMATION-GEOMETRIC FOUNDATION
+% ============================================
+\section{Information-Geometric Foundation}\label{sec:info-geom}
+
+This section embeds the $\Con/\MB$ correspondence in the framework of information geometry, providing a continuous geometric foundation.
+
+\subsection{The Space of Markov Kernels}
+
+\begin{definition}[Kernel Manifold]
+For finite sets $X$ and $Y$ with $|X| = n$ and $|Y| = m$, the space of Markov kernels is:
+\[
+\mathcal{K}(X, Y) = \{ K \in \mathbb{R}^{n \times m}_{\geq 0} : \sum_{j} K_{ij} = 1 \; \forall i \}
+\]
+This is a product of $n$ copies of the $(m-1)$-simplex $\Delta^{m-1}$, with total dimension $n(m-1)$.
+\end{definition}
+
+\begin{definition}[Strictly Positive Kernel Interior]
+The \emph{interior} of the kernel manifold is:
+\[
+\mathcal{K}^+(X, Y) = \{ K \in \mathcal{K}(X, Y) : K(x, y) > 0 \; \forall x, y \}
+\]
+This is a smooth manifold (product of simplex interiors).
+\end{definition}
+
+\begin{definition}[Fisher-Rao Metric on Kernels]\label{def:fisher-rao}
+For $K \in \mathcal{K}^+(X, Y)$, the \emph{Fisher-Rao metric} on $\mathcal{K}^+(X, Y)$ is defined for tangent vectors $V, W \in T_K \mathcal{K}^+(X, Y)$ by:
+\[
+g_K(V, W) = \sum_{x \in X} \pi(x) \sum_{y \in Y} \frac{V(x,y) W(x,y)}{K(x,y)}
+\]
+where $\pi$ is a reference probability measure on $X$ (typically uniform: $\pi(x) = 1/n$).
+\end{definition}
+
+\begin{remark}[Interpretation and Standard References]
+The Fisher-Rao metric has several equivalent characterizations:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Row-wise Fisher information:} For each $x \in X$, the conditional distribution $K(x, \cdot)$ lives in the simplex $\Delta^{m-1}$. The Fisher-Rao metric on $\Delta^{m-1}$ is $g_p(v, w) = \sum_y v_y w_y / p_y$. Our definition averages these over $x$ with weight $\pi(x)$.
+
+    \item \textbf{KL-divergence Hessian:} For nearby kernels, $D_{KL}(K \| K') \approx \frac{1}{2} d_g(K, K')^2$, where $d_g$ is geodesic distance. This justifies the metric as measuring ``statistical distinguishability.''
+
+    \item \textbf{Categorical semantics:} The Fisher-Rao metric makes $\mathcal{K}^+(X, Y)$ the space of morphisms in the category of statistical manifolds (Amari, 2016).
+\end{enumerate}
+\end{remark}
+
+\begin{proposition}[Reference Measure Independence]\label{prop:reference-measure}
+Let $\pi, \pi'$ be two strictly positive probability measures on $X$. The Fisher-Rao metrics $g^\pi$ and $g^{\pi'}$ induced by $\pi$ and $\pi'$ are related by:
+\[
+g^{\pi'}_K(V, W) = \sum_{x \in X} \frac{\pi'(x)}{\pi(x)} \cdot \frac{\pi(x)}{1} \sum_{y \in Y} \frac{V(x,y) W(x,y)}{K(x,y)}
+\]
+The metrics are \emph{conformally equivalent} when restricted to each fiber $\{x\} \times Y$, but not globally conformally equivalent on $\mathcal{K}^+(X, Y)$.
+
+\textbf{Canonical choice:} For applications where no prior on $X$ is given, we adopt the uniform measure $\pi(x) = 1/|X|$. This choice:
+\begin{enumerate}[label=(\roman*)]
+    \item Treats all conditioning values equally (no preference for particular inputs)
+    \item Ensures invariance under permutation of $X$
+    \item Reduces to the standard Fisher-Rao metric when $|X| = 1$
+\end{enumerate}
+\end{proposition}
+
+\begin{remark}[Justification for Kernel Metrics]
+The extension of Fisher-Rao geometry from probability distributions to Markov kernels is standard in information geometry; see Amari (2016, Chapter 6) for the treatment of conditional distributions. The key insight is that a kernel $K: X \to \Delta(Y)$ can be viewed as a family of distributions parametrized by $X$, and the natural metric averages the Fisher information over this family.
+\end{remark}
+
+\begin{remark}[Boundary Behavior]
+The Fisher-Rao metric diverges as $K(x,y) \to 0$. Geometrically, the boundary of the simplex is ``infinitely far away''---one cannot reach a zero-probability state in finite geodesic distance. This reflects the information-theoretic fact that distinguishing $p$ from $q$ becomes arbitrarily hard as either approaches a Dirac mass.
+\end{remark}
+
+\subsection{The Consciousness Manifold}
+
+\begin{definition}[Consciousness Manifold]\label{def:consciousness-manifold}
+For measurable spaces $X$ (experience), $G$ (action), $W$ (world), define:
+\[
+\mathcal{C} = \mathcal{K}(W \times X, X) \times \mathcal{K}(X, G) \times \mathcal{K}(G \times W, W)
+\]
+A conscious agent $\alpha = (X, G, W, P, D, A)$ corresponds to a point $(P, D, A) \in \mathcal{C}$.
+\end{definition}
+
+\begin{definition}[Product Metric]
+The consciousness manifold inherits the product Fisher-Rao metric:
+\[
+g_{(P,D,A)}((V_P, V_D, V_A), (W_P, W_D, W_A)) = g_P(V_P, W_P) + g_D(V_D, W_D) + g_A(V_A, W_A)
+\]
+\end{definition}
+
+\subsection{Geometric Structure of $\Theta$}
+
+\begin{definition}[Combination Map]
+The combination map $\Psi: \mathcal{C} \to \mathcal{K}(\Omega, \Omega)$ where $\Omega = X \times G \times W$ is defined by:
+\[
+\Psi(P, D, A) = K_{P \cdot D \cdot A}
+\]
+where $K_{P \cdot D \cdot A}[(x,g,w) \to (x',g',w')] = P(x'|w,x) \cdot D(g'|x') \cdot A(w'|g',w)$.
+\end{definition}
+
+\begin{definition}[Markov Blanket Submanifold]
+For partition $(\mu, B, \eta)$ of $\Omega$, define:
+\[
+\mathcal{M} = \{ K \in \mathcal{K}(\Omega, \Omega) : P_K(\mu' | \mu, B, \eta) = P_K(\mu' | \mu, B) \}
+\]
+By Proposition~\ref{prop:codimension}, $\mathcal{M}$ is a submanifold of codimension $\geq m^2 \cdot b \cdot (e-1)$.
+\end{definition}
+
+\begin{theorem}[$\Theta$ as Geometric Embedding]\label{thm:theta-embedding}
+The mapping $\Theta: \Con \to \MB$ factors through the consciousness manifold:
+\[
+\Con \hookrightarrow \mathcal{C} \xrightarrow{\Psi} \mathcal{K}(\Omega, \Omega) \supset \mathcal{M}
+\]
+The image $\Psi(\mathcal{C}) \subset \mathcal{M}$ is the submanifold of ``factorizable'' blanket systems.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:main}, every $K \in \Psi(\mathcal{C})$ satisfies the Markov blanket property, so $\Psi(\mathcal{C}) \subset \mathcal{M}$. The factorization constraint $K = P \cdot D \cdot A$ defines $\Psi(\mathcal{C})$ as a submanifold.
+\end{proof}
+
+\subsection{Integration as Geodesic Distance}
+
+\begin{definition}[Factorizable Locus]
+Within $\mathcal{M}$, define the factorizable locus:
+\[
+\mathcal{F} = \{ K \in \mathcal{M} : K = K_1 \otimes K_2 \text{ for non-trivial } K_1, K_2 \}
+\]
+\end{definition}
+
+\begin{definition}[Geometric Integration Degree]
+For $K \in \mathcal{M}$:
+\[
+\iota_g(K) = d_g(K, \mathcal{F}) = \inf_{K_F \in \mathcal{F}} d_g(K, K_F)
+\]
+where $d_g$ is geodesic distance in the Fisher-Rao metric.
+\end{definition}
+
+\begin{conjecture}[$\Phi$-Geometry Correspondence]\label{conj:phi-geometry}
+For conscious agent $\alpha$:
+\[
+\Phi_{\Con}(\alpha) \approx \iota_g(\Theta(\alpha))^2
+\]
+The integrated information is approximately the squared geodesic distance to the factorizable locus.
+\end{conjecture}
+
+\begin{remark}
+This conjecture is motivated by the relationship between KL-divergence and squared geodesic distance in information geometry: $D_{KL}(p \| q) \approx \frac{1}{2} d_g(p, q)^2$ for nearby distributions.
+\end{remark}
+
+\subsection{Dynamics as Geodesic Flow}
+
+\begin{definition}[Association/Dissociation as Geodesics]
+On $(\mathcal{M}, g)$:
+\begin{itemize}
+    \item \textbf{Association:} Geodesic flow away from $\mathcal{F}$ (increasing $\iota_g$)
+    \item \textbf{Dissociation:} Geodesic flow toward $\mathcal{F}$ (decreasing $\iota_g$)
+\end{itemize}
+\end{definition}
+
+\begin{conjecture}[Dynamical Correspondence]\label{conj:dynamics}
+Friston's free energy minimization corresponds to gradient flow on $(\mathcal{M}, g)$ with respect to a potential:
+\[
+F(K) = D_{KL}(K \| K_{eq}) + \lambda \cdot \text{complexity}(K)
+\]
+Hoffman's agent dynamics traces geodesics constrained to $\Psi(\mathcal{C})$.
+\end{conjecture}
+
+% ============================================
+% SECTION A.11: HYPERGRAPH DISCRETIZATION
+% ============================================
+\section{Hypergraph Discretization}\label{sec:hypergraph}
+
+This section establishes the correspondence between Markov kernels and hypergraph structures, connecting the continuous framework to Wolfram's Ruliad.
+
+\subsection{Hypergraph-Kernel Correspondence}
+
+\begin{definition}[Agent Hypergraph]
+For finite sets $X$, $G$, $W$, an \emph{agent hypergraph} is $H = (V, E_P \cup E_D \cup E_A)$ where:
+\begin{itemize}
+    \item Nodes: $V = X \sqcup G \sqcup W$
+    \item Perception hyperedges: $E_P \subseteq W \times X \times X$ (ternary)
+    \item Decision hyperedges: $E_D \subseteq X \times G$ (binary)
+    \item Action hyperedges: $E_A \subseteq G \times W \times W$ (ternary)
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Weighted Agent Hypergraph]
+A \emph{weighted agent hypergraph} assigns weights:
+\begin{itemize}
+    \item $w_P: E_P \to [0,1]$ with $\sum_{x'} w_P(w, x, x') = 1$ for each $(w, x)$
+    \item $w_D: E_D \to [0,1]$ with $\sum_{g} w_D(x, g) = 1$ for each $x$
+    \item $w_A: E_A \to [0,1]$ with $\sum_{w'} w_A(g, w, w') = 1$ for each $(g, w)$
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Hypergraph-Kernel Bijection]\label{thm:hypergraph-kernel}
+There is a natural bijection:
+\[
+\{ \text{weighted agent hypergraphs on } X \sqcup G \sqcup W \} \cong \{ \text{conscious agents } (X, G, W, P, D, A) \}
+\]
+given by: $P(x'|w,x) = w_P(w, x, x')$, $D(g|x) = w_D(x, g)$, $A(w'|g,w) = w_A(g, w, w')$.
+\end{theorem}
+
+\begin{proof}
+The normalization conditions on hyperedge weights exactly match the Markov kernel conditions. The correspondence is immediate.
+\end{proof}
+
+\subsection{Blanket-Separator Equivalence}
+
+\begin{definition}[Hypergraph Separator]\label{def:hypergraph-separator}
+In hypergraph $H = (V, E)$ with disjoint vertex sets $\mu, B, \eta \subseteq V$, we say $B$ is a \emph{separator} between $\mu$ and $\eta$ if for every hyperedge $e \in E$:
+\[
+(e \cap \mu \neq \emptyset \text{ and } e \cap \eta \neq \emptyset) \implies e \cap B \neq \emptyset
+\]
+That is, every hyperedge that touches both $\mu$ and $\eta$ must also touch $B$.
+\end{definition}
+
+\begin{remark}[Relation to Graph Theory]
+For ordinary graphs (2-uniform hypergraphs), this reduces to the standard notion of vertex separator (or vertex cut): $B$ separates $\mu$ from $\eta$ if every path from $\mu$ to $\eta$ passes through $B$. For hypergraphs, we generalize from paths to single hyperedges.
+\end{remark}
+
+\begin{remark}[Standard Terminology]
+This definition generalizes the graph-theoretic notion of vertex separator to hypergraphs. In the hypergraph literature, this is sometimes called a \emph{weak separator} (as opposed to a \emph{strong separator} that would require $B$ to separate $\mu$ from $\eta$ in every induced sub-hypergraph). Our definition is the natural one for Markov properties: it captures exactly when conditioning on $B$ blocks all direct statistical dependencies between $\mu$ and $\eta$ that are represented by hyperedges.
+
+For $k$-uniform hypergraphs (all edges have exactly $k$ vertices), the separator condition requires that every edge containing vertices from both $\mu$ and $\eta$ must also contain at least one vertex from $B$. This applies uniformly regardless of $k$, making our Blanket-Separator Equivalence (Theorem~\ref{thm:blanket-separator}) valid for the mixed-arity hypergraphs arising from conscious agents (binary decision edges, ternary perception and action edges).
+\end{remark}
+
+\begin{theorem}[Blanket-Separator Equivalence]\label{thm:blanket-separator}
+Let $\alpha = (X, G, W, P, D, A)$ be a conscious agent with associated hypergraph $H_\alpha$ (via Theorem~\ref{thm:hypergraph-kernel}). Consider the partition:
+\begin{itemize}
+    \item $\mu = X$ (internal/experience nodes)
+    \item $\eta = W$ (external/world nodes)
+    \item $B = G \cup S$ where $S$ represents sensory equivalence classes
+\end{itemize}
+Then:
+\[
+\Theta(\alpha) \text{ satisfies the MB property} \iff B \text{ is a separator between } \mu \text{ and } \eta \text{ in } H_\alpha
+\]
+\end{theorem}
+
+\begin{proof}
+We analyze each type of hyperedge in the agent hypergraph.
+
+\textbf{Hyperedge types in $H_\alpha$:}
+\begin{itemize}
+    \item \textbf{Perception edges} $E_P$: $(w, x, x') \in W \times X \times X$ with weight $P[w, x, x']$
+    \item \textbf{Decision edges} $E_D$: $(x, g) \in X \times G$ with weight $D[x, g]$
+    \item \textbf{Action edges} $E_A$: $(g, w, w') \in G \times W \times W$ with weight $A[g, w, w']$
+\end{itemize}
+
+\textbf{($\Rightarrow$) MB property implies separator structure:}
+
+Suppose the MB property holds: $P(\mu' | \mu, B, \eta) = P(\mu' | \mu, B)$. We must show $B$ separates $\mu$ from $\eta$.
+
+Consider any hyperedge $e$ touching both $\mu = X$ and $\eta = W$:
+\begin{itemize}
+    \item If $e \in E_P$: $e = (w, x, x')$ involves $w \in W$ and $x, x' \in X$. By the sensory equivalence construction (Definition~\ref{def:sensory-equiv}), the dependence of $x'$ on $w$ factors through the sensory state $\sigma(w, x) \in S \subseteq B$. Thus $e$ ``passes through'' the blanket via the sensory component.
+    \item If $e \in E_A$: $e = (g, w, w')$ involves $g \in G \subseteq B$ and $w, w' \in W$. The edge touches $B$ directly through $g$.
+    \item Edges in $E_D$ involve only $X$ and $G$, not touching $\eta = W$.
+\end{itemize}
+In all cases, hyperedges connecting $\mu$ to $\eta$ pass through $B$.
+
+\textbf{($\Leftarrow$) Separator structure implies MB property:}
+
+Suppose $B$ separates $\mu = X$ from $\eta = W$. We show $P(x' | x, B, w) = P(x' | x, B)$.
+
+The next experience $x'$ is determined by perception edges in $E_P$. Any perception edge $(w, x, x')$ that determines the distribution of $x'$ involves:
+\begin{itemize}
+    \item The current experience $x \in \mu$ (known)
+    \item The current world state $w \in \eta$
+    \item The next experience $x' \in \mu$ (target)
+\end{itemize}
+
+Since $B$ is a separator, this edge must touch $B$. The sensory state $\sigma(w, x)$---which is determined by $w$ and $x$---provides exactly the information from $w$ that is relevant for determining the distribution over $x'$.
+
+Formally: if $w_1$ and $w_2$ yield the same sensory state $\sigma(w_1, x) = \sigma(w_2, x) = s$, then by definition of sensory equivalence, $P[w_1, x, x'] = P[w_2, x, x']$ for all $x'$. Therefore:
+\[
+P(x' | x, s, g, w) = P(x' | x, s) = P(x' | x, B)
+\]
+The external state $w$ provides no additional information beyond the sensory state $s \in B$.
+\end{proof}
+
+\begin{remark}[Handling Different Edge Arities]
+The proof handles edges of different arities uniformly: binary edges $(x, g) \in E_D$ and ternary edges $(w, x, x') \in E_P$, $(g, w, w') \in E_A$ are all subject to the same separator condition. The key insight is that the separator definition (Definition~\ref{def:hypergraph-separator}) applies to hyperedges of any arity.
+\end{remark}
+
+\begin{corollary}[Non-Genericity in Hypergraphs]
+Random hypergraphs on $n$ nodes almost surely lack separator structure. The set of hypergraphs admitting a non-trivial separator has measure zero.
+\end{corollary}
+
+\subsection{Discretization Maps}
+
+\begin{definition}[$\varepsilon$-Discretization]
+For continuous spaces $X$, $G$, $W$ and $\varepsilon > 0$, an $\varepsilon$-discretization is:
+\begin{itemize}
+    \item Finite partitions $X_\varepsilon$, $G_\varepsilon$, $W_\varepsilon$ with cell diameter $< \varepsilon$
+    \item Induced discrete kernels $P_\varepsilon$, $D_\varepsilon$, $A_\varepsilon$ by averaging
+\end{itemize}
+This defines $\pi_\varepsilon: \mathcal{C}_\infty \to \mathcal{C}_\varepsilon$.
+\end{definition}
+
+\begin{definition}[Induced Hypergraph]
+The $\varepsilon$-discretization induces a weighted hypergraph:
+\[
+H_\varepsilon = \text{Hypergraph}(\pi_\varepsilon(\alpha))
+\]
+via Theorem~\ref{thm:hypergraph-kernel}.
+\end{definition}
+
+\subsection{Connection to the Ruliad}
+
+\begin{definition}[Computational Ruliad]
+The Ruliad $\mathcal{R}$ is the direct limit over all finite discretizations:
+\[
+\mathcal{R} = \varinjlim_{\text{finite } (X, G, W)} \mathcal{C}_{(X, G, W)}
+\]
+This includes all possible hypergraph structures with all possible weighting schemes.
+\end{definition}
+
+\begin{proposition}[Discretization Triangle]
+The following diagram commutes:
+\[
+\begin{tikzcd}
+\mathcal{C}_\infty \arrow[d, "\pi_\varepsilon"'] \arrow[r, "\text{smooth limit}"] & \varprojlim \mathcal{C}_\varepsilon \\
+\mathcal{C}_\varepsilon \arrow[r, "\cong"'] & \text{Weighted Hypergraphs}_\varepsilon \arrow[u, hook]
+\end{tikzcd}
+\]
+The continuous consciousness field $\mathcal{C}_\infty$ and the Ruliad $\mathcal{R}$ are dual completions of the finite discretizations.
+\end{proposition}
+
+\begin{remark}[Ontological Interpretation]
+This structure supports the view that:
+\begin{enumerate}
+    \item The continuous field $\mathcal{C}_\infty$ is fundamental
+    \item The Ruliad $\mathcal{R}$ is the space of all possible discretizations (computational perspectives)
+    \item Finite observers (including us) access $\mathcal{C}_\infty$ through discretization $\pi_\varepsilon$
+\end{enumerate}
+\end{remark}
+
+% ============================================
+% SECTION A.12: THE CONSCIOUSNESS FIELD
+% ============================================
+\section{The Consciousness Field}\label{sec:field}
+
+This section extends the framework to a continuous field theory. \textbf{Caveat:} The constructions in this section are more speculative than the preceding material. We present them as a \emph{conjectural framework} suggesting directions for future mathematical development, rather than as fully rigorous results.
+
+\subsection{Infinite-Dimensional Generalization}
+
+\begin{definition}[Continuous Consciousness Field]
+For smooth compact manifolds $X$, $G$, $W$, define:
+\[
+\mathcal{C}_\infty = \mathcal{K}(W \times X, X) \times \mathcal{K}(X, G) \times \mathcal{K}(G \times W, W)
+\]
+where $\mathcal{K}(M, N)$ denotes the space of smooth strictly positive kernel densities from $M$ to $N$.
+\end{definition}
+
+\begin{proposition}[Fr\'echet Manifold Structure]\label{prop:frechet-structure}
+Under the following regularity assumptions, $\mathcal{C}_\infty$ is a Fr\'echet manifold:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Base spaces:} $X$, $G$, $W$ are compact smooth manifolds without boundary.
+    \item \textbf{Regularity class:} Kernels are $C^\infty$ densities $k: M \times N \to \mathbb{R}_{>0}$ satisfying:
+    \[
+    \int_N k(m, n) \, d\text{vol}_N(n) = 1 \quad \forall m \in M
+    \]
+    \item \textbf{Strict positivity:} There exists $\epsilon > 0$ such that $k(m, n) > \epsilon$ for all $(m, n)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}[Proof Sketch]
+The space $C^\infty(M \times N, \mathbb{R}_{>0})$ is an open subset of the Fr\'echet space $C^\infty(M \times N, \mathbb{R})$, equipped with the seminorms $\|f\|_{C^k} = \sup_{|\alpha| \leq k} \|\partial^\alpha f\|_\infty$.
+
+The normalization constraint $N: C^\infty(M \times N, \mathbb{R}_{>0}) \to C^\infty(M, \mathbb{R})$ defined by $N(k)(m) = \int_N k(m, n) \, d\text{vol}_N(n)$ is:
+\begin{enumerate}
+    \item A smooth map between Fr\'echet spaces (integration preserves smoothness)
+    \item A submersion: the derivative $DN_k(v) = \int_N v(m, n) \, d\text{vol}_N(n)$ is surjective (any $f \in C^\infty(M)$ is $DN_k(f \cdot k / \|k\|_{L^1})$ for appropriate normalization)
+\end{enumerate}
+
+By the implicit function theorem for Fr\'echet manifolds (Kriegl \& Michor, Theorem 25.4), the level set $N^{-1}(\{1\})$ is a Fr\'echet submanifold. The product $\mathcal{C}_\infty$ of three such submanifolds is itself a Fr\'echet manifold.
+\end{proof}
+
+\begin{remark}[Infinite-Dimensional Caveats]
+Several standard finite-dimensional results require care in infinite dimensions:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Inverse function theorem:} Holds for Fr\'echet manifolds under additional tameness conditions (Nash-Moser theory may be needed for some applications).
+    \item \textbf{Geodesic completeness:} The Fisher-Rao metric on $\mathcal{C}_\infty$ may not be geodesically complete; existence of geodesics requires verification.
+    \item \textbf{Weak vs.\ strong Riemannian structure:} In infinite dimensions, the metric may be weak (inner product not inducing the topology), affecting the applicability of standard Riemannian geometry results.
+\end{enumerate}
+These technical issues do not affect the formal definitions but may constrain the scope of geometric conclusions. See Kriegl \& Michor (1997) and Lang, \textit{Fundamentals of Differential Geometry} (1999) for comprehensive treatments.
+\end{remark}
+
+\begin{definition}[Field Configuration]
+A \emph{field configuration} is a smooth map:
+\[
+\phi: \mathcal{S} \to \mathcal{C}_\infty
+\]
+where $\mathcal{S}$ is a smooth manifold (the ``base space'' or ``spacetime''). At each point $s \in \mathcal{S}$, we have a full conscious agent structure $\phi(s) = (P_s, D_s, A_s)$.
+\end{definition}
+
+\begin{remark}[Interpretation of Base Space]
+The base space $\mathcal{S}$ could represent:
+\begin{itemize}
+    \item Physical spacetime (if consciousness is spatiotemporally distributed)
+    \item An abstract parameter space indexing different agents
+    \item A moduli space of possible observer configurations
+\end{itemize}
+The choice of $\mathcal{S}$ is not fixed by the formalism; different choices yield different physical interpretations.
+\end{remark}
+
+\subsection{Proposed Field Axioms}
+
+The following axioms are \emph{proposed} as a framework for further investigation, not asserted as established results.
+
+\begin{axiom}[Local Blanket Structure]
+At each $s \in \mathcal{S}$, the combined kernel $\Psi(\phi(s))$ satisfies the Markov blanket property.
+\end{axiom}
+
+\begin{axiom}[Smoothness]
+$\phi: \mathcal{S} \to \mathcal{C}_\infty$ is smooth in the Fr\'echet sense: the map is $C^\infty$ when $\mathcal{C}_\infty$ is given the Fr\'echet topology.
+\end{axiom}
+
+\begin{axiom}[Variational Principle]
+The field evolves to extremize an action functional:
+\[
+S[\phi] = \int_{\mathcal{S}} \left[ \frac{1}{2} g_{\phi(s)}(d\phi, d\phi) - V(\phi(s)) \right] d\mu_{\mathcal{S}}(s)
+\]
+where:
+\begin{itemize}
+    \item $g_{\phi(s)}$ is the Fisher-Rao metric at $\phi(s) \in \mathcal{C}_\infty$
+    \item $d\phi \in T_{\phi(s)} \mathcal{C}_\infty$ is the differential of $\phi$
+    \item $V: \mathcal{C}_\infty \to \mathbb{R}$ is a potential function (e.g., depending on integration degree)
+    \item $\mu_{\mathcal{S}}$ is a measure on the base space
+\end{itemize}
+\end{axiom}
+
+\begin{remark}[Physical Analogy]
+This action is structurally analogous to a \emph{nonlinear sigma model} in theoretical physics, where a field takes values in a curved target manifold. The kinetic term $g(d\phi, d\phi)$ penalizes rapid variation of the agent structure across spacetime, while the potential $V(\phi)$ could favor integrated (high-$\Phi$) or dissociated (low-$\Phi$) configurations.
+
+\textbf{Caution:} Making this rigorous requires:
+\begin{enumerate}[label=(\roman*)]
+    \item Verifying the Fisher-Rao metric is well-defined on $\mathcal{C}_\infty$ (weak vs.\ strong Riemannian structure)
+    \item Establishing appropriate function spaces for $\phi$ (Sobolev spaces, etc.)
+    \item Proving existence and regularity of critical points of $S$
+\end{enumerate}
+These are substantial technical challenges left for future work.
+\end{remark}
+
+\subsection{Observer Paths}
+
+\begin{definition}[Continuous Observer Path]
+In $\mathcal{C}_\infty$, an observer path is a smooth curve:
+\[
+\gamma: \mathbb{R} \to \mathcal{C}_\infty
+\]
+representing the evolution of a conscious agent's structure through time.
+\end{definition}
+
+\begin{definition}[Discrete Observer Path]
+In $\mathcal{C}_\varepsilon$, an observer path is a sequence:
+\[
+\gamma = (\alpha_0, \alpha_1, \alpha_2, \ldots) \in \mathcal{C}_\varepsilon^{\mathbb{N}}
+\]
+with transitions determined by the agent's own kernels.
+\end{definition}
+
+\begin{conjecture}[Path Approximation]
+Discrete paths $(\alpha_0^\varepsilon, \alpha_1^\varepsilon, \ldots)$ in $\mathcal{C}_\varepsilon$ converge to continuous paths $\gamma: [0, T] \to \mathcal{C}_\infty$ as $\varepsilon \to 0$, in a sense to be made precise.
+\end{conjecture}
+
+\begin{remark}[Convergence Issues]
+Making this conjecture precise requires:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Topology on paths:} What does ``converge'' mean? Options include pointwise convergence, uniform convergence, or convergence in a path space with appropriate topology.
+    \item \textbf{Interpolation:} How do we embed a discrete path in $\mathcal{C}_\varepsilon$ as a function $[0, T] \to \mathcal{C}_\infty$? The natural choice is piecewise constant interpolation followed by smoothing.
+    \item \textbf{Consistency:} Different discretization schemes may yield different limits; one needs to show that a well-defined continuous limit exists.
+\end{enumerate}
+We expect results analogous to the convergence of random walks to Brownian motion, but this remains to be established.
+\end{remark}
+
+\subsection{Summary: The Complete Structure}
+
+The full framework relates four levels:
+
+\begin{center}
+\begin{tabular}{llp{6cm}}
+\toprule
+\textbf{Level} & \textbf{Structure} & \textbf{Status} \\
+\midrule
+Fundamental & $\mathcal{C}_\infty$ (consciousness field) & Continuous, infinite-dimensional \\
+Computational & $\mathcal{R}$ (Ruliad) / Hypergraphs & Discrete approximation \\
+Statistical & $\MB$ (Markov blankets) & Emergent from separator structure \\
+Experiential & $\Con$ (conscious agents) & Factorized kernel dynamics \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The correspondences established in this appendix show:
+\[
+\mathcal{C}_\infty \xrightarrow{\pi_\varepsilon} H_\varepsilon \xleftrightarrow{\text{Thm }\ref{thm:hypergraph-kernel}} \Con \xrightarrow{\Theta} \MB
+\]
+
+% ============================================
+% SECTION A.13: LIMITATIONS
+% ============================================
+\section{Limitations and Open Questions}
+
+\subsection{What Has Been Established}
+
+\begin{enumerate}
+    \item \textbf{$\Theta$ is well-defined:} The mapping from conscious agents to Markov blanket systems is mathematically well-defined.
+    \item \textbf{Conditional independence preserved:} Theorem~\ref{thm:main} establishes that Hoffman's kernel factorization implies Friston's screening property.
+    \item \textbf{Compositional correspondence (non-interacting):} Theorem~\ref{thm:composition-noninteracting} proves $\Theta(\alpha \otimes \beta) \cong \Theta(\alpha) \otimes_{\MB} \Theta(\beta)$ for non-interacting agents.
+    \item \textbf{Compositional correspondence (interacting):} Theorem~\ref{thm:composition-interacting} characterizes when correspondence holds via the BMIC condition.
+    \item \textbf{IIT connection:} Section~\ref{sec:iit} formalizes the relationship between $\Phi$ and the Con/MB framework.
+    \item \textbf{Association/dissociation formalized:} Section~\ref{sec:assoc-dissoc} defines these as categorical operations with precise properties.
+    \item \textbf{Inverse mapping characterized:} Theorem~\ref{thm:representability} gives necessary and sufficient conditions for $\MB \to \Con$.
+    \item \textbf{Non-genericity demonstrated:} The conditional independence property is measure-zero with precise codimension bounds (Section 6).
+    \item \textbf{Information-geometric embedding:} Section~\ref{sec:info-geom} embeds $\Con$ and $\MB$ in the consciousness manifold $\mathcal{C}$ with Fisher-Rao metric.
+    \item \textbf{Hypergraph correspondence:} Theorem~\ref{thm:hypergraph-kernel} establishes bijection between weighted hypergraphs and conscious agents; Theorem~\ref{thm:blanket-separator} proves Markov blankets correspond to hypergraph separators.
+    \item \textbf{Ruliad connection formalized:} Section~\ref{sec:hypergraph} defines the Ruliad as direct limit of finite discretizations, dual to the continuous field $\mathcal{C}_\infty$.
+\end{enumerate}
+
+\subsection{What Remains Open}
+
+\begin{enumerate}
+    \item \textbf{Symmetric monoidal closed structure:} Hoffman claims $\Con$ is symmetric monoidal closed. The closure property is not independently verified.
+
+    \item \textbf{$\Phi$-geometry conjecture:} Conjecture~\ref{conj:phi-geometry} ($\Phi_{\Con}(\alpha) \approx \iota_g(\Theta(\alpha))^2$) requires proof.
+
+    \item \textbf{Dynamical correspondence:} Conjecture~\ref{conj:dynamics} relating free energy minimization to geodesic flow requires proof.
+
+    \item \textbf{Continuous field axiomatization:} The field axioms in Section~\ref{sec:field} are proposed but not derived from first principles.
+
+    \item \textbf{Full categorical equivalence:} While we have characterized representability conditions, establishing a full equivalence of categories would require additional structure.
+\end{enumerate}
+
+\subsection{Technical Limitations}
+
+\begin{enumerate}
+    \item \textbf{Measurability assumptions:} The sensory equivalence construction requires regularity conditions on the perception kernel $P$.
+
+    \item \textbf{Discrete-time framework:} The current analysis is discrete-time. Extension to continuous-time systems is non-trivial.
+
+    \item \textbf{Finite-dimensional implicit assumptions:} Several constructions implicitly assume finite-dimensional or locally compact state spaces.
+\end{enumerate}
+
+\subsection{Interpretive Limitations}
+
+\begin{enumerate}
+    \item \textbf{Correspondence $\neq$ equivalence:} We have shown compatibility, not equivalence.
+
+    \item \textbf{Non-genericity $\neq$ deep significance:} The fact that conditional independence is measure-zero shows it's \emph{specific}, not that it's \emph{important}.
+
+    \item \textbf{Alternative interpretations not excluded:} The structural parallels might reflect generic features of organized systems rather than anything specific to consciousness.
+\end{enumerate}
+
+% ============================================
+% SECTION A.11: SUMMARY
+% ============================================
+\section{Summary of Key Results}
+
+\begin{center}
+\begin{tabular}{llp{5cm}}
+\toprule
+\textbf{Result} & \textbf{Status} & \textbf{Reference} \\
+\midrule
+$\Theta: \Con \to \MB$ well-defined & \textbf{Established} & Definition~\ref{def:theta} \\
+Morphism conditions specified & \textbf{Established} & Definition~\ref{def:con-morphism} \\
+Identity/composition preserved & \textbf{Proven} & Propositions~\ref{prop:identity},~\ref{prop:composition} \\
+Conditional independence preserved & \textbf{Proven} & Theorem~\ref{thm:main} \\
+Compositional (non-interacting) & \textbf{Proven} & Theorem~\ref{thm:composition-noninteracting} \\
+Compositional (interacting, BMIC) & \textbf{Proven} & Theorem~\ref{thm:composition-interacting} \\
+IIT/$\Phi$ connection & \textbf{Formalized} & Section~\ref{sec:iit} \\
+Association/dissociation operations & \textbf{Defined} & Section~\ref{sec:assoc-dissoc} \\
+Inverse mapping conditions & \textbf{Characterized} & Theorem~\ref{thm:representability} \\
+Non-genericity & \textbf{Demonstrated} & Section 6 \\
+Information-geometric embedding & \textbf{Established} & Section~\ref{sec:info-geom} \\
+Hypergraph-kernel bijection & \textbf{Proven} & Theorem~\ref{thm:hypergraph-kernel} \\
+Blanket-separator equivalence & \textbf{Proven} & Theorem~\ref{thm:blanket-separator} \\
+Ruliad as discretization limit & \textbf{Formalized} & Section~\ref{sec:hypergraph} \\
+Consciousness field framework & \textbf{Proposed} & Section~\ref{sec:field} \\
+$\Phi$-geometry correspondence & \textbf{Conjectured} & Conjecture~\ref{conj:phi-geometry} \\
+Dynamical correspondence & \textbf{Conjectured} & Conjecture~\ref{conj:dynamics} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+
+\textbf{Summary statement:} We have constructed a mapping $\Theta: \Con \to \MB$ that preserves conditional independence structure and compositional structure. We have embedded this correspondence in information geometry, defining the consciousness manifold $\mathcal{C}$ with Fisher-Rao metric. We have established a bijection between conscious agents and weighted hypergraphs, proving that Markov blankets correspond to hypergraph separators. This connects the framework to Wolfram's Ruliad, which emerges as the direct limit of finite discretizations---dual to the continuous consciousness field $\mathcal{C}_\infty$. The ontological picture: $\mathcal{C}_\infty$ is fundamental, the Ruliad is the space of computational perspectives, and $\Con/\MB$ capture the structure of bounded conscious organization within this field.
+
+% ============================================
+% REFERENCES
+% ============================================
+\section*{References}
+
+\begin{itemize}[leftmargin=*]
+    \item Amari, S. (2016). \textit{Information Geometry and Its Applications}. Springer.
+
+    \item Friston, K. (2019). A free energy principle for a particular physics. \textit{arXiv:1906.10184}.
+
+    \item Hoffman, D. D., \& Prakash, C. (2014). Objects of consciousness. \textit{Frontiers in Psychology}, 5, 577.
+
+    \item Kallenberg, O. (2021). \textit{Foundations of Modern Probability} (3rd ed.). Springer.
+
+    \item Kechris, A. S. (1995). \textit{Classical Descriptive Set Theory}. Springer.
+
+    \item Kriegl, A., \& Michor, P. W. (1997). \textit{The Convenient Setting of Global Analysis}. American Mathematical Society.
+
+    \item Lang, S. (1999). \textit{Fundamentals of Differential Geometry}. Springer.
+
+    \item Mac Lane, S. (1998). \textit{Categories for the Working Mathematician} (2nd ed.). Springer.
+
+    \item Parr, T., Pezzulo, G., \& Friston, K. (2022). \textit{Active Inference}. MIT Press.
+
+    \item Pearl, J. (1988). \textit{Probabilistic Reasoning in Intelligent Systems}. Morgan Kaufmann.
+
+    \item Tononi, G. (2015). Integrated information theory. \textit{Scholarpedia}, 10(1), 4164.
+
+    \item Won, S.-M., et al. (2024). Continuous Tensor Abstraction. \textit{arXiv preprint}.
+\end{itemize}
+
+\end{document}

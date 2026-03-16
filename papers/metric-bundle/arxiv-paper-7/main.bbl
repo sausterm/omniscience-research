@@ -1,0 +1,77 @@
+\begin{thebibliography}{10}
+
+\bibitem{Paper1}
+Sloan Austermann.
+\newblock The {L}orentzian {D}e{W}itt metric and the {P}ati-{S}alam gauge
+  group.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{Paper2}
+Sloan Austermann.
+\newblock Fermion representations from the metric bundle: {C}lifford algebras
+  and the {P}ati-{S}alam spinor.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{Paper3}
+Sloan Austermann.
+\newblock Gauge fields from the {G}auss equation of the metric bundle.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{Paper4}
+Sloan Austermann.
+\newblock Anomaly cancellation in the metric bundle {P}ati-{S}alam theory.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{Paper5}
+Sloan Austermann.
+\newblock The three-generation problem in the metric bundle framework.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{Paper6}
+Sloan Austermann.
+\newblock Quantum mechanics from finite observation: {B}orn rule, interference,
+  and uncertainty as consequences of {M}arkov blanket geometry.
+\newblock {\em Zenodo preprint}, 2026.
+\newblock Companion paper.
+
+\bibitem{KrasnovPercacci2018}
+Kirill Krasnov and Roberto Percacci.
+\newblock Gravity and unification: A review.
+\newblock {\em Classical and Quantum Gravity}, 35:143001, 2018.
+
+\bibitem{MohapatraPati1975}
+Rabindra~N. Mohapatra and Jogesh~C. Pati.
+\newblock ``natural'' left-right symmetry.
+\newblock {\em Physical Review D}, 11:2558--2561, 1975.
+
+\bibitem{Hosotani1983}
+Yutaka Hosotani.
+\newblock Dynamical mass generation by compact extra dimensions.
+\newblock {\em Physics Letters B}, 126:309--313, 1983.
+
+\bibitem{HatanakaHosotani1998}
+Hisaki Hatanaka, Takeo Inami, and C.~S. Lim.
+\newblock The gauge hierarchy problem and higher dimensional gauge theories.
+\newblock {\em Modern Physics Letters A}, 13:2601--2612, 1998.
+
+\bibitem{ColemanWeinberg1973}
+Sidney Coleman and Erick Weinberg.
+\newblock Radiative corrections as the origin of spontaneous symmetry breaking.
+\newblock {\em Physical Review D}, 7:1888--1910, 1973.
+
+\bibitem{PatiSalam1974}
+Jogesh~C. Pati and Abdus Salam.
+\newblock Lepton number as the fourth ``color''.
+\newblock {\em Physical Review D}, 10:275--289, 1974.
+
+\bibitem{PDG2024}
+{Particle Data Group}, S.~Navas, et~al.
+\newblock Review of particle physics.
+\newblock {\em Physical Review D}, 110:030001, 2024.
+
+\end{thebibliography}

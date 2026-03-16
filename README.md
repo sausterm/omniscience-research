@@ -1,116 +1,105 @@
-# Omniscience Research
+# OmniSciences Research
 
-A mathematical research programme connecting consciousness theory with fundamental physics.
+Open research and public APIs from [OmniSciences LLC](https://omnisciences.io).
 
-## Overview
+## What's Here
 
-This repository contains the complete research output of the **Structural Idealism** programme, which establishes formal connections between two domains:
+### Client SDK (`omnisciences/`)
 
-1. **Consciousness theory** — A functorial correspondence **Θ: Con → MB** mapping Hoffman's Conscious Agent networks to Friston's Markov blanket systems, proving structural equivalence between the two leading mathematical frameworks for consciousness.
+Python client for the OmniSciences API platform:
 
-2. **Fundamental physics** — The **Metric Bundle Programme**, showing that the geometry of Met(X⁴) (the bundle of Lorentzian metrics over spacetime) yields the Pati-Salam gauge group, coupling unification, and quantum mechanics from finite observation.
-
-The unifying thesis: *consciousness is the intrinsic nature of physical structure* — what physics describes extrinsically as gauge fields and spacetime curvature is, from the inside, the dynamics of conscious agents.
-
-## Papers
-
-### Consciousness Programme (Θ: Con → MB)
-
-| Paper | Title | Zenodo DOI |
-|-------|-------|------------|
-| **A** | Structural Idealism and the Formal Foundations of Mind | [10.5281/zenodo.18521824](https://doi.org/10.5281/zenodo.18521824) |
-| **B** | Formal Correspondences Between Conscious Agents and Markov Blankets | [10.5281/zenodo.18521824](https://doi.org/10.5281/zenodo.18521824) |
-| **Technical** | Conscious Agents and Markov Blankets: A Categorical Correspondence | [10.5281/zenodo.18521824](https://doi.org/10.5281/zenodo.18521824) |
-
-### Metric Bundle Programme (Gauge Unification)
-
-| Paper | Title | Zenodo DOI |
-|-------|-------|------------|
-| **1** | Gauge Structure from the Metric Bundle | [10.5281/zenodo.18860687](https://doi.org/10.5281/zenodo.18860687) |
-| **2** | Torsion, Free Energy, and the Conscious Observer | [10.5281/zenodo.18860689](https://doi.org/10.5281/zenodo.18860689) |
-| **3** | Gauge Dynamics from the Gauss Equation | [10.5281/zenodo.18860691](https://doi.org/10.5281/zenodo.18860691) |
-| **4** | Anomaly Cancellation in the Metric Bundle | [10.5281/zenodo.18860693](https://doi.org/10.5281/zenodo.18860693) |
-| **5** | Three Generations from Quaternionic Structure | [10.5281/zenodo.18860697](https://doi.org/10.5281/zenodo.18860697) |
-| **6** | Quantum Mechanics from Finite Observation | — |
-
-## Repository Structure
-
+```bash
+pip install omnisciences
 ```
-omniscience-research/
-├── consciousness/           # Θ: Con → MB programme
-│   ├── paper-a/             # Philosophical foundations
-│   ├── paper-b/             # Formal correspondences
-│   └── technical-paper/     # Categorical proofs
-│
-├── metric-bundle/           # Met(X⁴) gauge unification
-│   ├── paper-{1..6}/        # Six papers (TeX + PDF)
-│   ├── computations/        # Python verification scripts
-│   └── handoff.md           # Master research document
-│
-├── omni-toolkit/            # Reusable geometric toolkit (pip-installable)
-│   └── omni_toolkit/        # Python package
-│       ├── core/            # Symmetric spaces, DeWitt metric, Ricci tensor
-│       ├── dynamics/        # RG running, Coleman-Weinberg potential
-│       └── topology/        # Quaternionic structures, index theorems
-│
-├── simulations/             # Consciousness emergence models
-│   ├── *.py                 # Ising, developmental, scaling
-│   ├── results/             # JSON output data
-│   └── figures/             # Generated plots
-│
-├── cit/                     # Constitutive Interface Theory
-│   └── core/                # Core philosophical argument
-│
-└── website/                 # Interactive research visualizations
+
+```python
+from omnisciences.client import DTIClient, PCETClient, PortfolioClient
+
+# DTI curvature analysis
+dti = DTIClient(api_key="omni_...")
+result = dti.analyze(tensors=my_tensors)
+
+# PCET rate prediction
+pcet = PCETClient(api_key="omni_...")
+rate = pcet.compute_rate(delta_G=-0.5, lambda_reorg=1.2, coupling=0.01)
+
+# Riemannian portfolio optimization
+port = PortfolioClient(api_key="omni_...")
+weights = port.optimize(returns=my_returns, method="min_variance")
 ```
+
+### Demo Notebooks (`notebooks/`)
+
+Interactive Colab notebooks — no install required:
+
+| Notebook | Description | Colab |
+|----------|-------------|-------|
+| `dti_demo.ipynb` | Diffusion tensor curvature analysis | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sausterm/omniscience-research/blob/main/notebooks/dti_demo.ipynb) |
+| `pcet_demo.ipynb` | PCET rate prediction with Monte Carlo UQ | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sausterm/omniscience-research/blob/main/notebooks/pcet_demo.ipynb) |
+| `portfolio_demo.ipynb` | Riemannian portfolio optimization | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sausterm/omniscience-research/blob/main/notebooks/portfolio_demo.ipynb) |
+| `bci_demo.ipynb` | Brain-computer interface signal analysis | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/sausterm/omniscience-research/blob/main/notebooks/bci_demo.ipynb) |
+| `integration_*.ipynb` | Third-party integrations (cvxportfolio, PyPortfolioOpt, Riskfolio) | |
+
+### omni_toolkit (`omni_toolkit/`)
+
+Open-source math library for symmetric space physics. Paper reproducibility code.
+
+```bash
+cd omni_toolkit && pip install -e ".[dev]"
+```
+
+Modules: `core/` (Lie algebras, symmetric spaces, curvature), `dynamics/` (RG running, effective potentials), `topology/` (index theorems, complex structures), `mixing/`, `fermions/`, `breaking/`, `consistency/`.
+
+### Research Papers (`papers/`)
+
+| Programme | Papers | Topic |
+|-----------|--------|-------|
+| **Consciousness** | Structural Idealism, Formal Correspondences, Technical Appendix | Θ: Con → MB functorial correspondence |
+| **Metric Bundle** | Papers 1–8 | Gauge unification from Met(X⁴) geometry |
+| **Portfolio** | Riemannian Portfolio Optimization | SPD manifold methods for finance |
+
+### Computation Scripts (`computations/`)
+
+Python verification scripts for the Metric Bundle papers: `core/`, `fermions/`, `mixing/`, `symmetry_breaking/`, `cosmology/`, `consistency/`, `quantum/`, `consciousness/`.
+
+## API Products
+
+| Product | Endpoint | Description |
+|---------|----------|-------------|
+| **PCET Engine** | `pcet.omnisciences.io` | Proton-coupled electron transfer rate prediction |
+| **DTI Analysis** | `dti.omnisciences.io` | Riemannian diffusion tensor imaging |
+| **Portfolio** | `portfolio.omnisciences.io` | SPD manifold portfolio optimization |
+| **BCI Analysis** | `bci.omnisciences.io` | Brain-computer interface signal analysis |
+
+Free tier available for all products. See [omnisciences.io](https://omnisciences.io) for pricing.
 
 ## Key Results
 
-### Consciousness
+### Physics (Metric Bundle Programme)
+- DeWitt metric on Met(X⁴) has signature **(6,4)** → SO(6,4) → **Pati-Salam** gauge group
+- sin²θ_W = 0.2312 from two-step PS running (exact match to observation)
+- α_PS = 27/(128π²) ≈ 0.0214 (7% from observed, zero free parameters)
+- N_G = 3 generations from Spin^c index on K3
 
-- **Theorem (Θ: Con → MB):** Every conscious agent network maps functorially to a Markov blanket system preserving compositional structure under BMIC (Blanket-Mediated Interaction Condition).
-- **Theorem (Inverse):** A Markov blanket system is representable as a conscious agent iff it satisfies the Agenthood Tetrad (N1–N4).
-- **Result (Measure Zero):** Agent structure is rare — generic dynamical systems do not satisfy the factorisation conditions.
+### Consciousness (Θ: Con → MB)
+- Functorial correspondence between Conscious Agent networks and Markov blanket systems
+- Compositional structure preserved under BMIC
+- Inverse mapping: Agenthood Tetrad (N1–N4) characterizes representable systems
 
-### Physics
-
-- **Theorem:** The DeWitt metric on Met(X⁴) with Lorentzian background has signature **(6,4)**.
-- **Corollary:** Normal bundle structure group SO(6,4) → max compact SO(6)×SO(4) ≅ SU(4)×SU(2)_L×SU(2)_R = **Pati-Salam**.
-- **Result:** Dynkin index equality gives sin²θ_W = 3/8 at unification → **0.222 at M_Z** (observed: 0.231).
-- **Theorem (Born Rule Uniqueness):** Among α-rules p_i ∝ |⟨e_i|ψ⟩|^α, only α = 2 gives state-independent total Fisher trace.
-
-## Compilation
-
-All LaTeX files compile with `pdflatex`. Metric bundle papers require BibTeX:
-
-```bash
-cd metric-bundle/paper-1
-pdflatex main.tex
-bibtex main
-pdflatex main.tex
-pdflatex main.tex
-```
-
-Python scripts require NumPy and SciPy:
-
-```bash
-pip install numpy scipy matplotlib
-python metric-bundle/computations/verification_suite.py
-```
+### PCET Engine
+- 15 benchmark enzyme systems validated (~15% mean error)
+- Multi-channel vibronic rates with Monte Carlo uncertainty quantification
+- Sub-100ms inference
 
 ## Licenses
 
 - **Papers** (`.tex`, `.pdf`): [CC BY 4.0](LICENSE-CC-BY-4.0)
-- **Code** (`.py`, `.js`, `.html`, `.css`): [MIT](LICENSE-MIT)
+- **Code** (`.py`): [MIT](LICENSE-MIT)
 
 ## Citation
 
-If you use this work, please cite the relevant paper(s). See [CITATION.cff](CITATION.cff) for machine-readable citation metadata.
+See [CITATION.cff](CITATION.cff) for machine-readable citation metadata.
 
 ## Author
 
-**Sloan Austermann**
-
-## Acknowledgements
-
-Computational verification assisted by Claude (Anthropic). All mathematical results independently verifiable via the included Python scripts.
+**Sloan Austermann** — OmniSciences LLC — sloan@omnisciences.org

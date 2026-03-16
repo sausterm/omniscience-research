@@ -1,61 +1,25 @@
 cff-version: 1.2.0
-title: "Structural Idealism Research Programme"
-message: "If you use this work, please cite the relevant paper(s)."
-type: dataset
+message: "If you use this software, please cite it as below."
+type: software
+title: "omni-toolkit"
+version: 0.1.0
+date-released: 2026-03-15
 authors:
   - family-names: Austermann
     given-names: Sloan
-date-released: 2026-03-05
-repository-code: "https://github.com/sausterm/omniscience-research"
-license:
-  - MIT
-  - CC-BY-4.0
-references:
-  - type: article
-    title: "Structural Idealism and the Formal Foundations of Mind"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18521824"
-    year: 2026
-  - type: article
-    title: "Gauge Structure from the Metric Bundle"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18860687"
-    year: 2026
-  - type: article
-    title: "Torsion, Free Energy, and the Conscious Observer"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18860689"
-    year: 2026
-  - type: article
-    title: "Gauge Dynamics from the Gauss Equation"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18860691"
-    year: 2026
-  - type: article
-    title: "Anomaly Cancellation in the Metric Bundle"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18860693"
-    year: 2026
-  - type: article
-    title: "Three Generations from Quaternionic Structure"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    doi: "10.5281/zenodo.18860697"
-    year: 2026
-  - type: article
-    title: "Quantum Mechanics from Finite Observation"
-    authors:
-      - family-names: Austermann
-        given-names: Sloan
-    year: 2026
+    orcid: ""
+abstract: >-
+  A Python toolkit for non-perturbative quantum tunneling computations
+  on symmetric spaces, with applications spanning molecular physics,
+  superconductivity, gauge unification, diffusion tensor imaging,
+  and condensed matter.
+keywords:
+  - symmetric space
+  - DeWitt metric
+  - instanton
+  - tunneling
+  - Pati-Salam
+  - diffusion tensor imaging
+  - Riemannian geometry
+license: MIT
+repository-code: "https://github.com/omnisciences/omni-toolkit"
